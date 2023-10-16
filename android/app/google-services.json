@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "522500424446",
+    "project_id": "shipeasytech-f2adf",
+    "storage_bucket": "shipeasytech-f2adf.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:522500424446:android:5b4806f11afdd23b549baf",
+        "android_client_info": {
+          "package_name": "com.shipeasytech"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBTY8NJCqC_JwUUAiQ2RXvAsGJV0VdyNoQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
