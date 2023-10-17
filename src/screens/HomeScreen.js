@@ -14,19 +14,19 @@ import {
   Platform,
   Linking,
 } from 'react-native';
-import React, {useEffect, useRef, useState} from 'react';
-import {GREEN_COLOR, LIGHT_GREEN} from '../assets/Colors';
+import React, { useEffect, useRef, useState } from 'react';
+import { GREEN_COLOR, LIGHT_GREEN } from '../assets/Colors';
 import QuickActionBtns from '../components/QuickActionBtns';
 import ActionsRequiredBtns from '../components/ActionsRequiredBtns';
 import BarChartScreen from '../components/BarChartScreen';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import AddOrderSheet from '../components/AddOrderSheet';
 import QRCodeScanner from 'react-native-qrcode-scanner';
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 
-const HomeScreen = ({navigation}) => {
-  const {user} = useSelector(state => state.userSlice);
-  console.log(user);
+const HomeScreen = ({ navigation }) => {
+  const { user, customer } = useSelector(state => state.userSlice);
+  console.log(user + "\n" + customer);
   const refRBSheet = useRef();
   const textInputRef = useRef(null);
   const width = Dimensions.get('window').width;
@@ -110,7 +110,7 @@ const HomeScreen = ({navigation}) => {
             borderTopRightRadius: 30,
           },
         }}>
-        <View style={{flex: 1}}>
+        <View style={{ flex: 1 }}>
           <TouchableOpacity
             style={{
               marginRight: 20,
@@ -120,7 +120,7 @@ const HomeScreen = ({navigation}) => {
             onPress={() => refRBSheet.current.close()}>
             <Image
               source={require('../assets/images/close.png')}
-              style={{width: 15, height: 15, tintColor: GREEN_COLOR}}
+              style={{ width: 15, height: 15, tintColor: GREEN_COLOR }}
             />
           </TouchableOpacity>
           <AddOrderSheet REF={refRBSheet} />
@@ -131,7 +131,7 @@ const HomeScreen = ({navigation}) => {
         <View style={styles.headerStyle}>
           <Image
             source={require('../assets/images/logo1.png')}
-            style={{width: 115, height: 35, resizeMode: 'contain'}}
+            style={{ width: 115, height: 35, resizeMode: 'contain' }}
           />
           {/* wallet button */}
           <TouchableOpacity>
@@ -240,7 +240,7 @@ const HomeScreen = ({navigation}) => {
       </View>
         */}
       {/* quick view */}
-      <ScrollView style={{flex: 1}}>
+      <ScrollView style={{ flex: 1 }}>
         <View style={styles.quickView}>
           <Text style={styles.quickAction}>Quick Action</Text>
           <View style={styles.QuickActionBtnsView}>
@@ -290,7 +290,7 @@ const HomeScreen = ({navigation}) => {
               paddingTop: 20,
               borderRadius: 10,
             }}>
-            <Text style={{color: '#000', marginLeft: 10}}>
+            <Text style={{ color: '#000', marginLeft: 10 }}>
               Total Shipment: 0
             </Text>
             {/* bar chart is here  */}
@@ -341,7 +341,7 @@ const HomeScreen = ({navigation}) => {
                 </View>
               </TouchableOpacity>
               {showMetricsDay ? (
-                <View style={{width: '100%'}}>
+                <View style={{ width: '100%' }}>
                   <TouchableOpacity
                     onPress={() => {
                       setShipmentButton('Today');

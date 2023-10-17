@@ -1,13 +1,23 @@
-const {createSlice} = require('@reduxjs/toolkit');
+const { createSlice } = require('@reduxjs/toolkit');
+
+
 
 const UserSlice = createSlice({
   name: 'userSlice',
   initialState: {
-    user: 'hello',
+    user: null,
+    customer: null,
+    status: false,
   },
-  reducers: {},
-  //   extraReducers: (
+  reducers: {
+    userLogout(state, { payload }) {
 
-  //   ),
+    },
+    
+  },
+  // extraReducers: builder => {
+    
+  // },
 });
+export const { userLogout } = UserSlice.actions;
 export default UserSlice.reducer;
