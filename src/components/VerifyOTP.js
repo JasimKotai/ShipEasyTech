@@ -14,12 +14,8 @@ import {
 import React, {useState} from 'react';
 import axios from 'axios';
 import {GREEN_COLOR, LIGHT_GREEN} from '../assets/Colors';
-<<<<<<< HEAD
-import {BASE_URL_LIVE, BASE_URL_LOCAL} from '@env';
-=======
-import {BASE_URL_LOCAL} from '@env';
->>>>>>> 1be9dbdf2cbf278bb0780dc83b3e87dc5f5748d5
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { BASE_URL_LIVE, BASE_URL_LOCAL } from '../config/api';
 
 const VerifyOTP = ({route, navigation}) => {
   // http://localhost/shipEasy/public/api/otp-verify'
