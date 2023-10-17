@@ -18,10 +18,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { BASE_URL_LIVE, BASE_URL_LOCAL } from '../config/api';
 
 const VerifyOTP = ({route, navigation}) => {
-  // http://localhost/shipEasy/public/api/otp-verify'
-  const {verifyOtp} = route.params;
-  // const userVerify = JSON.stringify(verifyOtp.temp_data);
-  // console.log(verifyOtp.temp_data);
+  const {temp_data} = route.params;
+  console.log("temp_data===>", temp_data);
 
   const width = Dimensions.get('window').width;
   const height = Dimensions.get('window').height;
@@ -30,65 +28,22 @@ const VerifyOTP = ({route, navigation}) => {
   const [otp, setOtp] = useState('');
 
   const handleSignUpAPI = async () => {
-    // const axios = require('axios');
-    let data = JSON.stringify({
-      otp: '1234',
-      temp_data: [
-        {
-          name: 'Jasisk',
-          phone: '1234567890',
-          company_name: 'Kaoq',
-          email: 'jasimkhan678786@gmail.com',
-          password_confirmation: 'Jasim@123',
-          order_size: 'Setting up a new business',
-        },
-      ],
-    });
-    console.log(data);
+    try {
+      let data = {
+        otp: otp,
+        temp_data: [temp_data],
+      };
+      console.log(data);
 
-    let config = {
-      method: 'post',
-      maxBodyLength: Infinity,
-      url: `${BASE_URL_LIVE}/otp-verify`,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      data: data,
-    };
-    axios
-      .request(config)
-      .then(response => {
-        console.log('API RESPONSE', JSON.stringify(response.data));
-      })
-      .catch(error => {
-        console.log('ERR LOG: ', error);
-      });
+      const response = await axios.post(`${BASE_URL_LIVE}/otp-verify`, data);
+      Alert.alert('success', response.data.message);
+      console.log("response=====>", response.data);
+    } catch (error) {
+      setLoading(false);
+      Alert.alert('Error', error.response.data);
+      console.log('verify otp error log;', error.response.data);
+    }
   };
-
-  // const handleSignUpAPI = async () => {
-  //   try {
-  //     setLoading(true);
-  //     const formData = new FormData();
-  //     formData.append('otp', otp);
-  //     formData.append('temp_data', verifyOtp.temp_data);
-  //     console.log('++++++++', formData);
-  //     // const response = await axios.post(
-  //     //   `${VERIFY_USER_OTP}/otp-verify`,
-  //     //   formData,
-  //     // );
-  //     // if (response.data) {
-  //     //   // console.log(response);
-  //     //   console.log('response.data ===', response.data);
-  //     setLoading(false);
-  //     //   // const jsonValue = JSON.stringify(response.data);
-  //     //   // await AsyncStorage.setItem('userSignUpData', jsonValue);
-  //     // }
-  //   } catch (error) {
-  //     setLoading(false);
-  //     Alert.alert('Error', 'network error');
-  //     console.log('verify otp error log;', error);
-  //   }
-  // };
 
   return (
     <View style={styles.container}>
@@ -117,7 +72,7 @@ const VerifyOTP = ({route, navigation}) => {
             An OTP has been sent to your email address
           </Text>
           <Text style={styles.text3}>
-            {verifyOtp.temp_data[0].email} pls enter below
+            {temp_data?.email} pls enter below
           </Text>
           <TextInput
             placeholderTextColor={'#808080'}

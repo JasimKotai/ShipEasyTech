@@ -32,7 +32,7 @@ const SignUpScreen = ({navigation}) => {
     company_name: '',
     email: '',
     password_confirmation: '',
-    order_size: 'Setting up a new business',
+    order_size: '1-10',
   });
   // console.log(userDetails);
   const [secureEntry, setSecureEntry] = useState(true);
@@ -178,24 +178,10 @@ const SignUpScreen = ({navigation}) => {
   const handleSignUpAPI = async () => {
     try {
       setLoading(true);
-      const formData = new FormData();
-      formData.append('name', userDetails.name);
-      formData.append('phone', userDetails.phone);
-      formData.append('company_name', userDetails.company_name);
-      formData.append('email', userDetails.email);
-      formData.append(
-        'password_confirmation',
-        userDetails.password_confirmation,
-      );
-      formData.append('order_size', userDetails.order_size);
-
-      const response = await axios.post(
-        `${BASE_URL_LIVE}/verify-register`,
-        formData,
-      );
+      const response = await axios.post(`${BASE_URL_LIVE}/verify-register`, userDetails);
       if (response.data) {
-        navigation.navigate('VerifyOTP', {verifyOtp: response.data});
-        console.log('SignUpScreen', response.data);
+        // console.log('SignUpScreen', response.data);
+        navigation.navigate('VerifyOTP', {temp_data: response.data.temp_data[0]});
         setLoading(false);
       }
     } catch (error) {
@@ -348,6 +334,7 @@ const SignUpScreen = ({navigation}) => {
                   }}
                   cursorColor={'black'}
                   keyboardType="number-pad"
+                  maxLength={10}
                 />
                 {phone == false ? (
                   <Text style={{fontSize: 10, color: 'red', marginLeft: 10}}>
