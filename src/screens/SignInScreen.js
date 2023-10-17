@@ -11,47 +11,43 @@ import {
   ActivityIndicator,
   Alert,
 } from 'react-native';
-import React, {useEffect, useRef, useState} from 'react';
-import {GREEN_COLOR} from '../assets/Colors';
+import React, { useEffect, useRef, useState } from 'react';
+import { GREEN_COLOR } from '../assets/Colors';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {BASE_URL_LOCAL, BASE_URL_LIVE} from '../config/api';
-import {CommonActions} from '@react-navigation/native';
-import {useToast} from 'react-native-toast-notifications';
+import { BASE_URL_LOCAL, BASE_URL_LIVE } from '../config/api';
+import { CommonActions } from '@react-navigation/native';
+import { useToast } from 'react-native-toast-notifications';
+import { useDispatch } from 'react-redux';
+import { saveUserData } from '../config/UserSlice';
 
-const SignInScreen = ({navigation}) => {
+const SignInScreen = ({ navigation }) => {
   const toast = useToast();
   const refRBSheet = useRef();
   const width = Dimensions.get('window').width;
   const height = Dimensions.get('window').height;
   const [isFocused, setIsFocused] = useState('');
-  // console.log(isFocused);
-  const [userDetails, setUserDetails] = useState({
-    email: 'satyasankar09@gmail.com',
-    password: 'Rajarani22@',
-  });
-  // console.log(userDetails);
+  const [userDetails, setUserDetails] = useState({ email: 'satyasankar09@gmail.com', password: 'Rajarani22@' });
   const [checkEmailValidation, setEmailValidation] = useState(false);
   const [secureEntry, setSecureEntry] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
 
+  const dispatch = useDispatch();
+
   const handleLogin = async () => {
     try {
       setIsLoading(true); // Start loading
-      const response = await axios.post(
-        // `${process.env.BASE_URL}/login`,
-        `${BASE_URL_LIVE}/login`,
-        userDetails,
-      );
-      console.log(response.data);
+      const response = await axios.post(`${BASE_URL_LIVE}/login`, userDetails);
+      console.log("response=====> ", response.data);
       if (response.data) {
         const json = JSON.stringify(response.data);
         await AsyncStorage.setItem('userLoginDetails', json);
+        dispatch(saveUserData(response.data));
         navigation.dispatch(
           CommonActions.reset({
             index: 0,
-            routes: [{name: 'BottomHomeScreen'}],
+            routes: [{ name: 'BottomHomeScreen' }],
           }),
         );
       }
@@ -93,7 +89,7 @@ const SignInScreen = ({navigation}) => {
             }}
           />
         </View>
-        <ScrollView style={{flex: 1}} showsVerticalScrollIndicator={false}>
+        <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
           {/* transparent view start */}
           <View
             style={{
@@ -152,7 +148,7 @@ const SignInScreen = ({navigation}) => {
           </View>
           {/* divider views end */}
           {/* email  view */}
-          <View style={{backgroundColor: '#FFFF'}}>
+          <View style={{ backgroundColor: '#FFFF' }}>
             <Text
               style={[
                 styles.EmailPlaceholder,
@@ -165,7 +161,7 @@ const SignInScreen = ({navigation}) => {
             <TextInput
               style={styles.EmailInput}
               onChangeText={text => {
-                setUserDetails({...userDetails, email: text});
+                setUserDetails({ ...userDetails, email: text });
                 // validateEmail(text);
               }}
               value={userDetails.email}
@@ -176,7 +172,7 @@ const SignInScreen = ({navigation}) => {
             />
           </View>
           {/* password  view */}
-          <View style={{backgroundColor: '#FFFF'}}>
+          <View style={{ backgroundColor: '#FFFF' }}>
             <Text
               style={[
                 styles.EmailPlaceholder,
@@ -208,14 +204,14 @@ const SignInScreen = ({navigation}) => {
                       ? require('../assets/images/hidden.png')
                       : require('../assets/images/show.png')
                   }
-                  style={{width: 30, height: 30}}
+                  style={{ width: 30, height: 30 }}
                 />
               </TouchableOpacity>
             </View>
             <TextInput
               style={styles.EmailInput}
               onChangeText={text => {
-                setUserDetails({...userDetails, password: text});
+                setUserDetails({ ...userDetails, password: text });
                 // validateEmail(text);
               }}
               value={userDetails.password}
@@ -236,7 +232,7 @@ const SignInScreen = ({navigation}) => {
             </TouchableOpacity>
           </View>
           {/* sign in btnview */}
-          <View style={{backgroundColor: '#FFFF', flex: 1}}>
+          <View style={{ backgroundColor: '#FFFF', flex: 1 }}>
             <View
               style={{
                 marginHorizontal: 20,
@@ -249,7 +245,7 @@ const SignInScreen = ({navigation}) => {
                 style={styles.SignupBtn}>
                 {isLoading ? (
                   // Step 3: Show ActivityIndicator while loading
-                  <View style={{flexDirection: 'row'}}>
+                  <View style={{ flexDirection: 'row' }}>
                     <Text style={styles.SignupBtnText}>Logging...</Text>
                     <ActivityIndicator />
                   </View>
@@ -267,7 +263,7 @@ const SignInScreen = ({navigation}) => {
                 paddingTop: 20,
                 paddingBottom: 10,
               }}>
-              <Text style={{color: '#808080', fontFamily: 'Poppins-Regular'}}>
+              <Text style={{ color: '#808080', fontFamily: 'Poppins-Regular' }}>
                 Don't have an account?{' '}
               </Text>
               <TouchableOpacity
@@ -275,7 +271,7 @@ const SignInScreen = ({navigation}) => {
                   navigation.navigate('SignUpScreen');
                 }}>
                 <Text
-                  style={{color: GREEN_COLOR, fontFamily: 'Poppins-Regular'}}>
+                  style={{ color: GREEN_COLOR, fontFamily: 'Poppins-Regular' }}>
                   Sign Up
                 </Text>
               </TouchableOpacity>
@@ -290,12 +286,12 @@ const SignInScreen = ({navigation}) => {
               }}
             />
             {/* something else button*/}
-            <View style={{backgroundColor: '#FFFf', marginBottom: 40}}>
+            <View style={{ backgroundColor: '#FFFf', marginBottom: 40 }}>
               <TouchableOpacity
                 onPress={() => refRBSheet.current.open()}
-                style={{alignSelf: 'center', marginTop: 20}}>
+                style={{ alignSelf: 'center', marginTop: 20 }}>
                 <Text
-                  style={{color: GREEN_COLOR, fontFamily: 'Poppins-Regular'}}>
+                  style={{ color: GREEN_COLOR, fontFamily: 'Poppins-Regular' }}>
                   I want to do something else
                 </Text>
               </TouchableOpacity>
@@ -330,13 +326,13 @@ const SignInScreen = ({navigation}) => {
                   }}>
                   <TouchableOpacity
                     onPress={() => refRBSheet.current.close()}
-                    style={{alignSelf: 'flex-end'}}>
+                    style={{ alignSelf: 'flex-end' }}>
                     <Image
                       source={require('../assets/images/close1.png')}
-                      style={{width: 20, height: 20, tintColor: '#b3b3b3'}}
+                      style={{ width: 20, height: 20, tintColor: '#b3b3b3' }}
                     />
                   </TouchableOpacity>
-                  <Text style={{color: '#000', fontFamily: 'Poppins-Regular'}}>
+                  <Text style={{ color: '#000', fontFamily: 'Poppins-Regular' }}>
                     Select what you want to do
                   </Text>
                   <TouchableOpacity

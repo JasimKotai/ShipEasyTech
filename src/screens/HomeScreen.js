@@ -25,8 +25,7 @@ import QRCodeScanner from 'react-native-qrcode-scanner';
 import { useSelector } from 'react-redux';
 
 const HomeScreen = ({ navigation }) => {
-  const { user, customer } = useSelector(state => state.userSlice);
-  console.log(user + "\n" + customer);
+  const { user, customer, token } = useSelector(state => state.userSlice);
   const refRBSheet = useRef();
   const textInputRef = useRef(null);
   const width = Dimensions.get('window').width;
@@ -78,6 +77,10 @@ const HomeScreen = ({ navigation }) => {
   const handleQuickRecharge = () => {
     navigation.navigate('QuickRecharge');
   };
+
+  // console.log("home user ===>", user);
+  // console.log("home token ===>", token);
+
   return (
     <View style={styles.container}>
       <StatusBar
