@@ -528,6 +528,7 @@ const QuickShipmentScreen = ({navigation}) => {
               backgroundColor: '#e6ffef',
               paddingVertical: 20,
               marginTop: 10,
+              borderRadius: 5,
             }}>
             <View
               style={{

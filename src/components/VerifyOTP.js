@@ -20,6 +20,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const VerifyOTP = ({route, navigation}) => {
   // http://localhost/shipEasy/public/api/otp-verify'
   const {verifyOtp} = route.params;
+  // const userVerify = JSON.stringify(verifyOtp.temp_data);
+  // console.log(verifyOtp.temp_data);
 
   const width = Dimensions.get('window').width;
   const height = Dimensions.get('window').height;
@@ -28,64 +30,65 @@ const VerifyOTP = ({route, navigation}) => {
   const [otp, setOtp] = useState('');
 
   const handleSignUpAPI = async () => {
-    try {
-      // setLoading(true);
-      var myHeaders = new Headers();
-      myHeaders.append('Content-Type', 'application/json');
+    // const axios = require('axios');
+    let data = JSON.stringify({
+      otp: '1234',
+      temp_data: [
+        {
+          name: 'Jasisk',
+          phone: '1234567890',
+          company_name: 'Kaoq',
+          email: 'jasimkhan678786@gmail.com',
+          password_confirmation: 'Jasim@123',
+          order_size: 'Setting up a new business',
+        },
+      ],
+    });
+    console.log(data);
 
-      var raw = JSON.stringify({
-        otp: otp,
-        temp_data: [
-          {
-            name: verifyOtp.temp_data[0].name,
-            phone: verifyOtp.temp_data[0].phone,
-            company_name: verifyOtp.temp_data[0].company_name,
-            email: verifyOtp.temp_data[0].email,
-            password_confirmation: verifyOtp.temp_data[0].password_confirmation,
-            order_size: verifyOtp.temp_data[0].order_size,
-          },
-        ],
+    let config = {
+      method: 'post',
+      maxBodyLength: Infinity,
+      url: 'http://localhost/shipEasy/public/api/otp-verify',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      data: data,
+    };
+    axios
+      .request(config)
+      .then(response => {
+        console.log('API RESPONSE', JSON.stringify(response.data));
+      })
+      .catch(error => {
+        console.log('ERR LOG: ', error);
       });
-
-      var requestOptions = {
-        method: 'POST',
-        headers: myHeaders,
-        body: raw,
-        redirect: 'follow',
-      };
-
-      fetch(
-        'http://192.168.1.22/shipEasy/public/api/otp-verify',
-        requestOptions,
-      )
-        .then(response => response.text())
-        .then(result => console.log(result))
-        .catch(error => console.log('error', error));
-
-      // setLoading(true);
-      // const formData = new FormData();
-      // formData.append('otp', otp);
-      // formData.append('temp_data', verifyOtp.temp_data);
-      // console.log(formData);
-      // // console.log('VerifyOTP screen', verifyOtp.temp_data);
-
-      // const response = await axios.post(
-      //   `${VERIFY_USER_OTP}/otp-verify`,
-      //   formData,
-      // );
-      // if (response.data) {
-      //   console.log(response);
-      //   console.log(response.data);
-      //   setLoading(false);
-      //   // const jsonValue = JSON.stringify(response.data);
-      //   // await AsyncStorage.setItem('userSignUpData', jsonValue);
-      // }
-    } catch (error) {
-      setLoading(false);
-      Alert.alert('Error', 'network error');
-      console.log('verify otp error log;', error);
-    }
   };
+
+  // const handleSignUpAPI = async () => {
+  //   try {
+  //     setLoading(true);
+  //     const formData = new FormData();
+  //     formData.append('otp', otp);
+  //     formData.append('temp_data', verifyOtp.temp_data);
+  //     console.log('++++++++', formData);
+  //     // const response = await axios.post(
+  //     //   `${VERIFY_USER_OTP}/otp-verify`,
+  //     //   formData,
+  //     // );
+  //     // if (response.data) {
+  //     //   // console.log(response);
+  //     //   console.log('response.data ===', response.data);
+  //     setLoading(false);
+  //     //   // const jsonValue = JSON.stringify(response.data);
+  //     //   // await AsyncStorage.setItem('userSignUpData', jsonValue);
+  //     // }
+  //   } catch (error) {
+  //     setLoading(false);
+  //     Alert.alert('Error', 'network error');
+  //     console.log('verify otp error log;', error);
+  //   }
+  // };
 
   return (
     <View style={styles.container}>

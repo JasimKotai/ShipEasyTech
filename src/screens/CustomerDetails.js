@@ -8,13 +8,22 @@ import {
   ScrollView,
   TextInput,
 } from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
 import {GREEN_COLOR, LIGHT_GREEN} from '../assets/Colors';
 import Header from '../components/Header';
+import {
+  PRIMARY_TEXT_REG,
+  PRIMARY_TEXT_SEM,
+  TEXT_BLACK,
+  TEXT_BLACK2,
+  TEXT_LIGHT_BLACK,
+  TEXT_WHITE,
+} from '../assets/fontStyles';
 
 const CustomerDetails = ({navigation}) => {
   const height = Dimensions.get('window').height;
   const width = Dimensions.get('window').width;
+  const [BillingAddressNotSame, setBillingAddressNotSame] = useState(false);
   return (
     <View style={styles.container}>
       <Header
@@ -66,11 +75,168 @@ const CustomerDetails = ({navigation}) => {
         </View>
         {/* divider end */}
         <View style={styles.enterCustomerDetailsParentView}>
-          <Text style={styles.customerTitle}>Enter Customer Details</Text>
+          <Text style={styles.customerTitle}>Add Buyer's Details</Text>
+          <Text style={{color: '#808080', fontSize: 12}}>
+            To whom is the order being delivered? (Buyer's Info)
+          </Text>
+          {/* Buyer's Details */}
           <View>
-            <TextInput placeholder=''/>
+            <TextInput
+              placeholder="First Name"
+              placeholderTextColor={'#808080'}
+              style={styles.buyerDetailInput}
+            />
+            <TextInput
+              placeholder="Last Name"
+              style={styles.buyerDetailInput}
+              placeholderTextColor={'#808080'}
+            />
+            <TextInput
+              placeholder="Contact Number"
+              placeholderTextColor={'#808080'}
+              style={styles.buyerDetailInput}
+              keyboardType="number-pad"
+            />
+            <TextInput
+              placeholder="Enter Email Id"
+              placeholderTextColor={'#808080'}
+              style={styles.buyerDetailInput}
+              keyboardType="email-address"
+            />
+            <Text style={{fontSize: 11, color: '#808080', marginTop: 10}}>
+              Where is the order being delivered to?{' '}
+              <Text
+                style={{
+                  color: TEXT_BLACK2,
+                  fontFamily: PRIMARY_TEXT_SEM,
+                  fontSize: 12,
+                }}>
+                (Buyer's Address)
+              </Text>
+            </Text>
+            <TextInput
+              placeholder="House/Floor number.bulding name or street,Locality"
+              placeholderTextColor={'#808080'}
+              style={[styles.buyerDetailInput, {height: height / 16}]}
+              multiline
+            />
+            <TextInput
+              placeholder="Any near by post office,market,hospital as landmark"
+              placeholderTextColor={'#808080'}
+              style={[styles.buyerDetailInput, {height: height / 16}]}
+              multiline
+            />
+            <TextInput
+              placeholder="City"
+              placeholderTextColor={'#808080'}
+              style={styles.buyerDetailInput}
+            />
+            <TextInput
+              placeholder="Pincode"
+              placeholderTextColor={'#808080'}
+              style={styles.buyerDetailInput}
+            />
+            <TextInput
+              placeholder="State"
+              placeholderTextColor={'#808080'}
+              style={styles.buyerDetailInput}
+            />
+            <TextInput
+              placeholder="Country"
+              placeholderTextColor={'#808080'}
+              style={styles.buyerDetailInput}
+            />
+          </View>
+          <View
+            style={{
+              flexDirection: 'row',
+              marginVertical: 10,
+              alignItems: 'center',
+            }}>
+            <TouchableOpacity
+              onPress={() => {
+                setBillingAddressNotSame(!BillingAddressNotSame);
+              }}
+              style={{padding: 5}}>
+              <Image
+                source={
+                  BillingAddressNotSame
+                    ? require('../assets/images/check1.png')
+                    : require('../assets/images/empty-checkbox.png')
+                }
+                style={{width: 20, height: 20}}
+              />
+            </TouchableOpacity>
+            <Text style={{color: TEXT_BLACK2}}>
+              Billing address is not same as Shiping Address
+            </Text>
           </View>
         </View>
+        {/*  Billing address is not same as Shiping start */}
+        {BillingAddressNotSame ? (
+          <View style={styles.enterCustomerDetailsParentView}>
+            <Text style={{fontFamily: PRIMARY_TEXT_SEM, color: TEXT_BLACK2}}>
+              Billing Address
+            </Text>
+            <TextInput
+              placeholder="First Name"
+              placeholderTextColor={'#808080'}
+              style={styles.buyerDetailInput}
+            />
+            <TextInput
+              placeholder="Last Name"
+              style={styles.buyerDetailInput}
+              placeholderTextColor={'#808080'}
+            />
+            <TextInput
+              placeholder="Contact Number"
+              placeholderTextColor={'#808080'}
+              style={styles.buyerDetailInput}
+              keyboardType="number-pad"
+            />
+            <TextInput
+              placeholder="Enter Email Id"
+              placeholderTextColor={'#808080'}
+              style={styles.buyerDetailInput}
+              keyboardType="email-address"
+            />
+            <TextInput
+              placeholder="House/Floor number.bulding name or street,Locality"
+              placeholderTextColor={'#808080'}
+              style={[styles.buyerDetailInput, {height: height / 16}]}
+              multiline
+            />
+            <TextInput
+              placeholder="Any near by post office,market,hospital as landmark"
+              placeholderTextColor={'#808080'}
+              style={[styles.buyerDetailInput, {height: height / 16}]}
+              multiline
+            />
+            <TextInput
+              placeholder="City"
+              placeholderTextColor={'#808080'}
+              style={styles.buyerDetailInput}
+            />
+            <TextInput
+              placeholder="Pincode"
+              placeholderTextColor={'#808080'}
+              style={styles.buyerDetailInput}
+            />
+            <TextInput
+              placeholder="State"
+              placeholderTextColor={'#808080'}
+              style={styles.buyerDetailInput}
+            />
+            <TextInput
+              placeholder="Country"
+              placeholderTextColor={'#808080'}
+              style={styles.buyerDetailInput}
+            />
+          </View>
+        ) : null}
+        <TouchableOpacity style={styles.AddOrderBtn}>
+          <Text style={styles.AddOrderBtnText}>Add Order</Text>
+        </TouchableOpacity>
       </ScrollView>
     </View>
   );
@@ -109,7 +275,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   selectCustomerText: {
-    color: '#000',
+    color: TEXT_BLACK2,
     fontFamily: 'Poppins-SemiBold',
   },
   selectCustomerAddress: {
@@ -138,7 +304,31 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   customerTitle: {
-    color: '#000',
+    color: TEXT_BLACK2,
     fontFamily: 'Poppins-SemiBold',
+  },
+  buyerDetailInput: {
+    borderWidth: 1,
+    borderColor: '#d9d9d9',
+    borderRadius: 5,
+    padding: 0,
+    height: height / 18,
+    marginTop: 10,
+    paddingHorizontal: 10,
+    color: '#000',
+  },
+  AddOrderBtn: {
+    backgroundColor: TEXT_BLACK,
+    marginBottom: 20,
+    padding: 10,
+    marginHorizontal: 5,
+    borderRadius: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  AddOrderBtnText: {
+    color: TEXT_WHITE,
+    fontSize: 15,
+    fontFamily: PRIMARY_TEXT_SEM,
   },
 });
