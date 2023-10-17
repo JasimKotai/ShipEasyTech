@@ -1,8 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Alert } from 'react-native';
-const { createSlice } = require('@reduxjs/toolkit');
-
-
+import {Alert} from 'react-native';
+const {createSlice} = require('@reduxjs/toolkit');
 
 const UserSlice = createSlice({
   name: 'userSlice',
@@ -13,22 +11,21 @@ const UserSlice = createSlice({
     status: false,
   },
   reducers: {
-    userLogout(state, { payload }) {
+    userLogout(state, {payload}) {
       state.user = null;
       state.token = null;
-      AsyncStorage.removeItem("@userDetails");
+      AsyncStorage.removeItem('@userDetails');
       payload.replace('SignInScreen');
       Alert.alert('Logout Successful');
     },
-    saveUserData(state, {payload}){
+    saveUserData(state, {payload}) {
       state.user = payload.user;
       state.token = payload.token;
     },
-
   },
   // extraReducers: builder => {
-    
+
   // },
 });
-export const { userLogout, saveUserData } = UserSlice.actions;
+export const {userLogout, saveUserData} = UserSlice.actions;
 export default UserSlice.reducer;
