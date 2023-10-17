@@ -19,7 +19,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {BASE_URL_LOCAL, BASE_URL_LIVE} from '../config/api';
 import {CommonActions} from '@react-navigation/native';
 import {useToast} from 'react-native-toast-notifications';
-// console.log('++++++', process.env.BASE_URL);
 
 const SignInScreen = ({navigation}) => {
   const toast = useToast();
@@ -29,8 +28,6 @@ const SignInScreen = ({navigation}) => {
   const [isFocused, setIsFocused] = useState('');
   // console.log(isFocused);
   const [userDetails, setUserDetails] = useState({
-    // Email: '',
-    // Password: '',
     email: 'satyasankar09@gmail.com',
     password: 'Rajarani22@',
   });
@@ -159,7 +156,7 @@ const SignInScreen = ({navigation}) => {
             <Text
               style={[
                 styles.EmailPlaceholder,
-                isFocused === 'Email' || userDetails.Email
+                isFocused === 'Email' || userDetails.email
                   ? styles.EmailPlaceholderFocused
                   : {},
               ]}>
@@ -171,6 +168,7 @@ const SignInScreen = ({navigation}) => {
                 setUserDetails({...userDetails, email: text});
                 // validateEmail(text);
               }}
+              value={userDetails.email}
               onFocus={() => {
                 setIsFocused('Email');
               }}
@@ -182,7 +180,7 @@ const SignInScreen = ({navigation}) => {
             <Text
               style={[
                 styles.EmailPlaceholder,
-                isFocused === 'Password' || userDetails.Password
+                isFocused === 'Password' || userDetails.password
                   ? styles.EmailPlaceholderFocused
                   : {},
               ]}>
@@ -220,6 +218,7 @@ const SignInScreen = ({navigation}) => {
                 setUserDetails({...userDetails, password: text});
                 // validateEmail(text);
               }}
+              value={userDetails.password}
               onFocus={() => {
                 setIsFocused('Password');
               }}
