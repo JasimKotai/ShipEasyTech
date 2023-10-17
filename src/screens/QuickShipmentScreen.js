@@ -257,7 +257,8 @@ const QuickShipmentScreen = ({navigation}) => {
         {/* Delivery pincode */}
         <View style={styles.pickupAddressView}>
           <Text style={styles.pickupAddressText}>
-            Delivery Pincode <Text style={{color: '#cccccc'}}>(Optional)</Text>
+            Delivery Pincode
+            {/* <Text style={{color: '#cccccc'}}>(Optional)</Text> */}
           </Text>
           <View style={styles.selectLocationView}>
             <TextInput

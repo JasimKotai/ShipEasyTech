@@ -17,7 +17,7 @@ import React, {useRef, useState} from 'react';
 import {GREEN_COLOR} from '../assets/Colors';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import axios from 'axios';
-import {BASE_URL_LIVE, BASE_URL_LOCAL} from '@env';
+import {SIGNUP_URL} from '@env';
 
 const SignUpScreen = ({navigation}) => {
   const refRBSheet = useRef();
@@ -190,7 +190,7 @@ const SignUpScreen = ({navigation}) => {
       formData.append('order_size', userDetails.order_size);
 
       const response = await axios.post(
-        `${BASE_URL_LIVE}/verify-register`,
+        `${SIGNUP_URL}/verify-register`,
         formData,
       );
       if (response.data) {
