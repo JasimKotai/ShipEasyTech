@@ -10,46 +10,45 @@ import {
   Pressable,
   Alert,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {GREEN_COLOR} from '../assets/Colors';
+import { GREEN_COLOR } from '../assets/Colors';
 import DropDown from '../components/DropDown';
 import ReUsableButtons from '../components/ReUsableButtons';
 import DropDown2 from '../components/DropDown2';
+import { useDispatch, useSelector } from 'react-redux';
+import { userLogout } from '../config/UserSlice';
 
-const MoreScreen = ({navigation}) => {
+const MoreScreen = ({ navigation }) => {
   const imagePath = '../assets/images/up-arrow.png';
   const Width = Dimensions.get('window').width;
   const Height = Dimensions.get('window').height;
-  const [loginDetails, setLoginDetails] = useState('');
+  // const [loginDetails, setLoginDetails] = useState('');
   const [userProfileImage, setUserProfileImage] = useState(null);
   const [dropDown, setDropDown] = useState(false);
   const [channelIntegrations, setChannelIntegration] = useState(false);
+  const { user, token } = useSelector(state => state.userSlice);
 
-  //   console.log(loginDetails);
+  const dispatch = useDispatch();
 
-  useEffect(() => {
-    const getUserName = async () => {
-      try {
-        const res = await AsyncStorage.getItem('userLoginDetails');
-        const parse = JSON.parse(res);
-        // console.log('+++', parse.user.name);
-        setLoginDetails(parse);
-      } catch (error) {
-        console.log('Contact screen log:', error);
-      }
-    };
-    getUserName();
-  }, []);
+  // console.log("more user=====>", user);
 
-  const handleLogout = async () => {
-    try {
-      await AsyncStorage.clear();
-      navigation.replace('SignInScreen');
-      Alert.alert('Logout Successful');
-    } catch (error) {
-      console.log('handle logout error ', error);
-    }
+  // useEffect(() => {
+  //   const getUserName = async () => {
+  //     try {
+  //       const res = await AsyncStorage.getItem('userLoginDetails');
+  //       const parse = JSON.parse(res);
+  //       // console.log('+++', parse.user.name);
+  //       setLoginDetails(parse);
+  //     } catch (error) {
+  //       console.log('Contact screen log:', error);
+  //     }
+  //   };
+  //   getUserName();
+  // }, []);
+
+  const handleLogout = () => {
+    dispatch(userLogout(navigation));
   };
 
   return (
@@ -67,7 +66,7 @@ const MoreScreen = ({navigation}) => {
                   ? require('../assets/images/logo1.png')
                   : require('../assets/images/profile-user.png')
               }
-              style={{width: 70, height: 70}}
+              style={{ width: 70, height: 70 }}
             />
             {/* company name */}
             <View
@@ -77,7 +76,7 @@ const MoreScreen = ({navigation}) => {
                 flex: 1,
               }}>
               <Text numberOfLines={1} style={styles.company_name_Style}>
-                {loginDetails ? loginDetails.user.company_name : null}
+                {user?.company_name ? user?.company_name : null}
               </Text>
               {/* <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <Image
@@ -95,8 +94,8 @@ const MoreScreen = ({navigation}) => {
         </View>
         {/* drop down start */}
         <View style={styles.dropDownParent}>
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            <View style={{flexDirection: 'row', flex: 1, alignItems: 'center'}}>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <View style={{ flexDirection: 'row', flex: 1, alignItems: 'center' }}>
               <Text
                 style={{
                   color: '#000',
@@ -126,7 +125,7 @@ const MoreScreen = ({navigation}) => {
                     ? require('../assets/images/up-arrow.png')
                     : require('../assets/images/down-arrow.png')
                 }
-                style={{width: 18, height: 18, marginRight: 5}}
+                style={{ width: 18, height: 18, marginRight: 5 }}
               />
             </TouchableOpacity>
           </View>

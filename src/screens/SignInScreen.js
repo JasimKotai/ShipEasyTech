@@ -42,7 +42,7 @@ const SignInScreen = ({ navigation }) => {
       console.log("response=====> ", response.data);
       if (response.data) {
         const json = JSON.stringify(response.data);
-        await AsyncStorage.setItem('userLoginDetails', json);
+        await AsyncStorage.setItem('@userDetails', json);
         dispatch(saveUserData(response.data));
         navigation.dispatch(
           CommonActions.reset({
