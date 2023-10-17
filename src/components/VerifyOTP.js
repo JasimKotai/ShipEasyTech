@@ -14,7 +14,7 @@ import {
 import React, {useState} from 'react';
 import axios from 'axios';
 import {GREEN_COLOR, LIGHT_GREEN} from '../assets/Colors';
-import {VERIFY_USER_OTP} from '@env';
+import {BASE_URL_LOCAL} from '@env';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const VerifyOTP = ({route, navigation}) => {
