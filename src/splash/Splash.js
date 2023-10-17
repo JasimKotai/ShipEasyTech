@@ -8,16 +8,22 @@ import {
 } from 'react-native';
 import React, {useEffect} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useDispatch } from 'react-redux';
+import { saveUserData } from '../config/UserSlice';
 
 const Splash = ({navigation}) => {
   const windowWidth = Dimensions.get('window').width;
+  const dispatch = useDispatch();
+
+
   useEffect(() => {
     setTimeout(() => {
       const handleUserLoginData = async () => {
         try {
-          const res = await AsyncStorage.getItem('userLoginDetails');
-          const parse = JSON.parse(res);
-          if (parse !== null) {
+          const res = await AsyncStorage.getItem('@userDetails');
+          const userData = JSON.parse(res);
+          if (userData !== null) {
+            dispatch(saveUserData(userData));
             navigation.replace('BottomHomeScreen');
           } else {
             navigation.replace('SignInScreen');
