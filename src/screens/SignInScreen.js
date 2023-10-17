@@ -16,7 +16,7 @@ import {GREEN_COLOR} from '../assets/Colors';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {BASE_URL_LOCAL} from '@env';
+import {BASE_URL_LOCAL, BASE_URL_LIVE} from '@env';
 import {CommonActions} from '@react-navigation/native';
 import {useToast} from 'react-native-toast-notifications';
 // console.log('++++++', process.env.BASE_URL);
@@ -44,7 +44,7 @@ const SignInScreen = ({navigation}) => {
       setIsLoading(true); // Start loading
       const response = await axios.post(
         // `${process.env.BASE_URL}/login`,
-        `${BASE_URL_LOCAL}/login`,
+        `${BASE_URL_LIVE}/login`,
         userDetails,
       );
       console.log(response.data);
