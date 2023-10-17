@@ -16,7 +16,7 @@ import {GREEN_COLOR} from '../assets/Colors';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {BASE_URL} from '@env';
+import {BASE_URL_LOCAL} from '@env';
 import {CommonActions} from '@react-navigation/native';
 import {useToast} from 'react-native-toast-notifications';
 // console.log('++++++', process.env.BASE_URL);
@@ -31,8 +31,8 @@ const SignInScreen = ({navigation}) => {
   const [userDetails, setUserDetails] = useState({
     // Email: '',
     // Password: '',
-    Email: 'satyasankar09@gmail.com',
-    Password: 'Rajarani22@',
+    email: 'satyasankar09@gmail.com',
+    password: 'Rajarani22@',
   });
   // console.log(userDetails);
   const [checkEmailValidation, setEmailValidation] = useState(false);
@@ -40,16 +40,12 @@ const SignInScreen = ({navigation}) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleLogin = async () => {
-    const formData = new FormData();
-    formData.append('email', userDetails.Email);
-    formData.append('password', userDetails.Password);
-
     try {
       setIsLoading(true); // Start loading
       const response = await axios.post(
         // `${process.env.BASE_URL}/login`,
-        `${BASE_URL}/login`,
-        formData,
+        `${BASE_URL_LOCAL}/login`,
+        userDetails,
       );
       console.log(response.data);
       if (response.data) {
@@ -172,7 +168,7 @@ const SignInScreen = ({navigation}) => {
             <TextInput
               style={styles.EmailInput}
               onChangeText={text => {
-                setUserDetails({...userDetails, Email: text});
+                setUserDetails({...userDetails, email: text});
                 // validateEmail(text);
               }}
               onFocus={() => {
@@ -221,7 +217,7 @@ const SignInScreen = ({navigation}) => {
             <TextInput
               style={styles.EmailInput}
               onChangeText={text => {
-                setUserDetails({...userDetails, Password: text});
+                setUserDetails({...userDetails, password: text});
                 // validateEmail(text);
               }}
               onFocus={() => {

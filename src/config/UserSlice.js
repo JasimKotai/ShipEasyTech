@@ -13,6 +13,9 @@ const UserSlice = createSlice({
     userLogout(state, { payload }) {
 
     },
+    saveUserData(state, {payload}){
+
+    },
     
   },
   // extraReducers: builder => {
