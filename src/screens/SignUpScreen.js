@@ -241,7 +241,7 @@ const SignUpScreen = ({navigation}) => {
               <View style={styles.facebookAndGoogleChildView}>
                 <TouchableOpacity style={styles.facebookBtn}>
                   <Image
-                    source={require('../assets/images/search.png')}
+                    source={require('../assets/images/google.png')}
                     style={styles.facebookIcon}
                   />
                 </TouchableOpacity>

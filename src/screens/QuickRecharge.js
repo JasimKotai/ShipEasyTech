@@ -17,7 +17,7 @@ import {useNavigation} from '@react-navigation/native';
 const QuickRecharge = ({navigation, refRBSheet2}) => {
   const [amount, setAmount] = useState('500');
   const toCouponScreen = () => {
-    navigation.navigate('CouponsScreen', {refRBSheet2: refRBSheet2});
+    navigation.navigate('CouponsScreen', {refRBSheet2});
     refRBSheet2.current.close();
   };
   return (
