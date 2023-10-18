@@ -28,7 +28,8 @@ const SignInScreen = ({ navigation }) => {
   const width = Dimensions.get('window').width;
   const height = Dimensions.get('window').height;
   const [isFocused, setIsFocused] = useState('');
-  const [userDetails, setUserDetails] = useState({ email: 'satyasankar09@gmail.com', password: 'Rajarani22@' });
+  // const [userDetails, setUserDetails] = useState({ email: 'satyasankar09@gmail.com', password: 'Rajarani22@' });
+  const [userDetails, setUserDetails] = useState({ email: 'chandan76kotai@gmail.com', password: 'Abc@123' });
   const [checkEmailValidation, setEmailValidation] = useState(false);
   const [secureEntry, setSecureEntry] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
@@ -38,12 +39,12 @@ const SignInScreen = ({ navigation }) => {
   const handleLogin = async () => {
     try {
       setIsLoading(true); // Start loading
-      const response = await axios.post(`${BASE_URL_LIVE}/login`, userDetails);
+      const response = await axios.post(`${BASE_URL_LOCAL}/login`, userDetails);
       console.log("response=====> ", response.data);
-      if (response.data) {
-        const json = JSON.stringify(response.data);
+      if (response.data.code == "200") {
+        const json = JSON.stringify(response.data.userData);
         await AsyncStorage.setItem('@userDetails', json);
-        dispatch(saveUserData(response.data));
+        dispatch(saveUserData(response.data.userData));
         navigation.dispatch(
           CommonActions.reset({
             index: 0,

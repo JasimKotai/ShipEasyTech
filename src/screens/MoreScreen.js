@@ -27,11 +27,11 @@ const MoreScreen = ({ navigation }) => {
   const [userProfileImage, setUserProfileImage] = useState(null);
   const [dropDown, setDropDown] = useState(false);
   const [channelIntegrations, setChannelIntegration] = useState(false);
-  const { user, token } = useSelector(state => state.userSlice);
+  const { user, customer } = useSelector(state => state.userSlice);
 
   const dispatch = useDispatch();
 
-  // console.log("more user=====>", user);
+  console.log("more user=====>", user);
 
   // useEffect(() => {
   //   const getUserName = async () => {

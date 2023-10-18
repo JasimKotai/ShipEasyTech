@@ -7,7 +7,6 @@ const UserSlice = createSlice({
   initialState: {
     user: null,
     customer: null,
-    token: null,
     status: false,
   },
   reducers: {
@@ -19,13 +18,11 @@ const UserSlice = createSlice({
       Alert.alert('Logout Successful');
     },
     saveUserData(state, {payload}) {
-      state.user = payload.user;
-      state.token = payload.token;
+      state.user = payload?.user;
+      state.customer = payload?.customer;
     },
-  },
-  // extraReducers: builder => {
 
-  // },
+  },
 });
 export const {userLogout, saveUserData} = UserSlice.actions;
 export default UserSlice.reducer;

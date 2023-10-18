@@ -11,13 +11,15 @@ import {
   Alert,
   ActivityIndicator,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
-import {GREEN_COLOR, LIGHT_GREEN} from '../assets/Colors';
+import { GREEN_COLOR, LIGHT_GREEN } from '../assets/Colors';
 import { BASE_URL_LIVE, BASE_URL_LOCAL } from '../config/api';
+import { useDispatch } from 'react-redux';
+import { saveUserData } from '../config/UserSlice';
 
-const VerifyOTP = ({route, navigation}) => {
-  const {temp_data} = route.params;
+const VerifyOTP = ({ route, navigation }) => {
+  const { temp_data } = route.params;
   console.log("temp_data===>", temp_data);
 
   const width = Dimensions.get('window').width;
@@ -25,6 +27,7 @@ const VerifyOTP = ({route, navigation}) => {
 
   const [loading, setLoading] = useState(false);
   const [otp, setOtp] = useState('');
+  const dispatch = useDispatch();
 
   const handleSignUpAPI = async () => {
     try {
@@ -32,11 +35,21 @@ const VerifyOTP = ({route, navigation}) => {
         otp: otp,
         temp_data: [temp_data],
       };
-      console.log(data);
+      // console.log(data);
 
-      const response = await axios.post(`${BASE_URL_LIVE}/otp-verify`, data);
-      Alert.alert('success', response.data.message);
-      console.log("response=====>", response.data);
+      const response = await axios.post(`${BASE_URL_LOCAL}/otp-verify`, data);
+      if (response?.data?.code == "200") {
+        Alert.alert('ShipEasy', response.data.message);
+        dispatch(saveUserData(response.data?.userData));
+        navigation.replace('BottomHomeScreen');
+      }
+      else if (response?.data?.code == "23000") {
+        Alert.alert('ShipEasy', response.data.message);
+        console.log("response=====>", response.data);
+      }else{
+        Alert.alert('Message', response.data.message);
+        console.log("response=====>", response.data);
+      }
     } catch (error) {
       setLoading(false);
       Alert.alert('Error', error.response.data);
@@ -79,20 +92,21 @@ const VerifyOTP = ({route, navigation}) => {
             style={styles.otpInput}
             keyboardType="number-pad"
             value={otp}
+            maxLength={4}
             onChangeText={setOtp}
           />
           <TouchableOpacity>
             <Text style={styles.ResendOtptext}>Resend OTP</Text>
           </TouchableOpacity>
         </View>
-        <View style={{backgroundColor: '#ffff', paddingBottom: 20}}>
+        <View style={{ backgroundColor: '#ffff', paddingBottom: 20 }}>
           <TouchableOpacity
             onPress={() => {
               handleSignUpAPI();
             }}
             style={styles.submitButton}>
             {loading ? (
-              <View style={{flexDirection: 'row'}}>
+              <View style={{ flexDirection: 'row' }}>
                 <Text style={styles.SignupBtnText}>Wait...</Text>
                 <ActivityIndicator />
               </View>
