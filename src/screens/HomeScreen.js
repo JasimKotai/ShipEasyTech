@@ -28,6 +28,8 @@ import QuickRecharge from './QuickRecharge';
 const HomeScreen = ({navigation}) => {
   const {user, customer, token} = useSelector(state => state.userSlice);
   const refRBSheet = useRef();
+  const refRBSheet2 = useRef();
+
   const textInputRef = useRef(null);
   const width = Dimensions.get('window').width;
   const height = Dimensions.get('window').height;
@@ -50,10 +52,6 @@ const HomeScreen = ({navigation}) => {
     setFocus(false);
   };
   const data = [1, 1, 1, 1];
-  //opening RBSheet dont delete
-  const handleAddorder = () => {
-    refRBSheet.current.open();
-  };
 
   // barcode
   const handleRequestCameraPermission = async () => {
@@ -80,6 +78,15 @@ const HomeScreen = ({navigation}) => {
   const toggleModal = () => {
     setModalVisible(!modalVisible);
   };
+  //opening RBSheet for add order dont delete
+  const handleAddorder = () => {
+    refRBSheet.current.open();
+  };
+  //opening RBSheet for QuickRecharge
+  const handleQuickRecharge = () => {
+    refRBSheet2.current.open();
+  };
+
   return (
     <View style={styles.container}>
       <StatusBar
@@ -88,9 +95,7 @@ const HomeScreen = ({navigation}) => {
         backgroundColor={'transparent'}
         barStyle={'dark-content'}
       />
-      {/* quick recharge (modal) */}
-      <QuickRecharge visible={modalVisible} onClose={toggleModal} />
-      {/* handleAddorder */}
+      {/* RBSheet for Addorder */}
       <RBSheet
         ref={refRBSheet}
         closeOnDragDown={true}
@@ -130,6 +135,46 @@ const HomeScreen = ({navigation}) => {
           <AddOrderSheet REF={refRBSheet} />
         </View>
       </RBSheet>
+      {/* RBSheet for QuickRecharge */}
+      <RBSheet
+        ref={refRBSheet2}
+        closeOnDragDown={true}
+        closeOnPressMask={false}
+        height={height / 1.5}
+        customStyles={{
+          wrapper: {
+            backgroundColor: 'rgba(0, 0, 0, 0.7)',
+          },
+          draggableIcon: {
+            // backgroundColor: '#000',
+            padding: 0,
+            width: 0,
+            height: 0,
+            margin: 0,
+          },
+          container: {
+            borderTopLeftRadius: 30,
+            borderTopRightRadius: 30,
+          },
+        }}>
+        <View style={{flex: 1, backgroundColor: 'aliceblue'}}>
+          <TouchableOpacity
+            style={{
+              marginRight: 20,
+              marginTop: 15,
+              alignSelf: 'flex-end',
+            }}
+            onPress={() => refRBSheet2.current.close()}>
+            <Image
+              source={require('../assets/images/close.png')}
+              style={{width: 15, height: 15, tintColor: GREEN_COLOR}}
+            />
+          </TouchableOpacity>
+          <QuickRecharge navigation={navigation} refRBSheet2={refRBSheet2} />
+        </View>
+      </RBSheet>
+      {/* RBSheet for QuickRecharge end */}
+
       {/* header */}
       <View style={styles.headerView}>
         <View style={styles.headerStyle}>
@@ -256,7 +301,8 @@ const HomeScreen = ({navigation}) => {
             <QuickActionBtns
               image={require('../assets/images/wallet1.png')}
               title="Quick Recharge"
-              onPress={toggleModal}
+              onPress={handleQuickRecharge}
+              // onPress={toggleModal}
               // onPress={() => {
               //   navigation.navigate('QuickRecharge');
               // }}

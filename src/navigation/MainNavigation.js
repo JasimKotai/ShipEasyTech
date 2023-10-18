@@ -22,6 +22,8 @@ import AddPickupAddress from '../screens/AddPickupAddress';
 import QuickRecharge from '../screens/QuickRecharge';
 import CustomerDetails from '../screens/CustomerDetails';
 import Header from '../components/Header';
+import CouponsScreen from '../screens/CouponsScreen';
+import HomeScreen from '../screens/HomeScreen';
 
 const MainNavigation = () => {
   const Stack = createNativeStackNavigator();
@@ -58,6 +60,8 @@ const MainNavigation = () => {
         <Stack.Screen name="QuickRecharge" component={QuickRecharge} />
         <Stack.Screen name="CustomerDetails" component={CustomerDetails} />
         <Stack.Screen name="Header" component={Header} />
+        <Stack.Screen name="CouponsScreen" component={CouponsScreen} />
+        <Stack.Screen name="HomeScreen" component={HomeScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

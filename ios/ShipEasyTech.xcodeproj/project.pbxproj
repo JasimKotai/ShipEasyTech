@@ -25,6 +25,9 @@
 		881AB6717A4E46CC8274F883 /* Caveat-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E289A69A33544F99BA394841 /* Caveat-Regular.ttf */; };
 		F6794A75F95E42A8A66F67F6 /* Caveat-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EDF662F83791439B9C81F546 /* Caveat-Bold.ttf */; };
 		FE3BDD936A824FA4AA2D4423 /* Poppins-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0CEBD7E21DE34D86B7C764CB /* Poppins-Regular.ttf */; };
+		A22039E4268F4ADBABA0E42C /* Onest-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EBB715A4A9DA4F908CE157FA /* Onest-Bold.ttf */; };
+		E7C855E7E91747E6B5A55F10 /* Onest-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2EF924C83EAF47F0AAFCA677 /* Onest-Regular.ttf */; };
+		83E6E7064D1340D3A16AF178 /* Onest-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0676FCBEDC2240C388793219 /* Onest-SemiBold.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -66,6 +69,9 @@
 		E289A69A33544F99BA394841 /* Caveat-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Caveat-Regular.ttf"; path = "../src/assets/fonts/Caveat-Regular.ttf"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		EDF662F83791439B9C81F546 /* Caveat-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Caveat-Bold.ttf"; path = "../src/assets/fonts/Caveat-Bold.ttf"; sourceTree = "<group>"; };
+		EBB715A4A9DA4F908CE157FA /* Onest-Bold.ttf */ = {isa = PBXFileReference; name = "Onest-Bold.ttf"; path = "../src/assets/fonts/Onest-Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		2EF924C83EAF47F0AAFCA677 /* Onest-Regular.ttf */ = {isa = PBXFileReference; name = "Onest-Regular.ttf"; path = "../src/assets/fonts/Onest-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		0676FCBEDC2240C388793219 /* Onest-SemiBold.ttf */ = {isa = PBXFileReference; name = "Onest-SemiBold.ttf"; path = "../src/assets/fonts/Onest-SemiBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -132,6 +138,9 @@
 				E20BE86EA81546818F91D992 /* Poppins-SemiBold.ttf */,
 				951B6808622140B0ABAE73BA /* Roboto-Bold.ttf */,
 				BB55938A25514F628266EF0E /* Roboto-Regular.ttf */,
+				EBB715A4A9DA4F908CE157FA /* Onest-Bold.ttf */,
+				2EF924C83EAF47F0AAFCA677 /* Onest-Regular.ttf */,
+				0676FCBEDC2240C388793219 /* Onest-SemiBold.ttf */,
 			);
 			name = Resources;
 			path = "";
@@ -297,6 +306,9 @@
 				4A7789A33D794802B96823F6 /* Poppins-SemiBold.ttf in Resources */,
 				5917D32467F74CA082DC945C /* Roboto-Bold.ttf in Resources */,
 				5E9720172779478781DD8280 /* Roboto-Regular.ttf in Resources */,
+				A22039E4268F4ADBABA0E42C /* Onest-Bold.ttf in Resources */,
+				E7C855E7E91747E6B5A55F10 /* Onest-Regular.ttf in Resources */,
+				83E6E7064D1340D3A16AF178 /* Onest-SemiBold.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
