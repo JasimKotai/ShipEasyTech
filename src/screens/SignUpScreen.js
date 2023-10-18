@@ -471,7 +471,7 @@ const SignUpScreen = ({navigation}) => {
               />
               {password_confirmation == false ? (
                 <Text style={{fontSize: 10, color: 'red', marginLeft: 30}}>
-                  Please enter valid email
+                  Please enter valid password
                 </Text>
               ) : null}
 
