@@ -2,10 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<!--  -->
 	<key>NSCameraUsageDescription</key>
 	<string>$(PRODUCT_NAME) needs access to your Camera.</string>
-	<!--  -->
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
@@ -68,6 +66,9 @@
 		<string>Poppins-SemiBold.ttf</string>
 		<string>Roboto-Bold.ttf</string>
 		<string>Roboto-Regular.ttf</string>
+		<string>Onest-Bold.ttf</string>
+		<string>Onest-Regular.ttf</string>
+		<string>Onest-SemiBold.ttf</string>
 	</array>
 </dict>
 </plist>
