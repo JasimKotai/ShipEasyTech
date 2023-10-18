@@ -17,7 +17,7 @@ import React, {useRef, useState} from 'react';
 import {GREEN_COLOR} from '../assets/Colors';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import axios from 'axios';
-import {BASE_URL_LIVE, BASE_URL_LOCAL} from '../config/api';
+import {BASE_URL_DEV, BASE_URL_LIVE, BASE_URL_LOCAL} from '../config/api';
 
 const SignUpScreen = ({navigation}) => {
   const refRBSheet = useRef();
@@ -178,7 +178,7 @@ const SignUpScreen = ({navigation}) => {
   const handleSignUpAPI = async () => {
     try {
       setLoading(true);
-      const response = await axios.post(`${BASE_URL_LIVE}/verify-register`, userDetails);
+      const response = await axios.post(`${BASE_URL_LOCAL}/verify-register`, userDetails);
       if (response.data) {
         // console.log('SignUpScreen', response.data);
         navigation.navigate('VerifyOTP', {temp_data: response.data.temp_data[0]});
