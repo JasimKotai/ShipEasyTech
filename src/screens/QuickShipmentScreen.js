@@ -19,25 +19,25 @@ import Header from '../components/Header';
 
 
 const productDetails = {
-  // id: keyCounter++,
-  productName: '',
-  Quantity: '',
-  UnitPrice: '',
-  SKU: '',
+  product_name: '',
+  quentity: '',
+  price: '',
+  sku: '',
   ProductCategory: '',
   HSNCategory: '',
   TaxRate: '',
   Discount: '',
-}
+  showMore: false,
+};
 
 const QuickShipmentScreen = ({ navigation }) => {
   const [renderOnes, setrenderOnes] = useState(null);
   const height = Dimensions.get('window').height;
   const width = Dimensions.get('window').width;
   const [address, setAddress] = useState('empty');
-  const [showMore, setShowMore] = useState(null);
+  // const [showMore, setShowMore] = useState(null);
   const [productCategory, setproductCategory] = useState('');
-  const [products, setProducts] = useState([productDetails]);
+  const [products, setProducts] = useState([]);
   const [dropDownButton, setdropDownButton] = useState(false);
   const [cashOrPrepaid, setCashOrPrepaid] = useState('COD');
   const [otherCharges, setOtherCharges] = useState(false);
@@ -47,10 +47,20 @@ const QuickShipmentScreen = ({ navigation }) => {
   // console.log(productDetails);
 
   const addAnotherProduct = () => {
-    setProducts(prevState => {
-      const prevList = [...prevState, productDetails];
-    });
+    setProducts([...products, productDetails]);
   };
+
+  const changeShowMore = (index) => {
+    console.log("index==>", index);
+    setProducts(prevState => {
+      const updatedProducts = [...prevState];
+      updatedProducts[index] = {
+        ...updatedProducts[index],
+        showMore: !updatedProducts[index].showMore
+      };
+      return updatedProducts;
+    });
+  }
 
   // useEffect(() => {
   //   addAnotherProduct();
@@ -83,9 +93,9 @@ const QuickShipmentScreen = ({ navigation }) => {
   //   );
   // };
 
-  // useEffect(() => {
-  //   setProducts([...products, productDetailsLayout]);
-  // }, [])
+  useEffect(() => {
+    setProducts([...products, productDetails]);
+  }, [])
 
   return (
     // <KeyboardAvoidingView enabled={true} style={{flex: 1}} behavior={'height'}>
@@ -193,8 +203,16 @@ const QuickShipmentScreen = ({ navigation }) => {
                   placeholder="Product Name"
                   placeholderTextColor={'#808080'}
                   style={styles.enterLocationInput}
+                  value={item?.product_name}
                   onChangeText={text =>
-                    setproductDetails({ ...productDetails, productName: text })
+                    setProducts(prevState => {
+                      const updatedProducts = [...prevState];
+                      updatedProducts[index] = {
+                        ...updatedProducts[index],
+                        product_name: text
+                      };
+                      return updatedProducts;
+                    })
                   }
                 />
                 <TouchableOpacity
@@ -220,8 +238,16 @@ const QuickShipmentScreen = ({ navigation }) => {
                   style={styles.QuantityInput}
                   keyboardType="number-pad"
                   placeholderTextColor={'#808080'}
+                  value={item.quentity}
                   onChangeText={text =>
-                    setproductDetails({ ...productDetails, Quantity: text })
+                    setProducts(prevState => {
+                      const updatedProducts = [...prevState];
+                      updatedProducts[index] = {
+                        ...updatedProducts[index],
+                        quentity: text
+                      };
+                      return updatedProducts;
+                    })
                   }
                 />
                 <TextInput
@@ -229,8 +255,16 @@ const QuickShipmentScreen = ({ navigation }) => {
                   style={styles.QuantityInput}
                   keyboardType="number-pad"
                   placeholderTextColor={'#808080'}
+                  value={item.price}
                   onChangeText={text =>
-                    setproductDetails({ ...productDetails, UnitPrice: text })
+                    setProducts(prevState => {
+                      const updatedProducts = [...prevState];
+                      updatedProducts[index] = {
+                        ...updatedProducts[index],
+                        price: text
+                      };
+                      return updatedProducts;
+                    })
                   }
                 />
               </View>
@@ -238,26 +272,35 @@ const QuickShipmentScreen = ({ navigation }) => {
                 placeholder="SKU"
                 style={styles.SKUInput}
                 placeholderTextColor={'#808080'}
+                value={item.sku}
                 onChangeText={text =>
-                  setproductDetails({ ...productDetails, SKU: text })
+                  setProducts(prevState => {
+                    const updatedProducts = [...prevState];
+                    updatedProducts[index] = {
+                      ...updatedProducts[index],
+                      sku: text
+                    };
+                    return updatedProducts;
+                  })
                 }
               />
               {/* show more button start*/}
               <TouchableOpacity
                 onPress={() => {
-                  setShowMore(index);
+                  changeShowMore(index);
                 }}
-                style={styles.showMore}>
+                style={styles.showMore}
+              >
                 <Text style={styles.showMoreText}>
-                  {showMore === index ? 'Show Less -' : 'Show More +'}
+                  {item?.showMore ? 'Show Less -' : 'Show More +'}
                 </Text>
               </TouchableOpacity>
               {/* show more button end*/}
-              {/* product category button */}
-              {console.log("showMore==>", showMore)}
-              {showMore === index ? (
+              {/* product category button
+              {console.log("showMore==>", item.showMore)} */}
+              {item?.showMore ? (
                 <>
-                  <TouchableOpacity style={styles.productCategoryBtn}>
+                  {/* <TouchableOpacity style={styles.productCategoryBtn}>
                     <Text style={{ color: '#999999' }}>
                       Product Category (Optional)
                     </Text>
@@ -266,12 +309,23 @@ const QuickShipmentScreen = ({ navigation }) => {
                         {productCategory}
                       </Text>
                     ) : null}
-                  </TouchableOpacity>
+                  </TouchableOpacity> */}
                   {/* HSN (Optional) input */}
                   <TextInput
                     placeholder="HSN (Optional)"
                     placeholderTextColor={'#808080'}
+                    value={item.HSNCategory}
                     style={styles.HSNInput}
+                    onChangeText={text => {
+                      setProducts(prevState => {
+                        const updatedProducts = [...prevState];
+                        updatedProducts[index] = {
+                          ...updatedProducts[index],
+                          HSNInput: text
+                        };
+                        return updatedProducts;
+                      })
+                    }}
                   />
                   {/* Tax Rate & Discount inputs view start */}
                   <View style={styles.TaxRateDiscountView}>
@@ -279,11 +333,33 @@ const QuickShipmentScreen = ({ navigation }) => {
                       placeholder="Tax Rate (Optional)"
                       style={styles.TaxRateDiscountInput}
                       placeholderTextColor={'#808080'}
+                      value={item.TaxRate}
+                      onChangeText={text => {
+                        setProducts(prevState => {
+                          const updatedProducts = [...prevState];
+                          updatedProducts[index] = {
+                            ...updatedProducts[index],
+                            TaxRate: text
+                          };
+                          return updatedProducts;
+                        })
+                      }}
                     />
                     <TextInput
                       placeholder="Discount (Optional)"
                       style={styles.TaxRateDiscountInput}
                       placeholderTextColor={'#808080'}
+                      value={item.Discount}
+                      onChangeText={text => {
+                        setProducts(prevState => {
+                          const updatedProducts = [...prevState];
+                          updatedProducts[index] = {
+                            ...updatedProducts[index],
+                            Discount: text
+                          };
+                          return updatedProducts;
+                        })
+                      }}
                     />
                   </View>
                   {/* Tax Rate & Discount inputs view end */}
