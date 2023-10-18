@@ -149,6 +149,26 @@ const QuickRecharge = ({visible, onClose}) => {
               <Text style={styles.addMoneyBtnsText}>₹5000</Text>
             </TouchableOpacity>
           </View>
+          {/* coupon code view */}
+          <View style={styles.couponCodeView}>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}>
+              <Image
+                source={require('../assets/images/coupon.png')}
+                style={{width: 30, height: 30}}
+              />
+              <Text style={{color: TEXT_BLACK2, fontFamily: 'Onest-Regular'}}>
+                Select Coupon Code
+              </Text>
+            </View>
+
+            <TouchableOpacity>
+              <Text>View Coupons</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     </Modal>
@@ -185,7 +205,7 @@ const styles = StyleSheet.create({
   addMoneyBtns: {
     flexDirection: 'row',
     borderWidth: 1,
-    borderColor: '#fff',
+    borderColor: '#96ddea',
     width: width / 4.7,
     backgroundColor: LIGHT_GREEN,
     justifyContent: 'space-evenly',
@@ -197,4 +217,11 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
   addMoneyBtnsImg: {width: 18, height: 18},
+  couponCodeView: {
+    backgroundColor: '#e6ffef',
+    padding: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
 });
