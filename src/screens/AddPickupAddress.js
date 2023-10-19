@@ -12,26 +12,43 @@ import {
   ScrollView,
   StatusBar,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import Geolocation from '@react-native-community/geolocation';
 import MapView from 'react-native-maps';
-import {GREEN_COLOR, LIGHT_GREEN} from '../assets/Colors';
-import {Dropdown} from 'react-native-element-dropdown';
+import { GREEN_COLOR, LIGHT_GREEN } from '../assets/Colors';
+import { Dropdown } from 'react-native-element-dropdown';
+import { useSelector } from 'react-redux';
 const data = [
-  {label: 'Item 1', value: 'hello world'},
-  {label: 'Item 2', value: 'hello world 2'},
-  {label: 'Item 2', value: 'hello world 2'},
-  {label: 'Item 2', value: 'hello world 2'},
-  {label: 'Item 2', value: 'hello world 2'},
+  { label: 'Item 1', value: 'hello world' },
+  { label: 'Item 2', value: 'hello world 2' },
+  { label: 'Item 2', value: 'hello world 2' },
+  { label: 'Item 2', value: 'hello world 2' },
+  { label: 'Item 2', value: 'hello world 2' },
 ];
 
-const AddPickupAddress = ({navigation}) => {
+const AddPickupAddress = ({ navigation }) => {
+  const { user, customer } = useSelector(state => state.userSlice);
   const height = Dimensions.get('window').height;
   const width = Dimensions.get('window').width;
   const [currentLocation, setCurrentLocation] = useState(null);
   const [primaryAddress, setPrimaryAddress] = useState(false);
   const [rtoCheckedButton, setrtoCheckedButton] = useState(false);
   const [dropDownButton, setdropDownButton] = useState(false);
+  const [pickupAddress, setPickupAddress] = useState({
+    user_id: user.id,
+    address_type: "",
+    contact_person: "",
+    contact_person_no: "",
+    contact_person_email: "",
+    contact_person_alt_no: "",
+    complete_address: "",
+    landmark: "",
+    postcode: "",
+    city: "",
+    state: "",
+    country: "India",
+    is_default: "",
+  })
   // console.log(currentLocation);
   const handleLocationPermission = async () => {
     try {
@@ -68,7 +85,7 @@ const AddPickupAddress = ({navigation}) => {
           style={styles.backButton}>
           <Image
             source={require('../assets/images/back.png')}
-            style={{width: 25, height: 25}}
+            style={{ width: 25, height: 25 }}
           />
         </TouchableOpacity>
         <Text style={styles.title}>Add Pickup Address</Text>
@@ -84,7 +101,7 @@ const AddPickupAddress = ({navigation}) => {
         /> */}
         <Image
           source={require('../assets/images/map-image.jpeg')}
-          style={{flex: 1, resizeMode: 'cover', width: width}}
+          style={{ flex: 1, resizeMode: 'cover', width: width }}
         />
       </View>
       {/* <TouchableOpacity
@@ -102,6 +119,7 @@ const AddPickupAddress = ({navigation}) => {
         <Text>Press</Text>
       </TouchableOpacity> */}
       <ScrollView
+        showsVerticalScrollIndicator={false}
         style={{
           flex: 1,
           padding: 10,
@@ -112,7 +130,7 @@ const AddPickupAddress = ({navigation}) => {
         <View style={styles.currentLocationView}>
           <Image
             source={require('../assets/images/location.png')}
-            style={{width: 20, height: 20, tintColor: GREEN_COLOR}}
+            style={{ width: 20, height: 20, tintColor: GREEN_COLOR }}
           />
           <Text
             numberOfLines={1}
@@ -149,13 +167,13 @@ const AddPickupAddress = ({navigation}) => {
                 <View
                   style={
                     primaryAddress
-                      ? [styles.primaryBtn, {borderWidth: 0}]
+                      ? [styles.primaryBtn, { borderWidth: 0 }]
                       : styles.primaryBtn
                   }>
                   {primaryAddress ? (
                     <Image
                       source={require('../assets/images/check1.png')}
-                      style={{width: 20, height: 20}}
+                      style={{ width: 20, height: 20 }}
                     />
                   ) : null}
                 </View>
@@ -181,106 +199,126 @@ const AddPickupAddress = ({navigation}) => {
         </View>
 
         <View style={styles.PickUpAddressParentView}>
+          
           <TextInput
-            placeholder="Address Nick Name"
+            placeholder="Contact Person Name"
             style={styles.addressInput}
             placeholderTextColor={'#808080'}
-          />
-          <TextInput
-            placeholder="Contact Name"
-            style={styles.addressInput}
-            placeholderTextColor={'#808080'}
+            value={pickupAddress.contact_person}
+            onChangeText={text => setPickupAddress({ ...pickupAddress, contact_person: text })}
           />
           <TextInput
             placeholder="Phone Number"
             style={styles.addressInput}
             placeholderTextColor={'#808080'}
+            value={pickupAddress.contact_person_no}
+            onChangeText={text => setPickupAddress({ ...pickupAddress, contact_person_no: text })}
+            keyboardType='number-pad'
+            maxLength={10}
           />
           <TextInput
-            placeholder="Alternate Phone Number (Optiona)"
+            placeholder="Alternate Phone Number (Optional)"
             placeholderTextColor={'#808080'}
             style={styles.addressInput}
+            value={pickupAddress.contact_person_alt_no}
+            onChangeText={text => setPickupAddress({ ...pickupAddress, contact_person_alt_no: text })}
+            keyboardType='number-pad'
+            maxLength={10}
           />
           <TextInput
             placeholder="Email Id"
             style={styles.addressInput}
             placeholderTextColor={'#808080'}
+            value={pickupAddress.contact_person_email}
+            onChangeText={text => setPickupAddress({ ...pickupAddress, contact_person_email: text })}
           />
           <TextInput
-            placeholder="House Number, Building Name etc."
+            placeholder="Complete Address"
+            multiline
             style={styles.addressInput}
             placeholderTextColor={'#808080'}
+            value={pickupAddress.complete_address}
+            onChangeText={text => setPickupAddress({ ...pickupAddress, complete_address: text })}
           />
-          <TextInput
-            placeholder="Locality / Street Name (Optional)"
-            style={styles.addressInput}
-            placeholderTextColor={'#808080'}
-          />
+        
           <TextInput
             placeholder="Landmark (Optional)"
             style={styles.addressInput}
             placeholderTextColor={'#808080'}
+            value={pickupAddress.landmark}
+            onChangeText={text => setPickupAddress({ ...pickupAddress, landmark: text })}
           />
           <TextInput
-            placeholder="Pincode"
+            placeholder="Postal Code"
             placeholderTextColor={'#808080'}
+            value={pickupAddress.postcode}
+            onChangeText={text => setPickupAddress({ ...pickupAddress, postcode: text })}
             style={styles.addressInput}
+            keyboardType='number-pad'
+            maxLength={6}
           />
           <TextInput
             placeholder="City"
             style={styles.addressInput}
             placeholderTextColor={'#808080'}
+            value={pickupAddress.city}
+            onChangeText={text => setPickupAddress({ ...pickupAddress, city: text })}
           />
           <TextInput
             placeholder="State"
             style={styles.addressInput}
             placeholderTextColor={'#808080'}
+            value={pickupAddress.state}
+            onChangeText={text => setPickupAddress({ ...pickupAddress, state: text })}
           />
           <TextInput
             placeholder="Country"
             style={styles.addressInput}
             placeholderTextColor={'#808080'}
+            value={pickupAddress.country}
+            // onChangeText={text=>setPickupAddress({...pickupAddress, address_type: text})}
+            editable={false}
           />
         </View>
         {/* RTO address */}
-        <View style={{padding: 10}}>
+        {/* <View style={{ padding: 10 }}>
           <Text style={styles.RTOAddressTitle}>RTO Address</Text>
-        </View>
-        <View style={styles.RTOAddress}>
-          <View style={styles.RTOAddressButtonView}>
-            <Text
+        </View> */}
+        {/* <View style={styles.RTOAddress}>
+          <View style={styles.RTOAddressButtonView}> */}
+            {/* <Text
               style={{
                 color: '#808080',
                 fontSize: 12,
                 fontFamily: 'Poppins-Regular',
               }}>
               Use different address as RTO Address
-            </Text>
+            </Text> */}
             {/* set primary address button */}
-            <TouchableOpacity
+            {/* <TouchableOpacity
               onPress={() => {
                 setrtoCheckedButton(!rtoCheckedButton);
               }}>
               <View
                 style={
                   rtoCheckedButton
-                    ? [styles.RTOCheckedButton, {borderWidth: 0}]
+                    ? [styles.RTOCheckedButton, { borderWidth: 0 }]
                     : styles.RTOCheckedButton
                 }>
                 {rtoCheckedButton ? (
                   <Image
                     source={require('../assets/images/check1.png')}
-                    style={{width: 20, height: 20}}
+                    style={{ width: 20, height: 20 }}
                   />
                 ) : null}
               </View>
-            </TouchableOpacity>
-          </View>
-        </View>
+            </TouchableOpacity> */}
+          {/* </View>
+        </View> */}
         {rtoCheckedButton ? (
           <>
-            <View style={{marginBottom: 20, marginVertical: 5}}>
-              <Text style={{fontSize: 12, color: '#999999'}}>
+            <View style={{ marginBottom: 20, marginVertical: 5 }}>
+              <Text style={{ fontSize: 12, color: '#999999' }}>
                 Note : RTO is only applicable for Ecom express
               </Text>
             </View>
@@ -306,31 +344,31 @@ const AddPickupAddress = ({navigation}) => {
               <Dropdown
                 style={[
                   styles.dropdown,
-                  dropDownButton && {borderColor: 'blue'},
+                  dropDownButton && { borderColor: 'blue' },
                 ]}
                 placeholderStyle={styles.placeholderStyle}
                 iconStyle={styles.iconStyle}
                 data={data}
                 // search
-                containerStyle={{marginTop: 5, borderRadius: 5}}
+                containerStyle={{ marginTop: 5, borderRadius: 5 }}
                 activeColor="#e6ffef"
                 itemContainerStyle={{
                   borderBottomWidth: 1,
                   borderBottomColor: '#ccc',
                   marginTop: 5,
                 }}
-                itemTextStyle={{color: '#000'}}
+                itemTextStyle={{ color: '#000' }}
                 maxHeight={190}
                 showsVerticalScrollIndicator={false}
                 labelField="label"
                 valueField="value"
                 placeholder={'Select RTO Address'}
                 searchPlaceholder="Search..."
-                // value={value}
-                // onChange={item => {
-                //   setValue(item.value);
-                //   setIsFocus(false);
-                // }}
+              // value={value}
+              // onChange={item => {
+              //   setValue(item.value);
+              //   setIsFocus(false);
+              // }}
               />
               {/* DropDown end*/}
 
@@ -343,14 +381,14 @@ const AddPickupAddress = ({navigation}) => {
                   justifyContent: 'space-between',
                 }}>
                 <View
-                  style={{height: 1, backgroundColor: '#ccc', flex: 0.46}}
+                  style={{ height: 1, backgroundColor: '#ccc', flex: 0.46 }}
                 />
                 <Text
-                  style={{fontFamily: 'Poppins-SemiBold', color: '#b3b3b3'}}>
+                  style={{ fontFamily: 'Poppins-SemiBold', color: '#b3b3b3' }}>
                   OR
                 </Text>
                 <View
-                  style={{height: 1, backgroundColor: '#ccc', flex: 0.46}}
+                  style={{ height: 1, backgroundColor: '#ccc', flex: 0.46 }}
                 />
               </View>
               {/* Add new address button in RTO */}
@@ -366,7 +404,7 @@ const AddPickupAddress = ({navigation}) => {
                   borderRadius: 5,
                   backgroundColor: LIGHT_GREEN,
                 }}>
-                <Text style={{fontFamily: 'Poppins-SemiBold', color: '#000'}}>
+                <Text style={{ fontFamily: 'Poppins-SemiBold', color: '#000' }}>
                   + Add New Address
                 </Text>
               </TouchableOpacity>
