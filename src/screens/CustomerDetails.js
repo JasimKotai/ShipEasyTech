@@ -19,6 +19,7 @@ import {
   TEXT_LIGHT_BLACK,
   TEXT_WHITE,
 } from '../assets/fontStyles';
+import { useDispatch } from 'react-redux';
 
 const CustomerDetails = ({ navigation }) => {
   const height = Dimensions.get('window').height;
@@ -46,10 +47,12 @@ const CustomerDetails = ({ navigation }) => {
     billing_city: "",
     billing_pincode: "",
     billing_state: "",
-    billing_country: "",
+    billing_country: "India",
   });
 
-  console.log("shippingDetails==>", shippingDetails);
+  const dispatch = useDispatch();
+
+  // console.log("shippingDetails==>", shippingDetails);
   // console.log("billingDetails==>", billingDetails);
 
 
@@ -181,6 +184,8 @@ const CustomerDetails = ({ navigation }) => {
               style={styles.buyerDetailInput}
               value={shippingDetails.shipping_pincode}
               onChangeText={text => setShippingDetails({ ...shippingDetails, shipping_pincode: text })}
+              maxLength={6}
+              keyboardType='number-pad'
             />
             <TextInput
               placeholder="State"
@@ -289,20 +294,23 @@ const CustomerDetails = ({ navigation }) => {
               style={styles.buyerDetailInput}
               value={billingDetails.billing_pincode}
               onChangeText={text => setBillingDetails({ ...billingDetails, billing_pincode: text })}
+              maxLength={6}
+              keyboardType='number-pad'
             />
             <TextInput
               placeholder="State"
               placeholderTextColor={'#808080'}
               style={styles.buyerDetailInput}
-              value={billingDetails}
-              onChangeText={text => setBillingDetails({ ...billingDetails, srgsg: text })}
+              value={billingDetails.billing_state}
+              onChangeText={text => setBillingDetails({ ...billingDetails, billing_state: text })}
             />
             <TextInput
               placeholder="Country"
               placeholderTextColor={'#808080'}
               style={styles.buyerDetailInput}
               value={billingDetails.billing_country}
-              onChangeText={text => setBillingDetails({ ...billingDetails, billing_country: text })}
+              // onChangeText={text => setBillingDetails({ ...billingDetails, billing_country: text })}
+              editable={false}
             />
           </View>
         ) : null}
