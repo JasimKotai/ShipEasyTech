@@ -14,7 +14,7 @@ import {
 import React, { useState } from 'react';
 import axios from 'axios';
 import { GREEN_COLOR, LIGHT_GREEN } from '../assets/Colors';
-import { BASE_URL_LIVE, BASE_URL_LOCAL } from '../config/api';
+import { BASE_URL_DEV, BASE_URL_LIVE, BASE_URL_LOCAL } from '../config/api';
 import { useDispatch } from 'react-redux';
 import { saveUserData } from '../config/UserSlice';
 
@@ -37,7 +37,7 @@ const VerifyOTP = ({ route, navigation }) => {
       };
       // console.log(data);
 
-      const response = await axios.post(`${BASE_URL_LOCAL}/otp-verify`, data);
+      const response = await axios.post(`${BASE_URL_LIVE}/otp-verify`, data);
       if (response?.data?.code == "200") {
         Alert.alert('ShipEasy', response.data.message);
         dispatch(saveUserData(response.data?.userData));

@@ -178,7 +178,7 @@ const SignUpScreen = ({navigation}) => {
   const handleSignUpAPI = async () => {
     try {
       setLoading(true);
-      const response = await axios.post(`${BASE_URL_LOCAL}/verify-register`, userDetails);
+      const response = await axios.post(`${BASE_URL_LIVE}/verify-register`, userDetails);
       if (response.data) {
         // console.log('SignUpScreen', response.data);
         navigation.navigate('VerifyOTP', {temp_data: response.data.temp_data[0]});

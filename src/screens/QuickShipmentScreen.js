@@ -36,15 +36,22 @@ const QuickShipmentScreen = ({ navigation }) => {
   const width = Dimensions.get('window').width;
   const [address, setAddress] = useState('empty');
   // const [showMore, setShowMore] = useState(null);
-  const [productCategory, setproductCategory] = useState('');
+  const [productWeightDetails, setProductWeightDetails] = useState({
+    weight: "",
+    length: "",
+    breadth: "",
+    height: "",
+  });
   const [products, setProducts] = useState([]);
   const [dropDownButton, setdropDownButton] = useState(false);
   const [cashOrPrepaid, setCashOrPrepaid] = useState('COD');
   const [otherCharges, setOtherCharges] = useState(false);
+  const [payment, setPayment] = useState({
+    payment_type: cashOrPrepaid,
+    sub_total: 0,
+    total: 0,
+  });
 
-  let keyCounter = 1;
-  // const [productData, setproductData] = useState([]);
-  // console.log(productDetails);
 
   const addAnotherProduct = () => {
     setProducts([...products, productDetails]);
@@ -62,16 +69,8 @@ const QuickShipmentScreen = ({ navigation }) => {
     });
   }
 
-  // useEffect(() => {
-  //   addAnotherProduct();
-  //   console.log('QuickShipmentScreen useEffect calls renderOnes');
-  // }, [renderOnes]);
   const deleteProduct = index => {
-    console.log("delete product index", index);
-    console.log("outside if delete products length", products?.length);
-
     if (products?.length > 1) {
-      console.log("from if delete products length", products?.length);
       const updatedProducts = products.filter((item, i) => i !== index);
       setProducts(updatedProducts);
     }
@@ -85,17 +84,25 @@ const QuickShipmentScreen = ({ navigation }) => {
     { label: 'Item 2', value: 'hello world 2' },
   ];
 
-  console.log("products====>", products);
+  // console.log("products====>", products);
+  // console.log("productWeightDetails====>", productWeightDetails);
+  console.log("payment====>", payment);
 
-  // const renderProductDetails = (item, index) => {
-  //   return (
+  useEffect(() => {
+    const calculateSum = () => {
+      let st = 0
+      // let tl = 0
 
-  //   );
-  // };
+      products?.map(item => st += Number(item.price));
+      setPayment({ ...payment, sub_total: st, total: st });
+    }
+
+    calculateSum();
+  }, []);
 
   useEffect(() => {
     setProducts([...products, productDetails]);
-  }, [])
+  }, []);
 
   return (
     // <KeyboardAvoidingView enabled={true} style={{flex: 1}} behavior={'height'}>
@@ -386,6 +393,7 @@ const QuickShipmentScreen = ({ navigation }) => {
             <Text style={styles.AddAnotherBtnText}>+ Add Another Product</Text>
           </TouchableOpacity>
         </View>
+
         {/* Weight */}
         <View style={styles.WeightParentView}>
           <Text style={styles.pickupAddressText}>Weight</Text>
@@ -393,7 +401,15 @@ const QuickShipmentScreen = ({ navigation }) => {
             <TextInput
               placeholder="Enter the weight of package in Kgs"
               placeholderTextColor={'#808080'}
+              keyboardType='decimal-pad'
               style={styles.WeightInput}
+              value={productWeightDetails.weight}
+              onChangeText={text => {
+                const parts = text.split('.');
+                if (parts[0].length <= 5 && (parts[1] === undefined || parts[1].length <= 3)) {
+                  setProductWeightDetails({ ...productWeightDetails, weight: text });
+                }
+              }}
             />
             <View style={styles.WeightChildView2}>
               <Text style={{ color: '#ffff', fontFamily: 'Poppins-SemiBold' }}>
@@ -404,19 +420,21 @@ const QuickShipmentScreen = ({ navigation }) => {
           <Text style={{ color: '#808080', fontSize: 10 }}>
             Max 3 digits after decimal value
           </Text>
-          <Text style={{ color: '#000', fontSize: 12 }}>
+          <Text style={{ color: '#000', fontSize: 12, marginBottom: 20 }}>
             Note : The minimum chargeable weight is 50 gm
           </Text>
-          <View
+
+
+          {/* <View
             style={{ flexDirection: 'row', alignItems: 'center', marginTop: 20 }}>
             <Text style={styles.pickupAddressText}>Package Type</Text>
             <Image
               source={require('../assets/images/i.png')}
               style={{ width: 20, height: 20, marginLeft: 10 }}
             />
-          </View>
+          </View> */}
           {/* DropDown start*/}
-          <Dropdown
+          {/* <Dropdown
             style={[styles.dropdown, dropDownButton && { borderColor: 'blue' }]}
             placeholderStyle={styles.placeholderStyle}
             iconStyle={styles.iconStyle}
@@ -441,12 +459,14 @@ const QuickShipmentScreen = ({ navigation }) => {
           //   setValue(item.value);
           //   setIsFocus(false);
           // }}
-          />
+          /> */}
           {/* DropDown end*/}
           {/* add new package button */}
-          <TouchableOpacity style={{ width: width / 2.2 }}>
+          {/* <TouchableOpacity style={{ width: width / 2.2 }}>
             <Text style={styles.addNewPackageBtnText}>+ Add New Package</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
+
+
           <Text style={styles.pickupAddressText}>Package Dimensions</Text>
           {/* package dimension view */}
           <View
@@ -461,6 +481,7 @@ const QuickShipmentScreen = ({ navigation }) => {
                 placeholderTextColor={'#808080'}
                 style={styles.lengthInput}
                 keyboardType="number-pad"
+                maxLength={7}
               />
               <Text style={styles.lengthCMText}>cm</Text>
             </View>
@@ -470,6 +491,7 @@ const QuickShipmentScreen = ({ navigation }) => {
                 placeholderTextColor={'#808080'}
                 style={styles.lengthInput}
                 keyboardType="number-pad"
+                maxLength={7}
               />
               <Text style={styles.lengthCMText}>cm</Text>
             </View>
@@ -479,6 +501,7 @@ const QuickShipmentScreen = ({ navigation }) => {
                 placeholderTextColor={'#808080'}
                 style={styles.lengthInput}
                 keyboardType="number-pad"
+                maxLength={7}
               />
               <Text style={styles.lengthCMText}>cm</Text>
             </View>
@@ -558,10 +581,14 @@ const QuickShipmentScreen = ({ navigation }) => {
             <Text style={{ color: '#000', fontFamily: 'Poppins-Regular' }}>
               Subtotal
             </Text>
-            <Text style={{ color: '#000' }}>₹ 100000</Text>
+            <Text style={{ color: '#000' }}>
+              ₹ {payment.sub_total}
+            </Text>
           </View>
+
+
           {/* other charges button */}
-          <TouchableOpacity
+          {/* <TouchableOpacity
             onPress={() => {
               setOtherCharges(!otherCharges);
             }}
@@ -575,9 +602,9 @@ const QuickShipmentScreen = ({ navigation }) => {
               }
               style={{ width: 15, height: 15 }}
             />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
           {/* otherCharge shipping chages giftwrap transation discount */}
-          {otherCharges ? (
+          {otherCharges ?
             <View style={{ marginVertical: 10 }}>
               {/* shipping charge */}
               <View style={styles.otherChargesInputView}>
@@ -618,7 +645,9 @@ const QuickShipmentScreen = ({ navigation }) => {
                 />
               </View>
             </View>
-          ) : null}
+            : null}
+
+
           {/* total amount view */}
           <View
             style={{
@@ -636,7 +665,9 @@ const QuickShipmentScreen = ({ navigation }) => {
               <Text style={{ color: '#000', fontFamily: 'Poppins-Regular' }}>
                 Total
               </Text>
-              <Text style={{ color: '#000' }}>₹ 1000000</Text>
+              <Text style={{ color: '#000' }}>
+                ₹ {payment.total}
+              </Text>
             </View>
             <Text style={{ color: '#808080', fontSize: 12, marginLeft: 10 }}>
               Note : In case a shipment gets lost, the amount entered above will
