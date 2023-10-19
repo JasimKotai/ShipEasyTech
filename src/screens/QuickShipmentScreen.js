@@ -10,13 +10,12 @@ import {
   TextInput,
   KeyboardAvoidingView,
 } from 'react-native';
-import React, { useEffect, useState } from 'react';
-import { GREEN_COLOR, LIGHT_GREEN } from '../assets/Colors';
-import { English } from '../Languages/EnglishLan';
-import { Hindi } from '../Languages/HindiLan';
-import { Dropdown } from 'react-native-element-dropdown';
+import React, {useEffect, useState} from 'react';
+import {GREEN_COLOR, LIGHT_GREEN} from '../assets/Colors';
+import {English} from '../Languages/EnglishLan';
+import {Hindi} from '../Languages/HindiLan';
+import {Dropdown} from 'react-native-element-dropdown';
 import Header from '../components/Header';
-
 
 const productDetails = {
   product_name: '',
@@ -30,39 +29,42 @@ const productDetails = {
   showMore: false,
 };
 
-const QuickShipmentScreen = ({ navigation }) => {
+const QuickShipmentScreen = ({navigation}) => {
   const [renderOnes, setrenderOnes] = useState(null);
   const height = Dimensions.get('window').height;
   const width = Dimensions.get('window').width;
   const [address, setAddress] = useState('Select Address');
   const [cashOrPrepaid, setCashOrPrepaid] = useState('COD');
   const [productWeightDetails, setProductWeightDetails] = useState({
-    weight: "",
-    length: "",
-    breadth: "",
-    height: "",
-    payment_type: "",
+    weight: '',
+    length: '',
+    breadth: '',
+    height: '',
+    payment_type: '',
+    invoice: '',
+    order_number: '',
+    platform: '',
+    courier_company: '',
   });
   const [products, setProducts] = useState([]);
   const [dropDownButton, setdropDownButton] = useState(false);
   const [otherCharges, setOtherCharges] = useState(false);
 
-
   const addAnotherProduct = () => {
     setProducts([...products, productDetails]);
   };
 
-  const changeShowMore = (index) => {
-    console.log("index==>", index);
+  const changeShowMore = index => {
+    console.log('index==>', index);
     setProducts(prevState => {
       const updatedProducts = [...prevState];
       updatedProducts[index] = {
         ...updatedProducts[index],
-        showMore: !updatedProducts[index].showMore
+        showMore: !updatedProducts[index].showMore,
       };
       return updatedProducts;
     });
-  }
+  };
 
   const deleteProduct = index => {
     if (products?.length > 1) {
@@ -72,15 +74,20 @@ const QuickShipmentScreen = ({ navigation }) => {
   };
 
   const data = [
-    { label: 'Item 1', value: 'hello world' },
-    { label: 'Item 2', value: 'hello world 2' },
-    { label: 'Item 2', value: 'hello world 2' },
-    { label: 'Item 2', value: 'hello world 2' },
-    { label: 'Item 2', value: 'hello world 2' },
+    {label: 'Item 1', value: 'hello world'},
+    {label: 'Item 2', value: 'hello world 2'},
   ];
+  const platform = [
+    {label: '1', value: 'shopify'},
+    {label: '2', value: 'WooCommerce'},
+    {label: '2', value: 'Wix'},
+    {label: '2', value: 'Magento'},
+    {label: '2', value: 'BigCommercex'},
+  ];
+  const Courier = [{label: '1', value: 'Ecom Express'}];
 
   // console.log("products====>", products);
-  console.log("productWeightDetails====>", productWeightDetails);
+  console.log('productWeightDetails====>', productWeightDetails);
   // console.log("payment====>", payment);
 
   useEffect(() => {
@@ -100,7 +107,7 @@ const QuickShipmentScreen = ({ navigation }) => {
         <Text style={styles.title2text}>Add Order Details</Text>
       </View>
       <ScrollView
-        style={{ flex: 1, paddingHorizontal: 5 }}
+        style={{flex: 1, paddingHorizontal: 5}}
         showsVerticalScrollIndicator={false}>
         {/* pick up address view */}
         <View style={styles.pickupAddressView}>
@@ -119,18 +126,18 @@ const QuickShipmentScreen = ({ navigation }) => {
                 justifyContent: 'center',
                 paddingHorizontal: 10,
               }}>
-              <Text style={{ fontSize: 10, color: '#999999' }} numberOfLines={1}>
+              <Text style={{fontSize: 10, color: '#999999'}} numberOfLines={1}>
                 Selected Pickup Address
               </Text>
 
-              <Text style={{ color: '#000' }} numberOfLines={1}>
+              <Text style={{color: '#000'}} numberOfLines={1}>
                 {address}
               </Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.locationSearchBtn}>
               <Image
                 source={require('../assets/images/search-icon.png')}
-                style={{ width: 25, height: 25, tintColor: GREEN_COLOR }}
+                style={{width: 25, height: 25, tintColor: GREEN_COLOR}}
               />
             </TouchableOpacity>
           </View>
@@ -140,7 +147,7 @@ const QuickShipmentScreen = ({ navigation }) => {
               onPress={() => {
                 navigation.navigate('AddPickupAddress');
               }}
-              style={{ flexDirection: 'row', alignItems: 'center' }}>
+              style={{flexDirection: 'row', alignItems: 'center'}}>
               <Image
                 source={require('../assets/images/location.png')}
                 style={{
@@ -175,7 +182,7 @@ const QuickShipmentScreen = ({ navigation }) => {
               placeholderTextColor={'#808080'}
             />
           </View>
-          <Text style={{ color: '#bfbfbf', fontSize: 10 }}>
+          <Text style={{color: '#bfbfbf', fontSize: 10}}>
             Note : Entering pincode will check pincode is available or not
           </Text>
         </View>
@@ -186,7 +193,7 @@ const QuickShipmentScreen = ({ navigation }) => {
 
           {/* wrapper view */}
           {products?.map((item, index) => (
-            <View key={index} style={{ backgroundColor: '#ffff' }}>
+            <View key={index} style={{backgroundColor: '#ffff'}}>
               <StatusBar barStyle={'dark-content'} />
               <View style={styles.selectLocationView}>
                 <TextInput
@@ -199,7 +206,7 @@ const QuickShipmentScreen = ({ navigation }) => {
                       const updatedProducts = [...prevState];
                       updatedProducts[index] = {
                         ...updatedProducts[index],
-                        product_name: text
+                        product_name: text,
                       };
                       return updatedProducts;
                     })
@@ -234,7 +241,7 @@ const QuickShipmentScreen = ({ navigation }) => {
                       const updatedProducts = [...prevState];
                       updatedProducts[index] = {
                         ...updatedProducts[index],
-                        quentity: text
+                        quentity: text,
                       };
                       return updatedProducts;
                     })
@@ -251,7 +258,7 @@ const QuickShipmentScreen = ({ navigation }) => {
                       const updatedProducts = [...prevState];
                       updatedProducts[index] = {
                         ...updatedProducts[index],
-                        price: text
+                        price: text,
                       };
                       return updatedProducts;
                     })
@@ -268,7 +275,7 @@ const QuickShipmentScreen = ({ navigation }) => {
                     const updatedProducts = [...prevState];
                     updatedProducts[index] = {
                       ...updatedProducts[index],
-                      sku: text
+                      sku: text,
                     };
                     return updatedProducts;
                   })
@@ -279,8 +286,7 @@ const QuickShipmentScreen = ({ navigation }) => {
                 onPress={() => {
                   changeShowMore(index);
                 }}
-                style={styles.showMore}
-              >
+                style={styles.showMore}>
                 <Text style={styles.showMoreText}>
                   {item?.showMore ? 'Show Less -' : 'Show More +'}
                 </Text>
@@ -311,10 +317,10 @@ const QuickShipmentScreen = ({ navigation }) => {
                         const updatedProducts = [...prevState];
                         updatedProducts[index] = {
                           ...updatedProducts[index],
-                          HSNInput: text
+                          HSNInput: text,
                         };
                         return updatedProducts;
-                      })
+                      });
                     }}
                   />
                   {/* Tax Rate & Discount inputs view start */}
@@ -329,10 +335,10 @@ const QuickShipmentScreen = ({ navigation }) => {
                           const updatedProducts = [...prevState];
                           updatedProducts[index] = {
                             ...updatedProducts[index],
-                            TaxRate: text
+                            TaxRate: text,
                           };
                           return updatedProducts;
-                        })
+                        });
                       }}
                     />
                     <TextInput
@@ -345,10 +351,10 @@ const QuickShipmentScreen = ({ navigation }) => {
                           const updatedProducts = [...prevState];
                           updatedProducts[index] = {
                             ...updatedProducts[index],
-                            Discount: text
+                            Discount: text,
                           };
                           return updatedProducts;
-                        })
+                        });
                       }}
                     />
                   </View>
@@ -384,29 +390,34 @@ const QuickShipmentScreen = ({ navigation }) => {
             <TextInput
               placeholder="Enter the weight of package in Kgs"
               placeholderTextColor={'#808080'}
-              keyboardType='decimal-pad'
+              keyboardType="decimal-pad"
               style={styles.WeightInput}
               value={productWeightDetails.weight}
               onChangeText={text => {
                 const parts = text.split('.');
-                if (parts[0].length <= 5 && (parts[1] === undefined || parts[1].length <= 3)) {
-                  setProductWeightDetails({ ...productWeightDetails, weight: text });
+                if (
+                  parts[0].length <= 5 &&
+                  (parts[1] === undefined || parts[1].length <= 3)
+                ) {
+                  setProductWeightDetails({
+                    ...productWeightDetails,
+                    weight: text,
+                  });
                 }
               }}
             />
             <View style={styles.WeightChildView2}>
-              <Text style={{ color: '#ffff', fontFamily: 'Poppins-SemiBold' }}>
+              <Text style={{color: '#ffff', fontFamily: 'Poppins-SemiBold'}}>
                 KG
               </Text>
             </View>
           </View>
-          <Text style={{ color: '#808080', fontSize: 10 }}>
+          <Text style={{color: '#808080', fontSize: 10}}>
             Max 3 digits after decimal value
           </Text>
-          <Text style={{ color: '#000', fontSize: 12, marginBottom: 20 }}>
+          <Text style={{color: '#000', fontSize: 12, marginBottom: 20}}>
             Note : The minimum chargeable weight is 50 gm
           </Text>
-
 
           {/* <View
             style={{ flexDirection: 'row', alignItems: 'center', marginTop: 20 }}>
@@ -449,7 +460,6 @@ const QuickShipmentScreen = ({ navigation }) => {
             <Text style={styles.addNewPackageBtnText}>+ Add New Package</Text>
           </TouchableOpacity> */}
 
-
           <Text style={styles.pickupAddressText}>Package Dimensions</Text>
           {/* package dimension view */}
           <View
@@ -466,7 +476,12 @@ const QuickShipmentScreen = ({ navigation }) => {
                 keyboardType="number-pad"
                 maxLength={7}
                 value={productWeightDetails.length}
-                onChangeText={text=> setProductWeightDetails({...productWeightDetails, length: text})}
+                onChangeText={text =>
+                  setProductWeightDetails({
+                    ...productWeightDetails,
+                    length: text,
+                  })
+                }
               />
               <Text style={styles.lengthCMText}>cm</Text>
             </View>
@@ -478,7 +493,12 @@ const QuickShipmentScreen = ({ navigation }) => {
                 keyboardType="number-pad"
                 maxLength={7}
                 value={productWeightDetails.breadth}
-                onChangeText={text=> setProductWeightDetails({...productWeightDetails, breadth: text})}
+                onChangeText={text =>
+                  setProductWeightDetails({
+                    ...productWeightDetails,
+                    breadth: text,
+                  })
+                }
               />
               <Text style={styles.lengthCMText}>cm</Text>
             </View>
@@ -490,19 +510,131 @@ const QuickShipmentScreen = ({ navigation }) => {
                 keyboardType="number-pad"
                 maxLength={7}
                 value={productWeightDetails.height}
-                onChangeText={text=> setProductWeightDetails({...productWeightDetails, height: text})}
+                onChangeText={text =>
+                  setProductWeightDetails({
+                    ...productWeightDetails,
+                    height: text,
+                  })
+                }
               />
               <Text style={styles.lengthCMText}>cm</Text>
             </View>
           </View>
-          <Text style={{ color: '#808080', fontSize: 12 }}>
+          <Text style={{color: '#808080', fontSize: 12}}>
             Note : Dimensions value should be greater than 0.50 cm
           </Text>
+        </View>
+        {/* order and invoice view */}
+        <View style={styles.orderInvocesParent}>
+          {/* invoice no */}
+          <View style={styles.orderInvocesChild1}>
+            <TextInput
+              placeholder="Invoice No"
+              style={styles.orderInvocesInput}
+              value={productWeightDetails.invoice}
+              onChangeText={text =>
+                setProductWeightDetails({
+                  ...productWeightDetails,
+                  invoice: text,
+                })
+              }
+            />
+            <TouchableOpacity style={styles.orderInvocesGenerateBtn}>
+              <Image
+                source={require('../assets/images/auto-generate.png')}
+                style={{width: 25, height: 25, resizeMode: 'contain'}}
+              />
+            </TouchableOpacity>
+          </View>
+          {/* order no */}
+          <View style={styles.orderInvocesChild1}>
+            <TextInput
+              placeholder="Order No"
+              style={styles.orderInvocesInput}
+              value={productWeightDetails.order_number}
+              onChangeText={text =>
+                setProductWeightDetails({
+                  ...productWeightDetails,
+                  order_number: text,
+                })
+              }
+            />
+            <TouchableOpacity style={styles.orderInvocesGenerateBtn}>
+              <Image
+                source={require('../assets/images/auto-generate.png')}
+                style={{width: 25, height: 25, resizeMode: 'contain'}}
+              />
+            </TouchableOpacity>
+          </View>
+          {/* drop down for platform */}
+          <Dropdown
+            style={[styles.dropdown]}
+            placeholderStyle={styles.placeholderStyle}
+            iconStyle={styles.iconStyle}
+            data={platform}
+            // search
+            containerStyle={{
+              marginTop: 5,
+              borderRadius: 5,
+            }}
+            activeColor="#e6ffef"
+            itemContainerStyle={{
+              borderBottomWidth: 1,
+              borderBottomColor: '#ccc',
+              marginTop: 5,
+            }}
+            itemTextStyle={{color: '#000'}}
+            maxHeight={150}
+            showsVerticalScrollIndicator={false}
+            labelField="value"
+            valueField="value"
+            placeholder={'Platform'}
+            searchPlaceholder="Search..."
+            value={productWeightDetails.platform}
+            onChange={item => {
+              setProductWeightDetails({
+                ...productWeightDetails,
+                platform: item,
+              });
+            }}
+          />
+          {/* drop down forcourier partner */}
+          <Dropdown
+            style={[styles.dropdown]}
+            placeholderStyle={styles.placeholderStyle}
+            iconStyle={styles.iconStyle}
+            data={Courier}
+            // search
+            containerStyle={{
+              marginTop: 5,
+              borderRadius: 5,
+            }}
+            activeColor="#e6ffef"
+            itemContainerStyle={{
+              borderBottomWidth: 1,
+              borderBottomColor: '#ccc',
+              marginTop: 5,
+            }}
+            itemTextStyle={{color: '#000'}}
+            maxHeight={150}
+            showsVerticalScrollIndicator={false}
+            labelField="value"
+            valueField="value"
+            placeholder={'Courier Partner'}
+            searchPlaceholder="Search..."
+            value={productWeightDetails.courier_company}
+            onChange={item => {
+              setProductWeightDetails({
+                ...productWeightDetails,
+                courier_company: item,
+              });
+            }}
+          />
         </View>
         {/* payment cash on delivery or prepaid */}
         <View style={styles.PaymentParentView}>
           <Text style={styles.pickupAddressText}>Payment</Text>
-          <View style={{ flexDirection: 'row' }}>
+          <View style={{flexDirection: 'row'}}>
             <View style={styles.cashOnDeliveryView}>
               <TouchableOpacity
                 onPress={() => {
@@ -533,7 +665,7 @@ const QuickShipmentScreen = ({ navigation }) => {
             <View
               style={[
                 styles.cashOnDeliveryView,
-                { alignItems: 'center', justifyContent: 'center' },
+                {alignItems: 'center', justifyContent: 'center'},
               ]}>
               <TouchableOpacity
                 onPress={() => {
@@ -563,23 +695,21 @@ const QuickShipmentScreen = ({ navigation }) => {
           </View>
           {/* divider */}
           <View
-            style={{ height: 1, backgroundColor: '#cccc', marginVertical: 10 }}
+            style={{height: 1, backgroundColor: '#cccc', marginVertical: 10}}
           />
           {/* sub total */}
           <View style={styles.subTotalView}>
-            <Text style={{ color: '#000', fontFamily: 'Poppins-Regular' }}>
+            <Text style={{color: '#000', fontFamily: 'Poppins-Regular'}}>
               Subtotal
             </Text>
-            <Text style={{ color: '#000' }}>
-              ₹ {
-                products?.reduce((acc, cur) => {
-                  const qty = cur?.quentity?.length ? Number(cur?.quentity) : 1;
-                    return acc + (Number(cur?.price) * qty);
-                }, 0)
-              }
+            <Text style={{color: '#000'}}>
+              ₹{' '}
+              {products?.reduce((acc, cur) => {
+                const qty = cur?.quentity?.length ? Number(cur?.quentity) : 1;
+                return acc + Number(cur?.price) * qty;
+              }, 0)}
             </Text>
           </View>
-
 
           {/* other charges button */}
           {/* <TouchableOpacity
@@ -598,11 +728,11 @@ const QuickShipmentScreen = ({ navigation }) => {
             />
           </TouchableOpacity> */}
           {/* otherCharge shipping chages giftwrap transation discount */}
-          {otherCharges ?
-            <View style={{ marginVertical: 10 }}>
+          {otherCharges ? (
+            <View style={{marginVertical: 10}}>
               {/* shipping charge */}
               <View style={styles.otherChargesInputView}>
-                <Text style={{ flex: 0.5, color: '#000' }}>Shipping Charges</Text>
+                <Text style={{flex: 0.5, color: '#000'}}>Shipping Charges</Text>
                 <TextInput
                   placeholder="0"
                   placeholderTextColor={'#808080'}
@@ -611,7 +741,7 @@ const QuickShipmentScreen = ({ navigation }) => {
               </View>
               {/* gift wrap */}
               <View style={styles.otherChargesInputView}>
-                <Text style={{ flex: 0.5, color: '#000' }}>GiftWrap Charges</Text>
+                <Text style={{flex: 0.5, color: '#000'}}>GiftWrap Charges</Text>
                 <TextInput
                   placeholder="0"
                   placeholderTextColor={'#808080'}
@@ -620,7 +750,7 @@ const QuickShipmentScreen = ({ navigation }) => {
               </View>
               {/* transaction */}
               <View style={styles.otherChargesInputView}>
-                <Text style={{ flex: 0.5, color: '#000' }}>
+                <Text style={{flex: 0.5, color: '#000'}}>
                   Transaction Charges
                 </Text>
                 <TextInput
@@ -631,7 +761,7 @@ const QuickShipmentScreen = ({ navigation }) => {
               </View>
               {/* Discount */}
               <View style={styles.otherChargesInputView}>
-                <Text style={{ flex: 0.5, color: '#000' }}>Discount</Text>
+                <Text style={{flex: 0.5, color: '#000'}}>Discount</Text>
                 <TextInput
                   placeholder="0"
                   placeholderTextColor={'#808080'}
@@ -639,8 +769,7 @@ const QuickShipmentScreen = ({ navigation }) => {
                 />
               </View>
             </View>
-            : null}
-
+          ) : null}
 
           {/* total amount view */}
           <View
@@ -656,19 +785,18 @@ const QuickShipmentScreen = ({ navigation }) => {
                 justifyContent: 'space-between',
                 paddingHorizontal: 10,
               }}>
-              <Text style={{ color: '#000', fontFamily: 'Poppins-Regular' }}>
+              <Text style={{color: '#000', fontFamily: 'Poppins-Regular'}}>
                 Total
               </Text>
-              <Text style={{ color: '#000' }}>
-                ₹ {
-                  products?.reduce((acc, cur) => {
-                    const qty = cur?.quentity?.length ? Number(cur?.quentity) : 1;
-                    return acc + (Number(cur?.price) * qty);
-                  }, 0)
-                }
+              <Text style={{color: '#000'}}>
+                ₹{' '}
+                {products?.reduce((acc, cur) => {
+                  const qty = cur?.quentity?.length ? Number(cur?.quentity) : 1;
+                  return acc + Number(cur?.price) * qty;
+                }, 0)}
               </Text>
             </View>
-            <Text style={{ color: '#808080', fontSize: 12, marginLeft: 10 }}>
+            <Text style={{color: '#808080', fontSize: 12, marginLeft: 10}}>
               Note : In case a shipment gets lost, the amount entered above will
               be refunded to youraccount.
             </Text>
@@ -907,11 +1035,12 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 5,
   },
   dropdown: {
-    height: 45,
-    borderColor: '#ccc',
+    height: height / 18,
+    borderColor: '#808080',
     borderWidth: 0.5,
     borderRadius: 5,
     paddingHorizontal: 8,
+    marginBottom: 5,
   },
   placeholderStyle: {
     fontSize: 14,
@@ -923,6 +1052,7 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
     tintColor: GREEN_COLOR,
     height: 30,
+    marginRight: 6,
   },
   addNewPackageBtnText: {
     color: GREEN_COLOR,
@@ -971,7 +1101,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     alignItems: 'center',
   },
-  cashOnDeliveryBtn: { backgroundColor: '#999999', padding: 5, borderRadius: 40 },
+  cashOnDeliveryBtn: {backgroundColor: '#999999', padding: 5, borderRadius: 40},
   subTotalView: {
     flexDirection: 'row',
     padding: 10,
@@ -1017,5 +1147,38 @@ const styles = StyleSheet.create({
     color: '#ffff',
     fontSize: 15,
     fontFamily: 'Poppins-SemiBold',
+  },
+  orderInvocesParent: {
+    backgroundColor: '#fff',
+    elevation: 5,
+    marginHorizontal: 5,
+    marginVertical: 10,
+    // borderWidth: 0.6,
+    padding: 10,
+    borderRadius: 5,
+  },
+  orderInvocesChild1: {
+    flexDirection: 'row',
+    borderWidth: 0.5,
+    borderColor: '#808080',
+    borderRadius: 5,
+    marginVertical: 5,
+  },
+  orderInvocesInput: {
+    flex: 0.47,
+    height: height / 18,
+    paddingVertical: 0,
+    color: '#000',
+    flex: 0.8,
+    borderTopLeftRadius: 5,
+    borderBottomLeftRadius: 5,
+    paddingLeft: 10,
+  },
+  orderInvocesGenerateBtn: {
+    flex: 0.2,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderTopRightRadius: 5,
+    borderBottomRightRadius: 5,
   },
 });
