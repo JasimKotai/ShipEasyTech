@@ -12,10 +12,10 @@ import React from 'react';
 import {TEXT_BLACK, TEXT_BLACK2, TEXT_LIGHT_BLACK} from '../assets/fontStyles';
 import {GREEN_COLOR, LIGHT_GREEN} from '../assets/Colors';
 
-const AllOrders = () => {
+const NewOrders = () => {
   const height = Dimensions.get('window').height;
   const width = Dimensions.get('window').width;
-  const data = [1, 2, 3];
+  const data = [1,];
   return (
     <View style={styles.container}>
       <StatusBar barStyle={'dark-content'} backgroundColor={LIGHT_GREEN} />
@@ -70,7 +70,7 @@ const AllOrders = () => {
                     <Text
                       style={{
                         color: '#ffff',
-                        fontFamily: 'Onest-SemiBold',
+                        fontFamily: 'Poppins-Bold',
                         padding: 0,
                         margin: 0,
                       }}>
@@ -79,7 +79,11 @@ const AllOrders = () => {
                   </View>
                   <Text
                     numberOfLines={2}
-                    style={{flex: 0.4, color: TEXT_BLACK, fontFamily: 'Onest-Regular'}}>
+                    style={{
+                      flex: 0.4,
+                      color: TEXT_BLACK,
+                      fontFamily: 'Onest-Regular',
+                    }}>
                     Jasim Khan
                   </Text>
                   <View
@@ -91,13 +95,18 @@ const AllOrders = () => {
                       borderRightWidth: 1,
                       borderColor: '#cccccc',
                       fontSize: 13,
-                      color: TEXT_LIGHT_BLACK
+                      color: TEXT_LIGHT_BLACK,
                     }}>
                     <Text>Prepaid</Text>
                   </View>
                   <Text
                     numberOfLines={2}
-                    style={{flex: 0.35, textAlign: 'center',fontSize: 13,color: TEXT_LIGHT_BLACK}}>
+                    style={{
+                      flex: 0.35,
+                      textAlign: 'center',
+                      fontSize: 13,
+                      color: TEXT_LIGHT_BLACK,
+                    }}>
                     ₹ 1999.00
                   </Text>
                 </View>
@@ -131,7 +140,7 @@ const AllOrders = () => {
   );
 };
 
-export default AllOrders;
+export default NewOrders;
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
 const styles = StyleSheet.create({

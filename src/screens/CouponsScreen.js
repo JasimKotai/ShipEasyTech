@@ -1,21 +1,32 @@
-import {View, Text, TouchableOpacity} from 'react-native';
-import React from 'react';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  TextInput,
+} from 'react-native';
+import React, {useState} from 'react';
+import Header from '../components/Header';
 
 const CouponsScreen = ({navigation, route}) => {
   const {refRBSheet2} = route.params;
+  const [coupon, setCoupon] = useState('');
   return (
-    <View>
-      <Text>CouponsScreen</Text>
-      <TouchableOpacity
+    <View style={styles.container}>
+      <Header
+        title="View Offers"
         onPress={() => {
-          navigation.navigate('HomeScreen');
-          refRBSheet2.current.open();
+          navigation.goBack();
         }}
-        style={{padding: 20}}>
-        <Text>Back</Text>
-      </TouchableOpacity>
+      />
+      <TextInput placeholder="Enter Coupon Code" />
     </View>
   );
 };
 
 export default CouponsScreen;
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});

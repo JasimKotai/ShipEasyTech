@@ -11,7 +11,7 @@ import Header from '../components/Header';
 import {GREEN_COLOR, LIGHT_GREEN} from '../assets/Colors';
 import {TEXT_BLACK2} from '../assets/fontStyles';
 import AllOrders from '../components/AllOrders';
-import NewOrders from './NewOrders';
+import NewOrders from '../components/NewOrders';
 import HyperlocalOrders from '../components/HyperlocalOrders';
 import ReturnOrders from '../components/ReturnOrders';
 
@@ -56,7 +56,7 @@ const Orders = ({navigation}) => {
           }}
           style={[
             styles.topBarButtons,
-            selectedTopBar === 'All' ? {borderBottomWidth: 4} : null,
+            selectedTopBar === 'All' ? {borderColor: GREEN_COLOR} : null,
           ]}>
           <Text style={styles.topBarButtonsTxt}>All</Text>
         </TouchableOpacity>
@@ -66,7 +66,7 @@ const Orders = ({navigation}) => {
           }}
           style={[
             styles.topBarButtons,
-            selectedTopBar === 'New' ? {borderBottomWidth: 4} : null,
+            selectedTopBar === 'New' ? {borderColor: GREEN_COLOR} : null,
           ]}>
           <Text style={styles.topBarButtonsTxt}>New</Text>
         </TouchableOpacity>
@@ -76,7 +76,7 @@ const Orders = ({navigation}) => {
           }}
           style={[
             styles.topBarButtons,
-            selectedTopBar === 'Hyperlocal' ? {borderBottomWidth: 4} : null,
+            selectedTopBar === 'Hyperlocal' ? {borderColor: GREEN_COLOR} : null,
           ]}>
           <Text style={styles.topBarButtonsTxt}>Hyperlocal</Text>
         </TouchableOpacity>
@@ -86,7 +86,7 @@ const Orders = ({navigation}) => {
           }}
           style={[
             styles.topBarButtons,
-            selectedTopBar === 'Returns' ? {borderBottomWidth: 4} : null,
+            selectedTopBar === 'Returns' ? {borderColor: GREEN_COLOR} : null,
           ]}>
           <Text style={styles.topBarButtonsTxt}>Returns</Text>
         </TouchableOpacity>
@@ -136,10 +136,11 @@ const styles = StyleSheet.create({
   topBarButtons: {
     backgroundColor: '#ffffff',
     width: width / 4,
-    borderColor: GREEN_COLOR,
+    borderColor: '#ffff',
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 7,
+    borderBottomWidth: 4,
   },
   topBarButtonsTxt: {
     color: TEXT_BLACK2,

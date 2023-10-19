@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
   title: {
     color: '#000',
     fontFamily: 'Poppins-Regular',
-    fontSize: 20,
+    fontSize: 18,
     position: 'absolute',
     alignSelf: 'center',
     textAlign: 'center',
