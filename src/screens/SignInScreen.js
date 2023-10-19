@@ -39,7 +39,7 @@ const SignInScreen = ({ navigation }) => {
   const handleLogin = async () => {
     try {
       setIsLoading(true); // Start loading
-      const response = await axios.post(`${BASE_URL_LOCAL}/login`, userDetails);
+      const response = await axios.post(`${BASE_URL_LIVE}/login`, userDetails);
       console.log("response=====> ", response.data);
       if (response.data.code == "200") {
         const json = JSON.stringify(response.data.userData);

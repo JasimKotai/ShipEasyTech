@@ -8,8 +8,8 @@ import {
   ScrollView,
   TextInput,
 } from 'react-native';
-import React, {useState} from 'react';
-import {GREEN_COLOR, LIGHT_GREEN} from '../assets/Colors';
+import React, { useState } from 'react';
+import { GREEN_COLOR, LIGHT_GREEN } from '../assets/Colors';
 import Header from '../components/Header';
 import {
   PRIMARY_TEXT_REG,
@@ -20,10 +20,39 @@ import {
   TEXT_WHITE,
 } from '../assets/fontStyles';
 
-const CustomerDetails = ({navigation}) => {
+const CustomerDetails = ({ navigation }) => {
   const height = Dimensions.get('window').height;
   const width = Dimensions.get('window').width;
   const [BillingAddressNotSame, setBillingAddressNotSame] = useState(false);
+  const [shippingDetails, setShippingDetails] = useState({
+    shipping_first_name: "",
+    shipping_last_name: "",
+    shipping_phone: "",
+    shipping_email: "",
+    shipping_address_1: "",
+    shipping_address_2: "",
+    shipping_city: "",
+    shipping_pincode: "",
+    shipping_state: "",
+    shipping_country: "India",
+  });
+  const [billingDetails, setBillingDetails] = useState({
+    billing_first_name: "",
+    billing_last_name: "",
+    billing_phone: "",
+    billing_email: "",
+    billing_address_1: "",
+    billing_address_2: "",
+    billing_city: "",
+    billing_pincode: "",
+    billing_state: "",
+    billing_country: "",
+  });
+
+  console.log("shippingDetails==>", shippingDetails);
+  // console.log("billingDetails==>", billingDetails);
+
+
   return (
     <View style={styles.container}>
       <Header
@@ -36,7 +65,7 @@ const CustomerDetails = ({navigation}) => {
         <Text style={styles.title2text}>Add Customer Details</Text>
       </View>
       <ScrollView
-        style={{flex: 1, paddingHorizontal: 5}}
+        style={{ flex: 1, paddingHorizontal: 5 }}
         showsVerticalScrollIndicator={false}>
         <View style={styles.selectCustomerParentView}>
           <Text style={styles.selectCustomerText}>Select Customer</Text>
@@ -47,14 +76,14 @@ const CustomerDetails = ({navigation}) => {
                 justifyContent: 'center',
                 paddingHorizontal: 10,
               }}>
-              <Text style={{fontSize: 10, color: '#999999'}} numberOfLines={1}>
+              <Text style={{ fontSize: 10, color: '#999999' }} numberOfLines={1}>
                 Selected Customer Address
               </Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.selectCustomerAddressBtn}>
               <Image
                 source={require('../assets/images/search-icon.png')}
-                style={{width: 25, height: 25, tintColor: GREEN_COLOR}}
+                style={{ width: 25, height: 25, tintColor: GREEN_COLOR }}
               />
             </TouchableOpacity>
           </View>
@@ -67,16 +96,16 @@ const CustomerDetails = ({navigation}) => {
             alignItems: 'center',
             justifyContent: 'space-between',
           }}>
-          <View style={{height: 1, backgroundColor: '#ccc', flex: 0.46}} />
-          <Text style={{fontFamily: 'Poppins-SemiBold', color: '#b3b3b3'}}>
+          <View style={{ height: 1, backgroundColor: '#ccc', flex: 0.46 }} />
+          <Text style={{ fontFamily: 'Poppins-SemiBold', color: '#b3b3b3' }}>
             OR
           </Text>
-          <View style={{height: 1, backgroundColor: '#ccc', flex: 0.46}} />
+          <View style={{ height: 1, backgroundColor: '#ccc', flex: 0.46 }} />
         </View>
         {/* divider end */}
         <View style={styles.enterCustomerDetailsParentView}>
           <Text style={styles.customerTitle}>Add Buyer's Details</Text>
-          <Text style={{color: '#808080', fontSize: 12}}>
+          <Text style={{ color: '#808080', fontSize: 12 }}>
             To whom is the order being delivered? (Buyer's Info)
           </Text>
           {/* Buyer's Details */}
@@ -85,25 +114,34 @@ const CustomerDetails = ({navigation}) => {
               placeholder="First Name"
               placeholderTextColor={'#808080'}
               style={styles.buyerDetailInput}
+              value={shippingDetails.shipping_first_name}
+              onChangeText={text => setShippingDetails({ ...shippingDetails, shipping_first_name: text })}
             />
             <TextInput
               placeholder="Last Name"
               style={styles.buyerDetailInput}
               placeholderTextColor={'#808080'}
+              value={shippingDetails.shipping_last_name}
+              onChangeText={text => setShippingDetails({ ...shippingDetails, shipping_last_name: text })}
             />
             <TextInput
               placeholder="Contact Number"
               placeholderTextColor={'#808080'}
               style={styles.buyerDetailInput}
               keyboardType="number-pad"
+              value={shippingDetails.shipping_phone}
+              onChangeText={text => setShippingDetails({ ...shippingDetails, shipping_phone: text })}
+              maxLength={10}
             />
             <TextInput
               placeholder="Enter Email Id"
               placeholderTextColor={'#808080'}
               style={styles.buyerDetailInput}
               keyboardType="email-address"
+              value={shippingDetails.shipping_email}
+              onChangeText={text => setShippingDetails({ ...shippingDetails, shipping_email: text })}
             />
-            <Text style={{fontSize: 11, color: '#808080', marginTop: 10}}>
+            <Text style={{ fontSize: 11, color: '#808080', marginTop: 10 }}>
               Where is the order being delivered to?{' '}
               <Text
                 style={{
@@ -117,34 +155,47 @@ const CustomerDetails = ({navigation}) => {
             <TextInput
               placeholder="House/Floor number.bulding name or street,Locality"
               placeholderTextColor={'#808080'}
-              style={[styles.buyerDetailInput, {height: height / 16}]}
+              style={[styles.buyerDetailInput, { height: height / 16 }]}
               multiline
+              value={shippingDetails.shipping_address_1}
+              onChangeText={text => setShippingDetails({ ...shippingDetails, shipping_address_1: text })}
             />
             <TextInput
               placeholder="Any near by post office,market,hospital as landmark"
               placeholderTextColor={'#808080'}
-              style={[styles.buyerDetailInput, {height: height / 16}]}
+              style={[styles.buyerDetailInput, { height: height / 16 }]}
               multiline
+              value={shippingDetails.shipping_address_2}
+              onChangeText={text => setShippingDetails({ ...shippingDetails, shipping_address_2: text })}
             />
             <TextInput
               placeholder="City"
               placeholderTextColor={'#808080'}
               style={styles.buyerDetailInput}
+              value={shippingDetails.shipping_city}
+              onChangeText={text => setShippingDetails({ ...shippingDetails, shipping_city: text })}
             />
             <TextInput
               placeholder="Pincode"
               placeholderTextColor={'#808080'}
               style={styles.buyerDetailInput}
+              value={shippingDetails.shipping_pincode}
+              onChangeText={text => setShippingDetails({ ...shippingDetails, shipping_pincode: text })}
             />
             <TextInput
               placeholder="State"
               placeholderTextColor={'#808080'}
               style={styles.buyerDetailInput}
+              value={shippingDetails.shipping_state}
+              onChangeText={text => setShippingDetails({ ...shippingDetails, shipping_state: text })}
             />
             <TextInput
               placeholder="Country"
               placeholderTextColor={'#808080'}
               style={styles.buyerDetailInput}
+              value={shippingDetails.shipping_country}
+              // onChangeText={text => setShippingDetails({ ...shippingDetails, shipping_country: text })}
+              editable={false}
             />
           </View>
           <View
@@ -157,17 +208,17 @@ const CustomerDetails = ({navigation}) => {
               onPress={() => {
                 setBillingAddressNotSame(!BillingAddressNotSame);
               }}
-              style={{padding: 5}}>
+              style={{ padding: 5 }}>
               <Image
                 source={
                   BillingAddressNotSame
                     ? require('../assets/images/check1.png')
                     : require('../assets/images/empty-checkbox.png')
                 }
-                style={{width: 20, height: 20}}
+                style={{ width: 20, height: 20 }}
               />
             </TouchableOpacity>
-            <Text style={{color: TEXT_BLACK2}}>
+            <Text style={{ color: TEXT_BLACK2 }}>
               Billing address is not same as Shiping Address
             </Text>
           </View>
@@ -175,62 +226,83 @@ const CustomerDetails = ({navigation}) => {
         {/*  Billing address is not same as Shiping start */}
         {BillingAddressNotSame ? (
           <View style={styles.enterCustomerDetailsParentView}>
-            <Text style={{fontFamily: PRIMARY_TEXT_SEM, color: TEXT_BLACK2}}>
+            <Text style={{ fontFamily: PRIMARY_TEXT_SEM, color: TEXT_BLACK2 }}>
               Billing Address
             </Text>
             <TextInput
               placeholder="First Name"
               placeholderTextColor={'#808080'}
               style={styles.buyerDetailInput}
+              value={billingDetails.billing_first_name}
+              onChangeText={text => setBillingDetails({ ...billingDetails, billing_first_name: text })}
             />
             <TextInput
               placeholder="Last Name"
               style={styles.buyerDetailInput}
               placeholderTextColor={'#808080'}
+              value={billingDetails.billing_last_name}
+              onChangeText={text => setBillingDetails({ ...billingDetails, billing_last_name: text })}
             />
             <TextInput
               placeholder="Contact Number"
               placeholderTextColor={'#808080'}
               style={styles.buyerDetailInput}
+              value={billingDetails.billing_phone}
+              onChangeText={text => setBillingDetails({ ...billingDetails, billing_phone: text })}
               keyboardType="number-pad"
+              maxLength={10}
             />
             <TextInput
               placeholder="Enter Email Id"
               placeholderTextColor={'#808080'}
               style={styles.buyerDetailInput}
               keyboardType="email-address"
+              value={billingDetails.billing_email}
+              onChangeText={text => setBillingDetails({ ...billingDetails, billing_email: text })}
             />
             <TextInput
               placeholder="House/Floor number.bulding name or street,Locality"
               placeholderTextColor={'#808080'}
-              style={[styles.buyerDetailInput, {height: height / 16}]}
+              style={[styles.buyerDetailInput, { height: height / 16 }]}
               multiline
+              value={billingDetails.billing_address_1}
+              onChangeText={text => setBillingDetails({ ...billingDetails, billing_address_1: text })}
             />
             <TextInput
               placeholder="Any near by post office,market,hospital as landmark"
               placeholderTextColor={'#808080'}
-              style={[styles.buyerDetailInput, {height: height / 16}]}
+              style={[styles.buyerDetailInput, { height: height / 16 }]}
               multiline
+              value={billingDetails.billing_address_2}
+              onChangeText={text => setBillingDetails({ ...billingDetails, billing_address_2: text })}
             />
             <TextInput
               placeholder="City"
               placeholderTextColor={'#808080'}
               style={styles.buyerDetailInput}
+              value={billingDetails.billing_city}
+              onChangeText={text => setBillingDetails({ ...billingDetails, billing_city: text })}
             />
             <TextInput
               placeholder="Pincode"
               placeholderTextColor={'#808080'}
               style={styles.buyerDetailInput}
+              value={billingDetails.billing_pincode}
+              onChangeText={text => setBillingDetails({ ...billingDetails, billing_pincode: text })}
             />
             <TextInput
               placeholder="State"
               placeholderTextColor={'#808080'}
               style={styles.buyerDetailInput}
+              value={billingDetails}
+              onChangeText={text => setBillingDetails({ ...billingDetails, srgsg: text })}
             />
             <TextInput
               placeholder="Country"
               placeholderTextColor={'#808080'}
               style={styles.buyerDetailInput}
+              value={billingDetails.billing_country}
+              onChangeText={text => setBillingDetails({ ...billingDetails, billing_country: text })}
             />
           </View>
         ) : null}
