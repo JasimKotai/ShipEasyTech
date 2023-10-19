@@ -9,22 +9,23 @@ import {
   ScrollView,
   TextInput,
   KeyboardAvoidingView,
+  FlatList,
 } from 'react-native';
-import React, { useEffect, useState } from 'react';
-import { GREEN_COLOR, LIGHT_GREEN } from '../assets/Colors';
-import { English } from '../Languages/EnglishLan';
-import { Hindi } from '../Languages/HindiLan';
-import { Dropdown } from 'react-native-element-dropdown';
+import React, {useEffect, useRef, useState} from 'react';
+import {GREEN_COLOR, LIGHT_GREEN} from '../assets/Colors';
+import {English} from '../Languages/EnglishLan';
+import {Hindi} from '../Languages/HindiLan';
+import {Dropdown} from 'react-native-element-dropdown';
 import Header from '../components/Header';
-import { saveCreateOrderData } from '../config/UserSlice';
+import {saveCreateOrderData} from '../config/UserSlice';
+import RBSheet from 'react-native-raw-bottom-sheet';
 
-
-
-const QuickShipmentScreen = ({ navigation }) => {
+const QuickShipmentScreen = ({navigation}) => {
+  const refRBSheet = useRef();
   const [renderOnes, setrenderOnes] = useState(null);
   const height = Dimensions.get('window').height;
   const width = Dimensions.get('window').width;
-  const [address, setAddress] = useState('Select Address');
+  const [address, setAddress] = useState('');
   const [cashOrPrepaid, setCashOrPrepaid] = useState('COD');
   const [productWeightDetails, setProductWeightDetails] = useState({
     weight: '',
@@ -39,7 +40,6 @@ const QuickShipmentScreen = ({ navigation }) => {
   });
   const [products, setProducts] = useState({
     product_title: '',
-    product_name: '',
     quentity: '',
     price: '',
     sku: '',
@@ -50,16 +50,17 @@ const QuickShipmentScreen = ({ navigation }) => {
   });
   const [otherCharges, setOtherCharges] = useState(false);
   const [showmore, setShowmore] = useState(false);
-
+  // search address state (bottomsheet)
+  const [searchAddress, setSearchAddress] = useState('1111');
 
   const platform = [
-    { label: '1', value: 'shopify' },
-    { label: '2', value: 'WooCommerce' },
-    { label: '2', value: 'Wix' },
-    { label: '2', value: 'Magento' },
-    { label: '2', value: 'BigCommercex' },
+    {label: '1', value: 'shopify'},
+    {label: '2', value: 'WooCommerce'},
+    {label: '2', value: 'Wix'},
+    {label: '2', value: 'Magento'},
+    {label: '2', value: 'BigCommercex'},
   ];
-  const Courier = [{ label: '1', value: 'Ecom Express' }];
+  const Courier = [{label: '1', value: 'Ecom Express'}];
 
   // console.log("products====>", products);
   console.log('productWeightDetails====>', productWeightDetails);
@@ -78,37 +79,43 @@ const QuickShipmentScreen = ({ navigation }) => {
         <Text style={styles.title2text}>Add Order Details</Text>
       </View>
       <ScrollView
-        style={{ flex: 1, paddingHorizontal: 5 }}
+        style={{flex: 1, paddingHorizontal: 5}}
         showsVerticalScrollIndicator={false}>
         {/* pick up address view */}
         <View style={styles.pickupAddressView}>
           <Text style={styles.pickupAddressText}>Select Pickup Address</Text>
           {/* <View style={styles.enterLocationView}> */}
           <View style={styles.selectLocationView}>
-            {/* <TextInput
-                placeholder="Select Pickup Address"
-                style={styles.enterLocationInput}
-                value={address}
-                onChangeText={setAddress}
-              /> */}
             <TouchableOpacity
+              onPress={() => {
+                refRBSheet.current.open();
+              }}
               style={{
                 flex: 1,
-                justifyContent: 'center',
                 paddingHorizontal: 10,
+                alignItems: 'center',
+                flexDirection: 'row',
+                justifyContent: 'space-between',
               }}>
-              <Text style={{ fontSize: 10, color: '#999999' }} numberOfLines={1}>
-                Selected Pickup Address
-              </Text>
-
-              <Text style={{ color: '#000' }} numberOfLines={1}>
-                {address}
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.locationSearchBtn}>
+              <View>
+                {address !== null ? (
+                  <Text style={{color: '#808080'}} numberOfLines={1}>
+                    Selected Pickup Address
+                  </Text>
+                ) : (
+                  <Text style={{color: '#000'}} numberOfLines={1}>
+                    {address}
+                  </Text>
+                )}
+              </View>
               <Image
-                source={require('../assets/images/search-icon.png')}
-                style={{ width: 25, height: 25, tintColor: GREEN_COLOR }}
+                source={require('../assets/images/down-arrow.png')}
+                style={{
+                  width: 25,
+                  height: 20,
+                  resizeMode: 'contain',
+                  tintColor: GREEN_COLOR,
+                }}
               />
             </TouchableOpacity>
           </View>
@@ -118,7 +125,7 @@ const QuickShipmentScreen = ({ navigation }) => {
               onPress={() => {
                 navigation.navigate('AddPickupAddress');
               }}
-              style={{ flexDirection: 'row', alignItems: 'center' }}>
+              style={{flexDirection: 'row', alignItems: 'center'}}>
               <Image
                 source={require('../assets/images/location.png')}
                 style={{
@@ -153,7 +160,7 @@ const QuickShipmentScreen = ({ navigation }) => {
               placeholderTextColor={'#808080'}
             />
           </View>
-          <Text style={{ color: '#bfbfbf', fontSize: 10 }}>
+          <Text style={{color: '#bfbfbf', fontSize: 10}}>
             Note : Entering pincode will check pincode is available or not
           </Text>
         </View>
@@ -163,7 +170,7 @@ const QuickShipmentScreen = ({ navigation }) => {
           <Text style={styles.pickupAddressText}>Product Details</Text>
 
           {/* wrapper view */}
-          <View style={{ backgroundColor: '#ffff' }}>
+          <View style={{backgroundColor: '#ffff'}}>
             <StatusBar barStyle={'dark-content'} />
             <View style={styles.selectLocationView}>
               <TextInput
@@ -171,23 +178,10 @@ const QuickShipmentScreen = ({ navigation }) => {
                 placeholderTextColor={'#808080'}
                 style={styles.enterLocationInput}
                 value={products.product_title}
-                onChangeText={text => setProducts({...products, product_name: text })}
+                onChangeText={text =>
+                  setProducts({...products, product_name: text})
+                }
               />
-              <TouchableOpacity
-                onPress={() => {
-                  deleteProduct(index);
-                }}
-                // disabled={products?.length < 2 ? true : false}
-                style={styles.locationSearchBtn}>
-                <Image
-                  source={require('../assets/images/delete.png')}
-                  style={{
-                    width: 25,
-                    height: 25,
-                    resizeMode: 'contain',
-                  }}
-                />
-              </TouchableOpacity>
             </View>
             {/* quantity and unit price */}
             <View style={styles.quantityUnitPriceView}>
@@ -197,7 +191,9 @@ const QuickShipmentScreen = ({ navigation }) => {
                 keyboardType="number-pad"
                 placeholderTextColor={'#808080'}
                 value={products.quentity}
-                onChangeText={text => setProducts({...products, quentity: text })}
+                onChangeText={text =>
+                  setProducts({...products, quentity: text})
+                }
               />
               <TextInput
                 placeholder="Unit Price"
@@ -205,7 +201,7 @@ const QuickShipmentScreen = ({ navigation }) => {
                 keyboardType="number-pad"
                 placeholderTextColor={'#808080'}
                 value={products.price}
-                onChangeText={text => setProducts({...products, price: text })}
+                onChangeText={text => setProducts({...products, price: text})}
               />
             </View>
             <TextInput
@@ -213,7 +209,7 @@ const QuickShipmentScreen = ({ navigation }) => {
               style={styles.SKUInput}
               placeholderTextColor={'#808080'}
               value={products.sku}
-              onChangeText={text => setProducts({...products, sku: text })}
+              onChangeText={text => setProducts({...products, sku: text})}
             />
             {/* show more button start*/}
             {/* <TouchableOpacity
@@ -246,7 +242,9 @@ const QuickShipmentScreen = ({ navigation }) => {
                   placeholderTextColor={'#808080'}
                   value={products.HSNCategory}
                   style={styles.HSNInput}
-                  onChangeText={text => setProducts({...products, HSNInput: text })}
+                  onChangeText={text =>
+                    setProducts({...products, HSNInput: text})
+                  }
                 />
                 {/* Tax Rate & Discount inputs view start */}
                 <View style={styles.TaxRateDiscountView}>
@@ -255,14 +253,18 @@ const QuickShipmentScreen = ({ navigation }) => {
                     style={styles.TaxRateDiscountInput}
                     placeholderTextColor={'#808080'}
                     value={products.TaxRate}
-                    onChangeText={text => setProducts({...products, TaxRate: text })}
+                    onChangeText={text =>
+                      setProducts({...products, TaxRate: text})
+                    }
                   />
                   <TextInput
                     placeholder="Discount (Optional)"
                     style={styles.TaxRateDiscountInput}
                     placeholderTextColor={'#808080'}
                     value={products.Discount}
-                    onChangeText={text => setProducts({...products, Discount: text })}
+                    onChangeText={text =>
+                      setProducts({...products, Discount: text})
+                    }
                   />
                 </View>
                 {/* Tax Rate & Discount inputs view end */}
@@ -279,14 +281,6 @@ const QuickShipmentScreen = ({ navigation }) => {
 
             {/* divider view end */}
           </View>
-
-          <TouchableOpacity
-            onPress={() => {
-              addAnotherProduct();
-            }}
-            style={styles.AddAnotherBtn}>
-            <Text style={styles.AddAnotherBtnText}>+ Add Another Product</Text>
-          </TouchableOpacity>
         </View>
 
         {/* Weight */}
@@ -313,15 +307,15 @@ const QuickShipmentScreen = ({ navigation }) => {
               }}
             />
             <View style={styles.WeightChildView2}>
-              <Text style={{ color: '#ffff', fontFamily: 'Poppins-SemiBold' }}>
+              <Text style={{color: '#ffff', fontFamily: 'Poppins-SemiBold'}}>
                 KG
               </Text>
             </View>
           </View>
-          <Text style={{ color: '#808080', fontSize: 10 }}>
+          <Text style={{color: '#808080', fontSize: 10}}>
             Max 3 digits after decimal value
           </Text>
-          <Text style={{ color: '#000', fontSize: 12, marginBottom: 20 }}>
+          <Text style={{color: '#000', fontSize: 12, marginBottom: 20}}>
             Note : The minimum chargeable weight is 50 gm
           </Text>
 
@@ -426,7 +420,7 @@ const QuickShipmentScreen = ({ navigation }) => {
               <Text style={styles.lengthCMText}>cm</Text>
             </View>
           </View>
-          <Text style={{ color: '#808080', fontSize: 12 }}>
+          <Text style={{color: '#808080', fontSize: 12}}>
             Note : Dimensions value should be greater than 0.50 cm
           </Text>
         </View>
@@ -437,6 +431,7 @@ const QuickShipmentScreen = ({ navigation }) => {
             <TextInput
               placeholder="Invoice No"
               style={styles.orderInvocesInput}
+              placeholderTextColor={'#808080'}
               value={productWeightDetails.invoice}
               onChangeText={text =>
                 setProductWeightDetails({
@@ -448,7 +443,7 @@ const QuickShipmentScreen = ({ navigation }) => {
             <TouchableOpacity style={styles.orderInvocesGenerateBtn}>
               <Image
                 source={require('../assets/images/auto-generate.png')}
-                style={{ width: 25, height: 25, resizeMode: 'contain' }}
+                style={styles.orderInvocesGenerateBtnIMG}
               />
             </TouchableOpacity>
           </View>
@@ -457,6 +452,7 @@ const QuickShipmentScreen = ({ navigation }) => {
             <TextInput
               placeholder="Order No"
               style={styles.orderInvocesInput}
+              placeholderTextColor={'#808080'}
               value={productWeightDetails.order_number}
               onChangeText={text =>
                 setProductWeightDetails({
@@ -468,7 +464,7 @@ const QuickShipmentScreen = ({ navigation }) => {
             <TouchableOpacity style={styles.orderInvocesGenerateBtn}>
               <Image
                 source={require('../assets/images/auto-generate.png')}
-                style={{ width: 25, height: 25, resizeMode: 'contain' }}
+                style={styles.orderInvocesGenerateBtnIMG}
               />
             </TouchableOpacity>
           </View>
@@ -489,7 +485,7 @@ const QuickShipmentScreen = ({ navigation }) => {
               borderBottomColor: '#ccc',
               marginTop: 5,
             }}
-            itemTextStyle={{ color: '#000' }}
+            itemTextStyle={{color: '#000'}}
             maxHeight={150}
             showsVerticalScrollIndicator={false}
             labelField="value"
@@ -521,7 +517,7 @@ const QuickShipmentScreen = ({ navigation }) => {
               borderBottomColor: '#ccc',
               marginTop: 5,
             }}
-            itemTextStyle={{ color: '#000' }}
+            itemTextStyle={{color: '#000'}}
             maxHeight={150}
             showsVerticalScrollIndicator={false}
             labelField="value"
@@ -540,7 +536,7 @@ const QuickShipmentScreen = ({ navigation }) => {
         {/* payment cash on delivery or prepaid */}
         <View style={styles.PaymentParentView}>
           <Text style={styles.pickupAddressText}>Payment</Text>
-          <View style={{ flexDirection: 'row' }}>
+          <View style={{flexDirection: 'row'}}>
             <View style={styles.cashOnDeliveryView}>
               <TouchableOpacity
                 onPress={() => {
@@ -571,7 +567,7 @@ const QuickShipmentScreen = ({ navigation }) => {
             <View
               style={[
                 styles.cashOnDeliveryView,
-                { alignItems: 'center', justifyContent: 'center' },
+                {alignItems: 'center', justifyContent: 'center'},
               ]}>
               <TouchableOpacity
                 onPress={() => {
@@ -601,16 +597,15 @@ const QuickShipmentScreen = ({ navigation }) => {
           </View>
           {/* divider */}
           <View
-            style={{ height: 1, backgroundColor: '#cccc', marginVertical: 10 }}
+            style={{height: 1, backgroundColor: '#cccc', marginVertical: 10}}
           />
           {/* sub total */}
           <View style={styles.subTotalView}>
-            <Text style={{ color: '#000', fontFamily: 'Poppins-Regular' }}>
+            <Text style={{color: '#000', fontFamily: 'Poppins-Regular'}}>
               Subtotal
             </Text>
-            <Text style={{ color: '#000' }}>
-              ₹{' '}
-              {products?.quentity * products.price}
+            <Text style={{color: '#000'}}>
+              ₹ {products?.quentity * products.price}
             </Text>
           </View>
 
@@ -632,10 +627,10 @@ const QuickShipmentScreen = ({ navigation }) => {
           </TouchableOpacity> */}
           {/* otherCharge shipping chages giftwrap transation discount */}
           {otherCharges ? (
-            <View style={{ marginVertical: 10 }}>
+            <View style={{marginVertical: 10}}>
               {/* shipping charge */}
               <View style={styles.otherChargesInputView}>
-                <Text style={{ flex: 0.5, color: '#000' }}>Shipping Charges</Text>
+                <Text style={{flex: 0.5, color: '#000'}}>Shipping Charges</Text>
                 <TextInput
                   placeholder="0"
                   placeholderTextColor={'#808080'}
@@ -644,7 +639,7 @@ const QuickShipmentScreen = ({ navigation }) => {
               </View>
               {/* gift wrap */}
               <View style={styles.otherChargesInputView}>
-                <Text style={{ flex: 0.5, color: '#000' }}>GiftWrap Charges</Text>
+                <Text style={{flex: 0.5, color: '#000'}}>GiftWrap Charges</Text>
                 <TextInput
                   placeholder="0"
                   placeholderTextColor={'#808080'}
@@ -653,7 +648,7 @@ const QuickShipmentScreen = ({ navigation }) => {
               </View>
               {/* transaction */}
               <View style={styles.otherChargesInputView}>
-                <Text style={{ flex: 0.5, color: '#000' }}>
+                <Text style={{flex: 0.5, color: '#000'}}>
                   Transaction Charges
                 </Text>
                 <TextInput
@@ -664,7 +659,7 @@ const QuickShipmentScreen = ({ navigation }) => {
               </View>
               {/* Discount */}
               <View style={styles.otherChargesInputView}>
-                <Text style={{ flex: 0.5, color: '#000' }}>Discount</Text>
+                <Text style={{flex: 0.5, color: '#000'}}>Discount</Text>
                 <TextInput
                   placeholder="0"
                   placeholderTextColor={'#808080'}
@@ -688,15 +683,14 @@ const QuickShipmentScreen = ({ navigation }) => {
                 justifyContent: 'space-between',
                 paddingHorizontal: 10,
               }}>
-              <Text style={{ color: '#000', fontFamily: 'Poppins-Regular' }}>
+              <Text style={{color: '#000', fontFamily: 'Poppins-Regular'}}>
                 Total
               </Text>
-              <Text style={{ color: '#000' }}>
-                ₹{' '}
-                {products?.quentity * products.price}
+              <Text style={{color: '#000'}}>
+                ₹ {products?.quentity * products.price}
               </Text>
             </View>
-            <Text style={{ color: '#808080', fontSize: 12, marginLeft: 10 }}>
+            <Text style={{color: '#808080', fontSize: 12, marginLeft: 10}}>
               Note : In case a shipment gets lost, the amount entered above will
               be refunded to youraccount.
             </Text>
@@ -705,12 +699,126 @@ const QuickShipmentScreen = ({ navigation }) => {
         <TouchableOpacity
           onPress={() => {
             navigation.navigate('CustomerDetails');
-            dispatch(saveCreateOrderData())
+            dispatch(saveCreateOrderData());
           }}
           style={styles.NextButton}>
           <Text style={styles.NextButtonText}>Next</Text>
         </TouchableOpacity>
       </ScrollView>
+      {/* bottom sheet for select pickup address */}
+      <RBSheet
+        ref={refRBSheet}
+        closeOnDragDown={true}
+        closeOnPressMask={true}
+        height={height / 1.1}
+        customStyles={{
+          wrapper: {
+            backgroundColor: 'rgba(0, 0, 0, 0.7)',
+          },
+          draggableIcon: {
+            // backgroundColor: '#000',
+            padding: 0,
+            width: 0,
+            height: 0,
+            margin: 0,
+          },
+          container: {
+            borderTopLeftRadius: 30,
+            borderTopRightRadius: 30,
+          },
+        }}>
+        <View style={{flex: 1, backgroundColor: '#f2f2f2'}}>
+          <TouchableOpacity
+            style={{
+              marginRight: 20,
+              marginTop: 15,
+              alignSelf: 'flex-end',
+            }}
+            onPress={() => refRBSheet.current.close()}>
+            <Image
+              source={require('../assets/images/close1.png')}
+              style={{
+                width: 25,
+                height: 20,
+                resizeMode: 'contain',
+                tintColor: GREEN_COLOR,
+              }}
+            />
+          </TouchableOpacity>
+          <TextInput
+            placeholder="Search Pickup Address"
+            placeholderTextColor={'#808080'}
+            value={searchAddress}
+            onChangeText={setSearchAddress}
+            style={{
+              borderWidth: 1,
+              marginHorizontal: 10,
+              borderRadius: 10,
+              borderColor: '#808080',
+              marginVertical: 10,
+              padding: 0,
+              height: height / 18,
+              paddingHorizontal: 10,
+            }}
+          />
+          <FlatList
+            data={searchAddress}
+            renderItem={() => {
+              return (
+                <View
+                  style={{
+                    backgroundColor: '#ffff',
+                    marginHorizontal: 10,
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    borderRadius: 5,
+                    paddingHorizontal: 10,
+                    marginVertical: 5,
+                    padding: 2,
+                    elevation: 5
+                  }}>
+                  <View
+                    style={{
+                      backgroundColor: LIGHT_GREEN,
+                      width: 40,
+                      height: 40,
+                      borderRadius: 30,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}>
+                    <Text
+                      style={{
+                        color: '#000',
+                        fontFamily: 'Montserrat-SemiBold',
+                        fontSize: 18,
+                      }}>
+                      Q
+                    </Text>
+                  </View>
+                  <View style={{marginLeft: 10}}>
+                    <Text
+                      numberOfLines={1}
+                      style={{
+                        color: '#404040',
+                        fontFamily: 'Montserrat-SemiBold',
+                      }}>
+                      hello world
+                    </Text>
+                    <Text
+                      numberOfLines={1}
+                      style={{
+                        color: '#737373',
+                        fontSize: 13
+                      }}>
+                      1234567890
+                    </Text>
+                  </View>
+                </View>
+              );
+            }}
+          />
+        </View>
+      </RBSheet>
     </View>
     //{/* </KeyboardAvoidingView> */}
   );
@@ -788,13 +896,6 @@ const styles = StyleSheet.create({
     // backgroundColor: 'red',
     height: height / 18,
     paddingVertical: 0,
-  },
-  locationSearchBtn: {
-    flex: 0.2,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderLeftWidth: 0.5,
-    borderColor: '#808080',
   },
   pickupLocationView: {
     alignItems: 'center',
@@ -1002,7 +1103,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     alignItems: 'center',
   },
-  cashOnDeliveryBtn: { backgroundColor: '#999999', padding: 5, borderRadius: 40 },
+  cashOnDeliveryBtn: {backgroundColor: '#999999', padding: 5, borderRadius: 40},
   subTotalView: {
     flexDirection: 'row',
     padding: 10,
@@ -1081,5 +1182,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderTopRightRadius: 5,
     borderBottomRightRadius: 5,
+  },
+  orderInvocesGenerateBtnIMG: {
+    width: 25,
+    height: 25,
+    resizeMode: 'contain',
+    tintColor: GREEN_COLOR,
   },
 });

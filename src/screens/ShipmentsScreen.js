@@ -3,14 +3,18 @@ import React, {useState} from 'react';
 import Modals from '../components/Modals';
 import Header from '../components/Header';
 
-const ShipmentsScreen = () => {
+const ShipmentsScreen = ({navigation}) => {
   const [modalVisible, setModalVisible] = useState(false);
   const height = Dimensions.get('window').height;
   const width = Dimensions.get('window').width;
 
-  const toggleModal = ({navigation}) => {
-    setModalVisible(!modalVisible);
-  };
+  // const toggleModal = () => {
+  //   setModalVisible(!modalVisible);
+  // };
+//   <TouchableOpacity onPress={toggleModal}>
+//   <Text>Show Modal</Text>
+// </TouchableOpacity>
+  // <Modals visible={modalVisible} onClose={toggleModal} />
   return (
     <View style={styles.container}>
       <Header
@@ -34,10 +38,7 @@ const ShipmentsScreen = () => {
           />
         </TouchableOpacity>
       </View>
-      <TouchableOpacity onPress={toggleModal}>
-        <Text>Show Modal</Text>
-      </TouchableOpacity>
-      <Modals visible={modalVisible} onClose={toggleModal} />
+     
     </View>
   );
 };
