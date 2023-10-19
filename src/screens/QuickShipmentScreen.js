@@ -34,23 +34,18 @@ const QuickShipmentScreen = ({ navigation }) => {
   const [renderOnes, setrenderOnes] = useState(null);
   const height = Dimensions.get('window').height;
   const width = Dimensions.get('window').width;
-  const [address, setAddress] = useState('empty');
-  // const [showMore, setShowMore] = useState(null);
+  const [address, setAddress] = useState('Select Address');
+  const [cashOrPrepaid, setCashOrPrepaid] = useState('COD');
   const [productWeightDetails, setProductWeightDetails] = useState({
     weight: "",
     length: "",
     breadth: "",
     height: "",
+    payment_type: "",
   });
   const [products, setProducts] = useState([]);
   const [dropDownButton, setdropDownButton] = useState(false);
-  const [cashOrPrepaid, setCashOrPrepaid] = useState('COD');
   const [otherCharges, setOtherCharges] = useState(false);
-  const [payment, setPayment] = useState({
-    payment_type: cashOrPrepaid,
-    sub_total: 0,
-    total: 0,
-  });
 
 
   const addAnotherProduct = () => {
@@ -85,20 +80,8 @@ const QuickShipmentScreen = ({ navigation }) => {
   ];
 
   // console.log("products====>", products);
-  // console.log("productWeightDetails====>", productWeightDetails);
-  console.log("payment====>", payment);
-
-  useEffect(() => {
-    const calculateSum = () => {
-      let st = 0
-      // let tl = 0
-
-      products?.map(item => st += Number(item.price));
-      setPayment({ ...payment, sub_total: st, total: st });
-    }
-
-    calculateSum();
-  }, []);
+  console.log("productWeightDetails====>", productWeightDetails);
+  // console.log("payment====>", payment);
 
   useEffect(() => {
     setProducts([...products, productDetails]);
@@ -582,7 +565,12 @@ const QuickShipmentScreen = ({ navigation }) => {
               Subtotal
             </Text>
             <Text style={{ color: '#000' }}>
-              ₹ {payment.sub_total}
+              ₹ {
+                products?.reduce((acc, cur) => {
+                  const qty = cur?.quentity?.length ? Number(cur?.quentity) : 1;
+                    return acc + (Number(cur?.price) * qty);
+                }, 0)
+              }
             </Text>
           </View>
 
@@ -666,7 +654,12 @@ const QuickShipmentScreen = ({ navigation }) => {
                 Total
               </Text>
               <Text style={{ color: '#000' }}>
-                ₹ {payment.total}
+                ₹ {
+                  products?.reduce((acc, cur) => {
+                    const qty = cur?.quentity?.length ? Number(cur?.quentity) : 1;
+                    return acc + (Number(cur?.price) * qty);
+                  }, 0)
+                }
               </Text>
             </View>
             <Text style={{ color: '#808080', fontSize: 12, marginLeft: 10 }}>
