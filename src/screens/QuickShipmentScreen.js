@@ -465,6 +465,8 @@ const QuickShipmentScreen = ({ navigation }) => {
                 style={styles.lengthInput}
                 keyboardType="number-pad"
                 maxLength={7}
+                value={productWeightDetails.length}
+                onChangeText={text=> setProductWeightDetails({...productWeightDetails, length: text})}
               />
               <Text style={styles.lengthCMText}>cm</Text>
             </View>
@@ -475,6 +477,8 @@ const QuickShipmentScreen = ({ navigation }) => {
                 style={styles.lengthInput}
                 keyboardType="number-pad"
                 maxLength={7}
+                value={productWeightDetails.breadth}
+                onChangeText={text=> setProductWeightDetails({...productWeightDetails, breadth: text})}
               />
               <Text style={styles.lengthCMText}>cm</Text>
             </View>
@@ -485,6 +489,8 @@ const QuickShipmentScreen = ({ navigation }) => {
                 style={styles.lengthInput}
                 keyboardType="number-pad"
                 maxLength={7}
+                value={productWeightDetails.height}
+                onChangeText={text=> setProductWeightDetails({...productWeightDetails, height: text})}
               />
               <Text style={styles.lengthCMText}>cm</Text>
             </View>
