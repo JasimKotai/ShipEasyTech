@@ -6,12 +6,20 @@ import {
   TouchableOpacity,
   Image,
 } from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
 import Header from '../components/Header';
+import {GREEN_COLOR, LIGHT_GREEN} from '../assets/Colors';
+import {TEXT_BLACK2} from '../assets/fontStyles';
+import AllOrders from '../components/AllOrders';
+import NewOrders from './NewOrders';
+import HyperlocalOrders from '../components/HyperlocalOrders';
+import ReturnOrders from '../components/ReturnOrders';
 
 const Orders = ({navigation}) => {
   const height = Dimensions.get('window').height;
   const width = Dimensions.get('window').width;
+  const [selectedTopBar, setSelectedTopBar] = useState('All');
+
   return (
     <View style={styles.container}>
       <Header
@@ -35,6 +43,63 @@ const Orders = ({navigation}) => {
           />
         </TouchableOpacity>
       </View>
+      {/* top bar buttons */}
+      <View
+        style={{
+          backgroundColor: LIGHT_GREEN,
+          marginTop: height / 26,
+          flexDirection: 'row',
+        }}>
+        <TouchableOpacity
+          onPress={() => {
+            setSelectedTopBar('All');
+          }}
+          style={[
+            styles.topBarButtons,
+            selectedTopBar === 'All' ? {borderBottomWidth: 4} : null,
+          ]}>
+          <Text style={styles.topBarButtonsTxt}>All</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            setSelectedTopBar('New');
+          }}
+          style={[
+            styles.topBarButtons,
+            selectedTopBar === 'New' ? {borderBottomWidth: 4} : null,
+          ]}>
+          <Text style={styles.topBarButtonsTxt}>New</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            setSelectedTopBar('Hyperlocal');
+          }}
+          style={[
+            styles.topBarButtons,
+            selectedTopBar === 'Hyperlocal' ? {borderBottomWidth: 4} : null,
+          ]}>
+          <Text style={styles.topBarButtonsTxt}>Hyperlocal</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            setSelectedTopBar('Returns');
+          }}
+          style={[
+            styles.topBarButtons,
+            selectedTopBar === 'Returns' ? {borderBottomWidth: 4} : null,
+          ]}>
+          <Text style={styles.topBarButtonsTxt}>Returns</Text>
+        </TouchableOpacity>
+      </View>
+      {selectedTopBar === 'All' ? (
+        <AllOrders />
+      ) : selectedTopBar === 'New' ? (
+        <NewOrders />
+      ) : selectedTopBar === 'Hyperlocal' ? (
+        <HyperlocalOrders />
+      ) : selectedTopBar === 'Returns' ? (
+        <ReturnOrders />
+      ) : null}
     </View>
   );
 };
@@ -50,15 +115,34 @@ const styles = StyleSheet.create({
   searchButtonView: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'flex-end',
+    justifyContent: 'center',
     marginTop: -height / 11,
+    backgroundColor: '#f0f8ff',
+    width: width / 4,
+    borderRadius: 15,
+    padding: 5,
+    alignSelf: 'flex-end',
+    right: width / 20,
   },
   searchBtn: {
     marginRight: 10,
   },
   searchBtnImg: {
-    width: width / 15,
-    height: width / 17,
+    width: width / 14,
+    height: width / 16,
     resizeMode: 'contain',
+    tintColor: '#000',
+  },
+  topBarButtons: {
+    backgroundColor: '#ffffff',
+    width: width / 4,
+    borderColor: GREEN_COLOR,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 7,
+  },
+  topBarButtonsTxt: {
+    color: TEXT_BLACK2,
+    fontFamily: 'Onest-SemiBold',
   },
 });
