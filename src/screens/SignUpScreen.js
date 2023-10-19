@@ -32,7 +32,7 @@ const SignUpScreen = ({navigation}) => {
     company_name: '',
     email: '',
     password_confirmation: '',
-    order_size: '1-10',
+    order_size: 'Setting up a new business',
   });
   // console.log(userDetails);
   const [secureEntry, setSecureEntry] = useState(true);
@@ -178,10 +178,15 @@ const SignUpScreen = ({navigation}) => {
   const handleSignUpAPI = async () => {
     try {
       setLoading(true);
-      const response = await axios.post(`${BASE_URL_LIVE}/verify-register`, userDetails);
+      const response = await axios.post(
+        `${BASE_URL_LIVE}/verify-register`,
+        userDetails,
+      );
       if (response.data) {
         // console.log('SignUpScreen', response.data);
-        navigation.navigate('VerifyOTP', {temp_data: response.data.temp_data[0]});
+        navigation.navigate('VerifyOTP', {
+          temp_data: response.data.temp_data[0],
+        });
         setLoading(false);
       }
     } catch (error) {
@@ -609,7 +614,7 @@ const SignUpScreen = ({navigation}) => {
                   }}>
                   <View style={{flex: 0.9}}>
                     <Text
-                      style={{color: '#000', fontFamily: 'Poppins-Regular'}}>
+                      style={{color: '#808080', fontFamily: 'Poppins-Regular'}}>
                       {userDetails.order_size}
                     </Text>
                   </View>
@@ -626,42 +631,39 @@ const SignUpScreen = ({navigation}) => {
                 </TouchableOpacity>
               </View>
               {showOrderButtons ? (
-                <View
-                  style={{
-                    backgroundColor: '#ffff',
-                    paddingVertical: 10,
-                    borderWidth: 0.4,
-                    borderRadius: 5,
-                    marginTop: 5,
-                  }}>
+                <View style={styles.customDropDownView}>
                   <TouchableOpacity
-                    style={{
-                      backgroundColor: '#ffff',
-                      elevation: 2,
-                      paddingVertical: 10,
-                      marginBottom: 5,
-                      paddingLeft: 10,
-                    }}>
-                    <Text style={{color: '#000'}}>Between 1-10 orders</Text>
+                    onPress={() => {
+                      setUserDetails({
+                        ...userDetails,
+                        order_size: 'Between 1-10 orders',
+                      });
+                      setShowOrderButtons(!showOrderButtons);
+                    }}
+                    style={styles.customDropDownBtns}>
+                    <Text style={styles.customDropDownTxt}>Between 1-10 orders</Text>
                   </TouchableOpacity>
                   <TouchableOpacity
-                    style={{
-                      backgroundColor: '#ffff',
-                      elevation: 2,
-                      paddingVertical: 10,
-                      marginBottom: 5,
-                      paddingLeft: 10,
-                    }}>
-                    <Text style={{color: '#000'}}>11-100 orders</Text>
+                    onPress={() => {
+                      setUserDetails({
+                        ...userDetails,
+                        order_size: '11-100 orders',
+                      });
+                      setShowOrderButtons(!showOrderButtons);
+                    }}
+                    style={styles.customDropDownBtns}>
+                    <Text style={styles.customDropDownTxt}>11-100 orders</Text>
                   </TouchableOpacity>
                   <TouchableOpacity
-                    style={{
-                      backgroundColor: '#ffff',
-                      elevation: 2,
-                      paddingVertical: 10,
-                      paddingLeft: 10,
-                    }}>
-                    <Text style={{color: '#000'}}>101-1000 orders</Text>
+                    onPress={() => {
+                      setUserDetails({
+                        ...userDetails,
+                        order_size: '101-1000 orders',
+                      });
+                      setShowOrderButtons(!showOrderButtons);
+                    }}
+                    style={styles.customDropDownBtns}>
+                    <Text style={styles.customDropDownTxt}>101-1000 orders</Text>
                   </TouchableOpacity>
                 </View>
               ) : null}
@@ -1016,4 +1018,21 @@ const styles = StyleSheet.create({
     height: 15,
     tintColor: '#808080',
   },
+  customDropDownView: {
+    backgroundColor: '#ffff',
+    paddingVertical: 5,
+    borderWidth: 0.4,
+    borderColor: '#cccccc',
+    borderRadius: 5,
+    marginTop: 5,
+  },
+  customDropDownBtns: {
+    backgroundColor: '#ffff',
+    paddingVertical: 10,
+    paddingLeft: 5,
+    borderBottomWidth: 0.4,
+    borderColor: '#cccccc',
+    marginHorizontal: 5
+  },
+  customDropDownTxt: {color: '#808080', fontFamily: 'Poppins-Regular'}
 });
