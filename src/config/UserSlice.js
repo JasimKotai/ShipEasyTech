@@ -8,6 +8,7 @@ const UserSlice = createSlice({
     user: null,
     customer: null,
     status: false,
+    create_order_Data: {},
   },
   reducers: {
     userLogout(state, {payload}) {
@@ -21,8 +22,11 @@ const UserSlice = createSlice({
       state.user = payload?.user;
       state.customer = payload?.customer;
     },
-
+    saveCreateOrderData(state, {payload}){
+      const mergedObj = {...state.create_order_Data, ...payload}
+      state.create_order_Data = mergedObj;
+    }
   },
 });
-export const {userLogout, saveUserData} = UserSlice.actions;
+export const {userLogout, saveUserData, saveCreateOrderData} = UserSlice.actions;
 export default UserSlice.reducer;
