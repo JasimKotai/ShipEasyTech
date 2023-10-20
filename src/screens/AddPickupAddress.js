@@ -12,22 +12,24 @@ import {
   ScrollView,
   StatusBar,
 } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import Geolocation from '@react-native-community/geolocation';
 import MapView from 'react-native-maps';
-import { GREEN_COLOR, LIGHT_GREEN } from '../assets/Colors';
-import { Dropdown } from 'react-native-element-dropdown';
-import { useSelector } from 'react-redux';
+import {GREEN_COLOR, LIGHT_GREEN} from '../assets/Colors';
+import {Dropdown} from 'react-native-element-dropdown';
+import {useSelector} from 'react-redux';
+import {TEXT_BLACK2, TEXT_LIGHT_BLACK} from '../assets/fontStyles';
+import Header from '../components/Header';
 const data = [
-  { label: 'Item 1', value: 'hello world' },
-  { label: 'Item 2', value: 'hello world 2' },
-  { label: 'Item 2', value: 'hello world 2' },
-  { label: 'Item 2', value: 'hello world 2' },
-  { label: 'Item 2', value: 'hello world 2' },
+  {label: 'Item 1', value: 'hello world'},
+  {label: 'Item 2', value: 'hello world 2'},
+  {label: 'Item 2', value: 'hello world 2'},
+  {label: 'Item 2', value: 'hello world 2'},
+  {label: 'Item 2', value: 'hello world 2'},
 ];
 
-const AddPickupAddress = ({ navigation }) => {
-  const { user, customer } = useSelector(state => state.userSlice);
+const AddPickupAddress = ({navigation}) => {
+  const {user, customer} = useSelector(state => state.userSlice);
   const height = Dimensions.get('window').height;
   const width = Dimensions.get('window').width;
   const [currentLocation, setCurrentLocation] = useState(null);
@@ -36,19 +38,19 @@ const AddPickupAddress = ({ navigation }) => {
   const [dropDownButton, setdropDownButton] = useState(false);
   const [pickupAddress, setPickupAddress] = useState({
     user_id: user.id,
-    address_type: "",
-    contact_person: "",
-    contact_person_no: "",
-    contact_person_email: "",
-    contact_person_alt_no: "",
-    complete_address: "",
-    landmark: "",
-    postcode: "",
-    city: "",
-    state: "",
-    country: "India",
-    is_default: "",
-  })
+    address_type: '',
+    contact_person: '',
+    contact_person_no: '',
+    contact_person_email: '',
+    contact_person_alt_no: '',
+    complete_address: '',
+    landmark: '',
+    postcode: '',
+    city: '',
+    state: '',
+    country: 'India',
+    is_default: 'Home',
+  });
   // console.log(currentLocation);
   const handleLocationPermission = async () => {
     try {
@@ -76,20 +78,12 @@ const AddPickupAddress = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <StatusBar barStyle={'dark-content'} />
-      <View style={styles.header}>
-        {/* back button */}
-        <TouchableOpacity
-          onPress={() => {
-            navigation.goBack();
-          }}
-          style={styles.backButton}>
-          <Image
-            source={require('../assets/images/back.png')}
-            style={{ width: 25, height: 25 }}
-          />
-        </TouchableOpacity>
-        <Text style={styles.title}>Add Pickup Address</Text>
-      </View>
+      <Header
+        title="Add Pickup Address"
+        onPress={() => {
+          navigation.goBack();
+        }}
+      />
       <View style={styles.mapView}>
         {/* <MapView
           initialRegion={{
@@ -101,7 +95,7 @@ const AddPickupAddress = ({ navigation }) => {
         /> */}
         <Image
           source={require('../assets/images/map-image.jpeg')}
-          style={{ flex: 1, resizeMode: 'cover', width: width }}
+          style={{flex: 1, resizeMode: 'cover', width: width}}
         />
       </View>
       {/* <TouchableOpacity
@@ -118,175 +112,253 @@ const AddPickupAddress = ({ navigation }) => {
         style={{backgroundColor: 'red', padding: 20}}>
         <Text>Press</Text>
       </TouchableOpacity> */}
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        style={{
-          flex: 1,
-          padding: 10,
-          paddingBottom: 50,
-          backgroundColor: '#e6ffef',
-        }}>
-        {/* location */}
-        <View style={styles.currentLocationView}>
-          <Image
-            source={require('../assets/images/location.png')}
-            style={{ width: 20, height: 20, tintColor: GREEN_COLOR }}
-          />
-          <Text
-            numberOfLines={1}
-            style={{
-              color: '#000',
-              fontFamily: 'Poppins-SemiBold',
-            }}>
-            location
-          </Text>
-        </View>
-        {/* location address view text */}
-        <View
+      <View style={{flex: 1, paddingTop: 10, backgroundColor: '#e6ffef'}}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
           style={{
-            backgroundColor: '#ffff',
-            paddingHorizontal: 10,
-            borderBottomLeftRadius: 5,
-            borderBottomRightRadius: 5,
+            flex: 1,
+            padding: 10,
+            paddingTop: 0,
+            paddingBottom: 50,
+            backgroundColor: '#e6ffef',
           }}>
-          <Text style={styles.addressText1}>kolkata west bengal 700091</Text>
-          <View style={styles.primaryAddressView}>
-            <View style={styles.primaryAddressViewChild}>
-              <Text
-                style={{
-                  color: '#808080',
-                  fontFamily: 'Poppins-Regular',
-                }}>
-                Set This Address as Primary
-              </Text>
-              {/* set primary address button */}
-              <TouchableOpacity
-                onPress={() => {
-                  setPrimaryAddress(!primaryAddress);
-                }}>
-                <View
-                  style={
-                    primaryAddress
-                      ? [styles.primaryBtn, { borderWidth: 0 }]
-                      : styles.primaryBtn
-                  }>
-                  {primaryAddress ? (
-                    <Image
-                      source={require('../assets/images/check1.png')}
-                      style={{ width: 20, height: 20 }}
-                    />
-                  ) : null}
-                </View>
-              </TouchableOpacity>
+          {/* location */}
+          <View style={styles.currentLocationView}>
+            <Image
+              source={require('../assets/images/location.png')}
+              style={{width: 20, height: 20, tintColor: GREEN_COLOR}}
+            />
+            <Text
+              numberOfLines={1}
+              style={{
+                color: '#000',
+                fontFamily: 'Poppins-SemiBold',
+              }}>
+              location
+            </Text>
+          </View>
+          {/* location address view text */}
+          <View
+            style={{
+              backgroundColor: '#ffff',
+              paddingHorizontal: 10,
+              borderBottomLeftRadius: 5,
+              borderBottomRightRadius: 5,
+            }}>
+            <Text style={styles.addressText1}>kolkata west bengal 700091</Text>
+            <View style={styles.primaryAddressView}>
+              <View style={styles.primaryAddressViewChild}>
+                <Text
+                  style={{
+                    color: '#808080',
+                    fontFamily: 'Poppins-Regular',
+                  }}>
+                  Set This Address as Primary
+                </Text>
+                {/* set primary address button */}
+                <TouchableOpacity
+                  onPress={() => {
+                    setPrimaryAddress(!primaryAddress);
+                  }}>
+                  <View
+                    style={
+                      primaryAddress
+                        ? [styles.primaryBtn, {borderWidth: 0}]
+                        : styles.primaryBtn
+                    }>
+                    {primaryAddress ? (
+                      <Image
+                        source={require('../assets/images/check1.png')}
+                        style={{width: 20, height: 20}}
+                      />
+                    ) : null}
+                  </View>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
-        </View>
 
-        {/* pick up address  */}
-        <View
-          style={{
-            paddingVertical: 10,
-            paddingLeft: 10,
-          }}>
-          <Text
+          {/* pick up address  */}
+          <View
             style={{
-              color: '#000',
-              fontSize: 16,
-              fontFamily: 'Poppins-Regular',
+              paddingVertical: 10,
+              paddingLeft: 10,
             }}>
-            Pick Up Address
-          </Text>
-        </View>
+            <Text
+              style={{
+                color: '#000',
+                fontSize: 16,
+                fontFamily: 'Poppins-Regular',
+              }}>
+              Pick Up Address
+            </Text>
+          </View>
 
-        <View style={styles.PickUpAddressParentView}>
-          
-          <TextInput
-            placeholder="Contact Person Name"
-            style={styles.addressInput}
-            placeholderTextColor={'#808080'}
-            value={pickupAddress.contact_person}
-            onChangeText={text => setPickupAddress({ ...pickupAddress, contact_person: text })}
-          />
-          <TextInput
-            placeholder="Phone Number"
-            style={styles.addressInput}
-            placeholderTextColor={'#808080'}
-            value={pickupAddress.contact_person_no}
-            onChangeText={text => setPickupAddress({ ...pickupAddress, contact_person_no: text })}
-            keyboardType='number-pad'
-            maxLength={10}
-          />
-          <TextInput
-            placeholder="Alternate Phone Number (Optional)"
-            placeholderTextColor={'#808080'}
-            style={styles.addressInput}
-            value={pickupAddress.contact_person_alt_no}
-            onChangeText={text => setPickupAddress({ ...pickupAddress, contact_person_alt_no: text })}
-            keyboardType='number-pad'
-            maxLength={10}
-          />
-          <TextInput
-            placeholder="Email Id"
-            style={styles.addressInput}
-            placeholderTextColor={'#808080'}
-            value={pickupAddress.contact_person_email}
-            onChangeText={text => setPickupAddress({ ...pickupAddress, contact_person_email: text })}
-          />
-          <TextInput
-            placeholder="Complete Address"
-            multiline
-            style={styles.addressInput}
-            placeholderTextColor={'#808080'}
-            value={pickupAddress.complete_address}
-            onChangeText={text => setPickupAddress({ ...pickupAddress, complete_address: text })}
-          />
-        
-          <TextInput
-            placeholder="Landmark (Optional)"
-            style={styles.addressInput}
-            placeholderTextColor={'#808080'}
-            value={pickupAddress.landmark}
-            onChangeText={text => setPickupAddress({ ...pickupAddress, landmark: text })}
-          />
-          <TextInput
-            placeholder="Postal Code"
-            placeholderTextColor={'#808080'}
-            value={pickupAddress.postcode}
-            onChangeText={text => setPickupAddress({ ...pickupAddress, postcode: text })}
-            style={styles.addressInput}
-            keyboardType='number-pad'
-            maxLength={6}
-          />
-          <TextInput
-            placeholder="City"
-            style={styles.addressInput}
-            placeholderTextColor={'#808080'}
-            value={pickupAddress.city}
-            onChangeText={text => setPickupAddress({ ...pickupAddress, city: text })}
-          />
-          <TextInput
-            placeholder="State"
-            style={styles.addressInput}
-            placeholderTextColor={'#808080'}
-            value={pickupAddress.state}
-            onChangeText={text => setPickupAddress({ ...pickupAddress, state: text })}
-          />
-          <TextInput
-            placeholder="Country"
-            style={styles.addressInput}
-            placeholderTextColor={'#808080'}
-            value={pickupAddress.country}
-            // onChangeText={text=>setPickupAddress({...pickupAddress, address_type: text})}
-            editable={false}
-          />
-        </View>
-        {/* RTO address */}
-        {/* <View style={{ padding: 10 }}>
+          <View style={styles.PickUpAddressParentView}>
+            {/* home or office or other radio button view */}
+            <View style={styles.homeOROfficeAddressView}>
+              {/* home address */}
+              <TouchableOpacity
+                onPress={() => {
+                  setPickupAddress({...pickupAddress, is_default: 'Home'});
+                }}
+                style={styles.homeAddressBtn}>
+                <View style={styles.homeOROfficeAddressChil}>
+                  <Image
+                    source={require('../assets/images/new-moon.png')}
+                    style={styles.homeAddressBtnImg}
+                    tintColor={
+                      pickupAddress.is_default == 'Home' ? null : '#ffff'
+                    }
+                  />
+                </View>
+
+                <Text style={{color: TEXT_BLACK2}}>Home</Text>
+              </TouchableOpacity>
+              {/* office address*/}
+              <TouchableOpacity
+                onPress={() => {
+                  setPickupAddress({...pickupAddress, is_default: 'Office'});
+                }}
+                style={styles.homeAddressBtn}>
+                <View style={styles.homeOROfficeAddressChil}>
+                  <Image
+                    source={require('../assets/images/new-moon.png')}
+                    style={styles.homeAddressBtnImg}
+                    tintColor={
+                      pickupAddress.is_default == 'Office' ? null : '#ffff'
+                    }
+                  />
+                </View>
+
+                <Text style={{color: TEXT_BLACK2}}>Office</Text>
+              </TouchableOpacity>
+              {/* Others address*/}
+              <TouchableOpacity
+                onPress={() => {
+                  setPickupAddress({...pickupAddress, is_default: 'Others'});
+                }}
+                style={styles.homeAddressBtn}>
+                <View style={styles.homeOROfficeAddressChil}>
+                  <Image
+                    source={require('../assets/images/new-moon.png')}
+                    style={styles.homeAddressBtnImg}
+                    tintColor={
+                      pickupAddress.is_default == 'Others' ? null : '#ffff'
+                    }
+                  />
+                </View>
+                <Text style={{color: TEXT_BLACK2}}>Office</Text>
+              </TouchableOpacity>
+            </View>
+            <TextInput
+              placeholder="Contact Person Name"
+              style={styles.addressInput}
+              placeholderTextColor={'#808080'}
+              value={pickupAddress.contact_person}
+              onChangeText={text =>
+                setPickupAddress({...pickupAddress, contact_person: text})
+              }
+            />
+            <TextInput
+              placeholder="Phone Number"
+              style={styles.addressInput}
+              placeholderTextColor={'#808080'}
+              value={pickupAddress.contact_person_no}
+              onChangeText={text =>
+                setPickupAddress({...pickupAddress, contact_person_no: text})
+              }
+              keyboardType="number-pad"
+              maxLength={10}
+            />
+            <TextInput
+              placeholder="Alternate Phone Number (Optional)"
+              placeholderTextColor={'#808080'}
+              style={styles.addressInput}
+              value={pickupAddress.contact_person_alt_no}
+              onChangeText={text =>
+                setPickupAddress({
+                  ...pickupAddress,
+                  contact_person_alt_no: text,
+                })
+              }
+              keyboardType="number-pad"
+              maxLength={10}
+            />
+            <TextInput
+              placeholder="Email Id"
+              style={styles.addressInput}
+              placeholderTextColor={'#808080'}
+              value={pickupAddress.contact_person_email}
+              onChangeText={text =>
+                setPickupAddress({...pickupAddress, contact_person_email: text})
+              }
+            />
+            <TextInput
+              placeholder="Complete Address"
+              multiline
+              style={styles.addressInput}
+              placeholderTextColor={'#808080'}
+              value={pickupAddress.complete_address}
+              onChangeText={text =>
+                setPickupAddress({...pickupAddress, complete_address: text})
+              }
+            />
+
+            <TextInput
+              placeholder="Landmark (Optional)"
+              style={styles.addressInput}
+              placeholderTextColor={'#808080'}
+              value={pickupAddress.landmark}
+              onChangeText={text =>
+                setPickupAddress({...pickupAddress, landmark: text})
+              }
+            />
+            <TextInput
+              placeholder="Postal Code"
+              placeholderTextColor={'#808080'}
+              value={pickupAddress.postcode}
+              onChangeText={text =>
+                setPickupAddress({...pickupAddress, postcode: text})
+              }
+              style={styles.addressInput}
+              keyboardType="number-pad"
+              maxLength={6}
+            />
+            <TextInput
+              placeholder="City"
+              style={styles.addressInput}
+              placeholderTextColor={'#808080'}
+              value={pickupAddress.city}
+              onChangeText={text =>
+                setPickupAddress({...pickupAddress, city: text})
+              }
+            />
+            <TextInput
+              placeholder="State"
+              style={styles.addressInput}
+              placeholderTextColor={'#808080'}
+              value={pickupAddress.state}
+              onChangeText={text =>
+                setPickupAddress({...pickupAddress, state: text})
+              }
+            />
+            <TextInput
+              placeholder="Country"
+              style={styles.addressInput}
+              placeholderTextColor={'#808080'}
+              value={pickupAddress.country}
+              // onChangeText={text=>setPickupAddress({...pickupAddress, address_type: text})}
+              editable={false}
+            />
+          </View>
+          {/* RTO address */}
+          {/* <View style={{ padding: 10 }}>
           <Text style={styles.RTOAddressTitle}>RTO Address</Text>
         </View> */}
-        {/* <View style={styles.RTOAddress}>
+          {/* <View style={styles.RTOAddress}>
           <View style={styles.RTOAddressButtonView}> */}
-            {/* <Text
+          {/* <Text
               style={{
                 color: '#808080',
                 fontSize: 12,
@@ -294,8 +366,8 @@ const AddPickupAddress = ({ navigation }) => {
               }}>
               Use different address as RTO Address
             </Text> */}
-            {/* set primary address button */}
-            {/* <TouchableOpacity
+          {/* set primary address button */}
+          {/* <TouchableOpacity
               onPress={() => {
                 setrtoCheckedButton(!rtoCheckedButton);
               }}>
@@ -315,131 +387,132 @@ const AddPickupAddress = ({ navigation }) => {
             </TouchableOpacity> */}
           {/* </View>
         </View> */}
-        {rtoCheckedButton ? (
-          <>
-            <View style={{ marginBottom: 20, marginVertical: 5 }}>
-              <Text style={{ fontSize: 12, color: '#999999' }}>
-                Note : RTO is only applicable for Ecom express
-              </Text>
-            </View>
-            {/* RTO select existing address */}
-            <View
-              style={{
-                borderRadius: 5,
-                backgroundColor: '#ffff',
-                padding: 10,
-                marginBottom: 10,
-                elevation: 2,
-              }}>
-              <Text
-                style={{
-                  fontFamily: 'Poppins-SemiBold',
-                  color: '#000',
-                  fontSize: 15,
-                }}>
-                Select Existing Address
-              </Text>
-              {/* select rto address */}
-              {/* DropDown start*/}
-              <Dropdown
-                style={[
-                  styles.dropdown,
-                  dropDownButton && { borderColor: 'blue' },
-                ]}
-                placeholderStyle={styles.placeholderStyle}
-                iconStyle={styles.iconStyle}
-                data={data}
-                // search
-                containerStyle={{ marginTop: 5, borderRadius: 5 }}
-                activeColor="#e6ffef"
-                itemContainerStyle={{
-                  borderBottomWidth: 1,
-                  borderBottomColor: '#ccc',
-                  marginTop: 5,
-                }}
-                itemTextStyle={{ color: '#000' }}
-                maxHeight={190}
-                showsVerticalScrollIndicator={false}
-                labelField="label"
-                valueField="value"
-                placeholder={'Select RTO Address'}
-                searchPlaceholder="Search..."
-              // value={value}
-              // onChange={item => {
-              //   setValue(item.value);
-              //   setIsFocus(false);
-              // }}
-              />
-              {/* DropDown end*/}
-
-              {/* OR divider */}
+          {rtoCheckedButton ? (
+            <>
+              <View style={{marginBottom: 20, marginVertical: 5}}>
+                <Text style={{fontSize: 12, color: '#999999'}}>
+                  Note : RTO is only applicable for Ecom express
+                </Text>
+              </View>
+              {/* RTO select existing address */}
               <View
                 style={{
-                  flexDirection: 'row',
-                  marginVertical: 20,
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                }}>
-                <View
-                  style={{ height: 1, backgroundColor: '#ccc', flex: 0.46 }}
-                />
-                <Text
-                  style={{ fontFamily: 'Poppins-SemiBold', color: '#b3b3b3' }}>
-                  OR
-                </Text>
-                <View
-                  style={{ height: 1, backgroundColor: '#ccc', flex: 0.46 }}
-                />
-              </View>
-              {/* Add new address button in RTO */}
-              <TouchableOpacity
-                style={{
-                  borderWidth: 1,
-                  borderColor: GREEN_COLOR,
-                  width: width / 2,
-                  alignSelf: 'center',
-                  paddingVertical: 8,
-                  alignItems: 'center',
-                  justifyContent: 'center',
                   borderRadius: 5,
-                  backgroundColor: LIGHT_GREEN,
+                  backgroundColor: '#ffff',
+                  padding: 10,
+                  marginBottom: 10,
+                  elevation: 2,
                 }}>
-                <Text style={{ fontFamily: 'Poppins-SemiBold', color: '#000' }}>
-                  + Add New Address
+                <Text
+                  style={{
+                    fontFamily: 'Poppins-SemiBold',
+                    color: '#000',
+                    fontSize: 15,
+                  }}>
+                  Select Existing Address
                 </Text>
-              </TouchableOpacity>
-              <Text
-                style={{
-                  fontSize: 10,
-                  textAlign: 'center',
-                  marginTop: 5,
-                  color: '#b3b3b3',
-                }}>
-                Note: New address will be saved as a pickup address
-              </Text>
-            </View>
-          </>
-        ) : null}
-        <TouchableOpacity
-          style={{
-            marginVertical: 10,
-            marginBottom: 20,
-            backgroundColor: '#000',
-            alignItems: 'center',
-            justifyContent: 'center',
-            height: 50,
-            borderRadius: 5,
-          }}>
-          <Text
+                {/* select rto address */}
+                {/* DropDown start*/}
+                <Dropdown
+                  style={[
+                    styles.dropdown,
+                    dropDownButton && {borderColor: 'blue'},
+                  ]}
+                  placeholderStyle={styles.placeholderStyle}
+                  iconStyle={styles.iconStyle}
+                  data={data}
+                  // search
+                  containerStyle={{marginTop: 5, borderRadius: 5}}
+                  activeColor="#e6ffef"
+                  itemContainerStyle={{
+                    borderBottomWidth: 1,
+                    borderBottomColor: '#ccc',
+                    marginTop: 5,
+                  }}
+                  itemTextStyle={{color: '#000'}}
+                  maxHeight={190}
+                  showsVerticalScrollIndicator={false}
+                  labelField="label"
+                  valueField="value"
+                  placeholder={'Select RTO Address'}
+                  searchPlaceholder="Search..."
+                  // value={value}
+                  // onChange={item => {
+                  //   setValue(item.value);
+                  //   setIsFocus(false);
+                  // }}
+                />
+                {/* DropDown end*/}
+
+                {/* OR divider */}
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    marginVertical: 20,
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                  }}>
+                  <View
+                    style={{height: 1, backgroundColor: '#ccc', flex: 0.46}}
+                  />
+                  <Text
+                    style={{fontFamily: 'Poppins-SemiBold', color: '#b3b3b3'}}>
+                    OR
+                  </Text>
+                  <View
+                    style={{height: 1, backgroundColor: '#ccc', flex: 0.46}}
+                  />
+                </View>
+                {/* Add new address button in RTO */}
+                <TouchableOpacity
+                  style={{
+                    borderWidth: 1,
+                    borderColor: GREEN_COLOR,
+                    width: width / 2,
+                    alignSelf: 'center',
+                    paddingVertical: 8,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    borderRadius: 5,
+                    backgroundColor: LIGHT_GREEN,
+                  }}>
+                  <Text style={{fontFamily: 'Poppins-SemiBold', color: '#000'}}>
+                    + Add New Address
+                  </Text>
+                </TouchableOpacity>
+                <Text
+                  style={{
+                    fontSize: 10,
+                    textAlign: 'center',
+                    marginTop: 5,
+                    color: '#b3b3b3',
+                  }}>
+                  Note: New address will be saved as a pickup address
+                </Text>
+              </View>
+            </>
+          ) : null}
+          <TouchableOpacity
             style={{
-              fontSize: 15,
-              color: '#ffff',
-              fontFamily: 'Poppins-Regular',
+              marginVertical: 10,
+              marginBottom: 20,
+              backgroundColor: '#000',
+              alignItems: 'center',
+              justifyContent: 'center',
+              height: 50,
+              borderRadius: 5,
             }}>
-            Save Address
-          </Text>
-        </TouchableOpacity>
-      </ScrollView>
+            <Text
+              style={{
+                fontSize: 15,
+                color: '#ffff',
+                fontFamily: 'Poppins-Regular',
+              }}>
+              Save Address
+            </Text>
+          </TouchableOpacity>
+        </ScrollView>
+      </View>
     </View>
   );
 };
@@ -452,33 +525,8 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#ffff',
   },
-  header: {
-    backgroundColor: '#e6ffef',
-    height: height / 7,
-    borderBottomLeftRadius: 60,
-    borderBottomRightRadius: 60,
-    alignItems: 'center',
-    flexDirection: 'row',
-    paddingLeft: 20,
-    justifyContent: 'center',
-    marginBottom: 5,
-  },
-  title: {
-    color: '#000',
-    fontFamily: 'Poppins-Regular',
-    fontSize: 18,
-    // marginLeft: width / 6,
-    textAlign: 'center',
-    // marginLeft: 64,
-  },
-  backButton: {
-    position: 'absolute',
-    zIndex: 1,
-    alignSelf: 'flex-start',
-    top: 40,
-    left: 20,
-  },
   mapView: {
+    marginTop: 5,
     flex: 1,
     backgroundColor: '#585858',
   },
@@ -520,7 +568,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 5,
     borderColor: '#a6a6a6',
-    backgroundColor: '#ffff',
+    backgroundColor: '#FFFFFF',
   },
   addressInput: {
     borderWidth: 1,
@@ -575,5 +623,36 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
     tintColor: GREEN_COLOR,
     height: 30,
+  },
+  homeOROfficeAddressView: {
+    height: 45,
+    backgroundColor: '#ffff',
+    flexDirection: 'row',
+    marginHorizontal: 10,
+    borderRadius: 5,
+    elevation: 1,
+    padding: 5,
+    alignItems: 'center',
+    justifyContent: 'space-around',
+  },
+  homeOROfficeAddressChil: {
+    backgroundColor: GREEN_COLOR,
+    width: 23,
+    height: 23,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 30,
+  },
+  homeAddressBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-evenly',
+    width: width / 4.5,
+    borderRadius: 5,
+    // backgroundColor: 'red'
+  },
+  homeAddressBtnImg: {
+    width: 17,
+    height: 17,
   },
 });

@@ -51,7 +51,7 @@ const QuickShipmentScreen = ({navigation}) => {
   const [otherCharges, setOtherCharges] = useState(false);
   const [showmore, setShowmore] = useState(false);
   // search address state (bottomsheet)
-  const [searchAddress, setSearchAddress] = useState('1111');
+  const [searchAddress, setSearchAddress] = useState('');
 
   const platform = [
     {label: '1', value: 'shopify'},
@@ -69,6 +69,7 @@ const QuickShipmentScreen = ({navigation}) => {
   return (
     // <KeyboardAvoidingView enabled={true} style={{flex: 1}} behavior={'height'}>
     <View style={styles.container}>
+      <StatusBar barStyle={'dark-content'} />
       <Header
         title="Quick Shipment"
         onPress={() => {
@@ -171,7 +172,6 @@ const QuickShipmentScreen = ({navigation}) => {
 
           {/* wrapper view */}
           <View style={{backgroundColor: '#ffff'}}>
-            <StatusBar barStyle={'dark-content'} />
             <View style={styles.selectLocationView}>
               <TextInput
                 placeholder="Product Name"
@@ -470,7 +470,7 @@ const QuickShipmentScreen = ({navigation}) => {
           </View>
           {/* drop down for platform */}
           <Dropdown
-            style={[styles.dropdown]}
+            style={styles.dropdown}
             placeholderStyle={styles.placeholderStyle}
             iconStyle={styles.iconStyle}
             data={platform}
@@ -699,7 +699,7 @@ const QuickShipmentScreen = ({navigation}) => {
         <TouchableOpacity
           onPress={() => {
             navigation.navigate('CustomerDetails');
-            dispatch(saveCreateOrderData());
+            // dispatch(saveCreateOrderData());
           }}
           style={styles.NextButton}>
           <Text style={styles.NextButtonText}>Next</Text>
@@ -727,7 +727,7 @@ const QuickShipmentScreen = ({navigation}) => {
             borderTopRightRadius: 30,
           },
         }}>
-        <View style={{flex: 1, backgroundColor: '#f2f2f2'}}>
+        <View style={{flex: 1, backgroundColor: '#ffff'}}>
           <TouchableOpacity
             style={{
               marginRight: 20,
@@ -762,7 +762,7 @@ const QuickShipmentScreen = ({navigation}) => {
             }}
           />
           <FlatList
-            data={searchAddress}
+            data={[1]}
             renderItem={() => {
               return (
                 <View
@@ -775,7 +775,7 @@ const QuickShipmentScreen = ({navigation}) => {
                     paddingHorizontal: 10,
                     marginVertical: 5,
                     padding: 2,
-                    elevation: 5
+                    elevation: 5,
                   }}>
                   <View
                     style={{
@@ -808,7 +808,7 @@ const QuickShipmentScreen = ({navigation}) => {
                       numberOfLines={1}
                       style={{
                         color: '#737373',
-                        fontSize: 13
+                        fontSize: 13,
                       }}>
                       1234567890
                     </Text>

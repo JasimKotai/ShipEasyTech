@@ -11,28 +11,33 @@ import {
   ActivityIndicator,
   Alert,
 } from 'react-native';
-import React, { useEffect, useRef, useState } from 'react';
-import { GREEN_COLOR } from '../assets/Colors';
+import React, {useEffect, useRef, useState} from 'react';
+import {GREEN_COLOR} from '../assets/Colors';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { BASE_URL_LOCAL, BASE_URL_LIVE } from '../config/api';
-import { CommonActions } from '@react-navigation/native';
-import { useToast } from 'react-native-toast-notifications';
-import { useDispatch } from 'react-redux';
-import { saveUserData } from '../config/UserSlice';
+import {BASE_URL_LOCAL, BASE_URL_LIVE} from '../config/api';
+import {CommonActions} from '@react-navigation/native';
+import {useToast} from 'react-native-toast-notifications';
+import {useDispatch} from 'react-redux';
+import {saveUserData} from '../config/UserSlice';
 
-const SignInScreen = ({ navigation }) => {
+const SignInScreen = ({navigation}) => {
   const toast = useToast();
   const refRBSheet = useRef();
   const width = Dimensions.get('window').width;
   const height = Dimensions.get('window').height;
   const [isFocused, setIsFocused] = useState('');
   // const [userDetails, setUserDetails] = useState({ email: 'satyasankar09@gmail.com', password: 'Rajarani22@' });
-  const [userDetails, setUserDetails] = useState({ email: 'chandan76kotai@gmail.com', password: 'Abc@123' });
+  const [userDetails, setUserDetails] = useState({
+    email: 'chandan76kotai@gmail.com',
+    password: 'Abc@123',
+  });
   const [checkEmailValidation, setEmailValidation] = useState(false);
   const [secureEntry, setSecureEntry] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+  const [emailValid, setEmailValid] = useState(null);
+  console.log(emailValid);
 
   const dispatch = useDispatch();
 
@@ -40,15 +45,15 @@ const SignInScreen = ({ navigation }) => {
     try {
       setIsLoading(true); // Start loading
       const response = await axios.post(`${BASE_URL_LIVE}/login`, userDetails);
-      console.log("response=====> ", response.data);
-      if (response.data.code == "200") {
+      console.log('response=====> ', response.data);
+      if (response.data.code == '200') {
         const json = JSON.stringify(response.data.userData);
         await AsyncStorage.setItem('@userDetails', json);
         dispatch(saveUserData(response.data.userData));
         navigation.dispatch(
           CommonActions.reset({
             index: 0,
-            routes: [{ name: 'BottomHomeScreen' }],
+            routes: [{name: 'BottomHomeScreen'}],
           }),
         );
       }
@@ -67,6 +72,12 @@ const SignInScreen = ({ navigation }) => {
   //     animationType: 'zoom-in',
   //   });
   // });
+
+  const validateEmail = text => {
+    const emailPattern = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+    const isValid = emailPattern.test(text);
+    setEmailValid(isValid);
+  };
 
   return (
     <View style={styles.container}>
@@ -90,7 +101,7 @@ const SignInScreen = ({ navigation }) => {
             }}
           />
         </View>
-        <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
+        <ScrollView style={{flex: 1}} showsVerticalScrollIndicator={false}>
           {/* transparent view start */}
           <View
             style={{
@@ -149,31 +160,39 @@ const SignInScreen = ({ navigation }) => {
           </View>
           {/* divider views end */}
           {/* email  view */}
-          <View style={{ backgroundColor: '#FFFF' }}>
+          <View style={{backgroundColor: '#FFFF'}}>
             <Text
               style={[
                 styles.EmailPlaceholder,
                 isFocused === 'Email' || userDetails.email
                   ? styles.EmailPlaceholderFocused
                   : {},
+                {color: emailValid === false ? 'red' : '#808080'},
               ]}>
               Email
             </Text>
             <TextInput
-              style={styles.EmailInput}
+              style={[
+                styles.EmailInput,
+                {
+                  borderColor: emailValid === false ? 'red' : '#cccccc',
+                  color: emailValid === false ? 'red' : '#000',
+                },
+              ]}
               onChangeText={text => {
-                setUserDetails({ ...userDetails, email: text });
-                // validateEmail(text);
+                setUserDetails({...userDetails, email: text});
+                validateEmail(text);
               }}
               value={userDetails.email}
               onFocus={() => {
                 setIsFocused('Email');
               }}
-              cursorColor={'black'}
+              cursorColor={emailValid === false ? 'red' : '#000'}
+              keyboardType="email-address"
             />
           </View>
           {/* password  view */}
-          <View style={{ backgroundColor: '#FFFF' }}>
+          <View style={{backgroundColor: '#FFFF'}}>
             <Text
               style={[
                 styles.EmailPlaceholder,
@@ -205,14 +224,14 @@ const SignInScreen = ({ navigation }) => {
                       ? require('../assets/images/hidden.png')
                       : require('../assets/images/show.png')
                   }
-                  style={{ width: 30, height: 30 }}
+                  style={{width: 30, height: 30}}
                 />
               </TouchableOpacity>
             </View>
             <TextInput
               style={styles.EmailInput}
               onChangeText={text => {
-                setUserDetails({ ...userDetails, password: text });
+                setUserDetails({...userDetails, password: text});
                 // validateEmail(text);
               }}
               value={userDetails.password}
@@ -233,7 +252,7 @@ const SignInScreen = ({ navigation }) => {
             </TouchableOpacity>
           </View>
           {/* sign in btnview */}
-          <View style={{ backgroundColor: '#FFFF', flex: 1 }}>
+          <View style={{backgroundColor: '#FFFF', flex: 1}}>
             <View
               style={{
                 marginHorizontal: 20,
@@ -246,7 +265,7 @@ const SignInScreen = ({ navigation }) => {
                 style={styles.SignupBtn}>
                 {isLoading ? (
                   // Step 3: Show ActivityIndicator while loading
-                  <View style={{ flexDirection: 'row' }}>
+                  <View style={{flexDirection: 'row'}}>
                     <Text style={styles.SignupBtnText}>Logging...</Text>
                     <ActivityIndicator />
                   </View>
@@ -264,7 +283,7 @@ const SignInScreen = ({ navigation }) => {
                 paddingTop: 20,
                 paddingBottom: 10,
               }}>
-              <Text style={{ color: '#808080', fontFamily: 'Poppins-Regular' }}>
+              <Text style={{color: '#808080', fontFamily: 'Poppins-Regular'}}>
                 Don't have an account?{' '}
               </Text>
               <TouchableOpacity
@@ -272,7 +291,7 @@ const SignInScreen = ({ navigation }) => {
                   navigation.navigate('SignUpScreen');
                 }}>
                 <Text
-                  style={{ color: GREEN_COLOR, fontFamily: 'Poppins-Regular' }}>
+                  style={{color: GREEN_COLOR, fontFamily: 'Poppins-Regular'}}>
                   Sign Up
                 </Text>
               </TouchableOpacity>
@@ -287,12 +306,12 @@ const SignInScreen = ({ navigation }) => {
               }}
             />
             {/* something else button*/}
-            <View style={{ backgroundColor: '#FFFf', marginBottom: 40 }}>
+            <View style={{backgroundColor: '#FFFf', marginBottom: 40}}>
               <TouchableOpacity
                 onPress={() => refRBSheet.current.open()}
-                style={{ alignSelf: 'center', marginTop: 20 }}>
+                style={{alignSelf: 'center', marginTop: 20}}>
                 <Text
-                  style={{ color: GREEN_COLOR, fontFamily: 'Poppins-Regular' }}>
+                  style={{color: GREEN_COLOR, fontFamily: 'Poppins-Regular'}}>
                   I want to do something else
                 </Text>
               </TouchableOpacity>
@@ -327,13 +346,13 @@ const SignInScreen = ({ navigation }) => {
                   }}>
                   <TouchableOpacity
                     onPress={() => refRBSheet.current.close()}
-                    style={{ alignSelf: 'flex-end' }}>
+                    style={{alignSelf: 'flex-end'}}>
                     <Image
                       source={require('../assets/images/close1.png')}
-                      style={{ width: 20, height: 20, tintColor: '#b3b3b3' }}
+                      style={{width: 20, height: 20, tintColor: '#b3b3b3'}}
                     />
                   </TouchableOpacity>
-                  <Text style={{ color: '#000', fontFamily: 'Poppins-Regular' }}>
+                  <Text style={{color: '#000', fontFamily: 'Poppins-Regular'}}>
                     Select what you want to do
                   </Text>
                   <TouchableOpacity
@@ -458,8 +477,8 @@ const styles = StyleSheet.create({
     borderColor: '#cccccc',
     borderRadius: 5,
     paddingLeft: 10,
-    lineHeight: 10,
-    fontSize: 12,
+    lineHeight: 13,
+    fontSize: 13,
     paddingBottom: 20,
     textAlignVertical: 'bottom',
     marginTop: 20,
