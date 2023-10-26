@@ -25,8 +25,11 @@ const UserSlice = createSlice({
     saveCreateOrderData(state, {payload}){
       const mergedObj = {...state.create_order_Data, ...payload}
       state.create_order_Data = mergedObj;
-    }
+    },
+    clearCreateOrderData(state){
+      state.create_order_Data = {};
+    },
   },
 });
-export const {userLogout, saveUserData, saveCreateOrderData} = UserSlice.actions;
+export const {userLogout, saveUserData, saveCreateOrderData, clearCreateOrderData} = UserSlice.actions;
 export default UserSlice.reducer;

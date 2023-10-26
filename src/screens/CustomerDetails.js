@@ -19,7 +19,8 @@ import {
   TEXT_LIGHT_BLACK,
   TEXT_WHITE,
 } from '../assets/fontStyles';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import keyMapping from '../config/keyMapping';
 
 const CustomerDetails = ({ navigation }) => {
   const height = Dimensions.get('window').height;
@@ -49,11 +50,28 @@ const CustomerDetails = ({ navigation }) => {
     billing_state: "",
     billing_country: "India",
   });
+  const {create_order_Data} = useSelector(state=> state.userSlice);
 
   const dispatch = useDispatch();
 
   // console.log("shippingDetails==>", shippingDetails);
   // console.log("billingDetails==>", billingDetails);
+
+  const createOrder = () => {
+    if (!BillingAddressNotSame) {
+      for (const key in keyMapping) {
+        if (shippingDetails.hasOwnProperty(key) && billingDetails.hasOwnProperty(keyMapping[key])) {
+          billingDetails[keyMapping[key]] = shippingDetails[key];
+        }
+      }
+      const mergedObj = {...shippingDetails, ...billingDetails, ...create_order_Data}
+      console.log("mergedObj==>", mergedObj);
+      // console.log("billingDetails==>", billingDetails);
+    } else {
+      console.log("shippingDetails==>", shippingDetails);
+      console.log("billingDetails==>", billingDetails);
+    }
+  }
 
 
   return (
@@ -314,7 +332,7 @@ const CustomerDetails = ({ navigation }) => {
             />
           </View>
         ) : null}
-        <TouchableOpacity style={styles.AddOrderBtn}>
+        <TouchableOpacity style={styles.AddOrderBtn} onPress={() => createOrder()}>
           <Text style={styles.AddOrderBtnText}>Add Order</Text>
         </TouchableOpacity>
       </ScrollView>
