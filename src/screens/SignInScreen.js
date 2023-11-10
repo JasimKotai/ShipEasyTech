@@ -31,7 +31,7 @@ const SignInScreen = ({navigation}) => {
   // const [userDetails, setUserDetails] = useState({ email: 'satyasankar09@gmail.com', password: 'Rajarani22@' });
   const [userDetails, setUserDetails] = useState({
     email: 'chandan76kotai@gmail.com',
-    password: 'Abc@123',
+    password: '12345678',
   });
   const [checkEmailValidation, setEmailValidation] = useState(false);
   const [secureEntry, setSecureEntry] = useState(true);
