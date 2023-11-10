@@ -37,7 +37,7 @@ const SignInScreen = ({navigation}) => {
   const [secureEntry, setSecureEntry] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [emailValid, setEmailValid] = useState(null);
-  console.log(emailValid);
+  // console.log(emailValid);
 
   const dispatch = useDispatch();
 
