@@ -5,25 +5,33 @@ import {
   FlatList,
   StyleSheet,
   Dimensions,
+  ScrollView,
+  TouchableOpacity,
+  Animated,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useRef, useState} from 'react';
 import Header from '../components/Header';
 import {Styles} from '../css/DashboardCSS';
-import {LIGHT_GREEN} from '../assets/Colors';
+import {GREEN_COLOR, LIGHT_GREEN} from '../assets/Colors';
+import DashboardOverview from '../components/DashboardOverview';
+import DashboardCOD from '../components/DashboardCOD';
+import DashboardPickUpDelivery from '../components/DashboardPickUpDelivery';
+import DashboardNDR from '../components/DashboardNDR';
+import DashboardWeightDiscrepancies from '../components/DashboardWeightDiscrepancies';
 
 const Dashboard = ({navigation}) => {
   const height = Dimensions.get('window').height;
   const width = Dimensions.get('window').width;
   const [currentIndex, setCurrentIndex] = useState(0);
+  console.log(currentIndex);
+  const ref = useRef();
 
   const data = [
-    {id: '1', content: 'Screen 1'},
-    {id: '2', content: 'Screen 2'},
-    {id: '3', content: 'Screen 3'},
-    {id: '4', content: 'Screen 4'},
-    {id: '5', content: 'Screen 5'},
-
-    // Add more screens as needed
+    {id: '1', content: 'Screen 1', screen: 'Overview'},
+    {id: '2', content: 'Screen 2', screen: 'COD'},
+    {id: '3', content: 'Screen 3', screen: 'Pickup & Delivery'},
+    {id: '4', content: 'Screen 4', screen: 'NDR'},
+    {id: '5', content: 'Screen 5', screen: 'Weight Discrepancies'},
   ];
 
   return (
@@ -35,45 +43,117 @@ const Dashboard = ({navigation}) => {
           navigation.goBack();
         }}
       />
-      <Text>Dashboard</Text>
-      <FlatList
+      {/* buttons rendering  */}
+      <View style={{backgroundColor: LIGHT_GREEN, marginVertical: 3}}>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          {/* overview button */}
+          <TouchableOpacity
+            onPress={() => {
+              setCurrentIndex(0);
+              ref.current.scrollToIndex({
+                animated: true,
+                index: 0,
+              });
+            }}
+            style={[
+              Styles.OverviewBtn,
+              {borderBottomColor: currentIndex === 0 ? GREEN_COLOR : '#FFF'},
+            ]}>
+            <Text style={Styles.OverviewBtnText}>Overview</Text>
+          </TouchableOpacity>
+          {/* COD button */}
+          <TouchableOpacity
+            onPress={() => {
+              setCurrentIndex(1);
+              ref.current.scrollToIndex({
+                animated: true,
+                index: 1,
+              });
+            }}
+            style={[
+              Styles.OverviewBtn,
+              {borderBottomColor: currentIndex === 1 ? GREEN_COLOR : '#FFF'},
+            ]}>
+            <Text style={Styles.OverviewBtnText}>COD</Text>
+          </TouchableOpacity>
+          {/* Pickup & Delivery button */}
+          <TouchableOpacity
+            onPress={() => {
+              setCurrentIndex(2);
+              ref.current.scrollToIndex({
+                animated: true,
+                index: 2,
+              });
+            }}
+            style={[
+              Styles.OverviewBtn,
+              {borderBottomColor: currentIndex === 2 ? GREEN_COLOR : '#FFF'},
+            ]}>
+            <Text style={Styles.OverviewBtnText}>Pickup & Delivery</Text>
+          </TouchableOpacity>
+          {/* NDR */}
+          <TouchableOpacity
+            onPress={() => {
+              setCurrentIndex(3);
+              ref.current.scrollToIndex({
+                animated: true,
+                index: 3,
+              });
+            }}
+            style={[
+              Styles.OverviewBtn,
+              {borderBottomColor: currentIndex === 3 ? GREEN_COLOR : '#FFF'},
+            ]}>
+            <Text style={Styles.OverviewBtnText}>NDR</Text>
+          </TouchableOpacity>
+          {/* Weight Discrepancies */}
+          <TouchableOpacity
+            onPress={() => {
+              setCurrentIndex(4);
+              ref.current.scrollToIndex({
+                animated: true,
+                index: 4,
+              });
+            }}
+            style={[
+              Styles.OverviewBtn,
+              {borderBottomColor: currentIndex === 4 ? GREEN_COLOR : '#FFF'},
+            ]}>
+            <Text style={Styles.OverviewBtnText}>Weight Discrepancies</Text>
+          </TouchableOpacity>
+        </ScrollView>
+      </View>
+      {/* screen rendering */}
+      <Animated.FlatList
+        ref={ref}
         data={data}
-        horizontal
         pagingEnabled
+        horizontal
         showsHorizontalScrollIndicator={false}
         keyExtractor={item => item.id}
-        renderItem={({item, index}) => (
-          <View
-            style={[
-              styles.carouselItem,
-              {backgroundColor: index === currentIndex ? 'blue' : 'gray'},
-            ]}>
-            <Text style={styles.carouselText}>{item.content}</Text>
-          </View>
-        )}
-        onMomentumScrollEnd={event => {
-          const newIndex = Math.floor(
-            event.nativeEvent.contentOffset.x / width,
-          );
-          setCurrentIndex(newIndex);
+        onScroll={e => {
+          const x = e.nativeEvent.contentOffset.x;
+          setCurrentIndex(x / width.toFixed(0));
         }}
+        renderItem={({item, index}) => (
+          <Animated.View style={{width: width, backgroundColor: 'pink'}}>
+            {/* <Text>{item.id}</Text> */}
+            {index === 0 ? (
+              <DashboardOverview />
+            ) : index === 1 ? (
+              <DashboardCOD />
+            ) : index === 2 ? (
+              <DashboardPickUpDelivery />
+            ) : index === 3 ? (
+              <DashboardNDR />
+            ) : index === 4 ? (
+              <DashboardWeightDiscrepancies />
+            ) : null}
+          </Animated.View>
+        )}
       />
     </View>
   );
 };
 
 export default Dashboard;
-const height = Dimensions.get('window').height;
-const width = Dimensions.get('window').width;
-const styles = StyleSheet.create({
-  carouselItem: {
-    width: width, // You can adjust the item width to your liking
-    height: 200, // Adjust the item height
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  carouselText: {
-    fontSize: 24,
-    color: 'white',
-  },
-});

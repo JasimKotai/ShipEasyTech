@@ -24,6 +24,8 @@ import CustomerDetails from '../screens/CustomerDetails';
 import Header from '../components/Header';
 import CouponsScreen from '../screens/CouponsScreen';
 import HomeScreen from '../screens/HomeScreen';
+import Wallet from '../components/Wallet';
+import Passbook from '../components/Passbook';
 
 const MainNavigation = () => {
   const Stack = createNativeStackNavigator();
@@ -62,6 +64,8 @@ const MainNavigation = () => {
         <Stack.Screen name="Header" component={Header} />
         <Stack.Screen name="CouponsScreen" component={CouponsScreen} />
         <Stack.Screen name="HomeScreen" component={HomeScreen} />
+        <Stack.Screen name="Wallet" component={Wallet} />
+        <Stack.Screen name="Passbook" component={Passbook} />
       </Stack.Navigator>
     </NavigationContainer>
   );

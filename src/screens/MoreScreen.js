@@ -31,7 +31,7 @@ const MoreScreen = ({ navigation }) => {
 
   const dispatch = useDispatch();
 
-  console.log("more user=====>", user);
+  console.log("more screen user=====>", user);
 
   // useEffect(() => {
   //   const getUserName = async () => {

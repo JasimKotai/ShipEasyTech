@@ -9,8 +9,8 @@ import React, {useState} from 'react';
 import Header from '../components/Header';
 
 const CouponsScreen = ({navigation, route}) => {
-  const {refRBSheet2} = route.params;
-  const [coupon, setCoupon] = useState('');
+  // const {refRBSheet2} = route.params;
+  // const [coupon, setCoupon] = useState('');
   return (
     <View style={styles.container}>
       <Header
