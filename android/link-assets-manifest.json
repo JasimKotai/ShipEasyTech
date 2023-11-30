@@ -14,6 +14,10 @@
       "sha1": "42b0a68e442e972219b83c8329e83d5c27f6a1a0"
     },
     {
+      "path": "src/assets/fonts/Montserrat-Black.ttf",
+      "sha1": "ad9c434705a52d90ac5a770e591c2325fb48c2dc"
+    },
+    {
       "path": "src/assets/fonts/Montserrat-Bold.ttf",
       "sha1": "98c66622226025f539568865af96df5175e2979c"
     },
@@ -38,6 +42,10 @@
       "sha1": "df478dcb8e506578298284ed4565342dbc49982d"
     },
     {
+      "path": "src/assets/fonts/Poppins-Black.ttf",
+      "sha1": "645e04c53c6b5b35bce654a811ebce16af8aa721"
+    },
+    {
       "path": "src/assets/fonts/Poppins-Bold.ttf",
       "sha1": "875cf0cecd647bcf22e79d633d868c1b1ec98dfa"
     },
@@ -50,8 +58,16 @@
       "sha1": "8a4ace9392d06bcb7f8ea2f5169b07e4c383a90d"
     },
     {
+      "path": "src/assets/fonts/Roboto-Black.ttf",
+      "sha1": "3f8e401d808f6ce84b542266726514ac8be73171"
+    },
+    {
       "path": "src/assets/fonts/Roboto-Bold.ttf",
       "sha1": "62442a18a9fe9457c1afeabf683d263a691b7798"
+    },
+    {
+      "path": "src/assets/fonts/Roboto-Medium.ttf",
+      "sha1": "3c6a09fcc6a454924c81af7dff94fc6d399ed79b"
     },
     {
       "path": "src/assets/fonts/Roboto-Regular.ttf",

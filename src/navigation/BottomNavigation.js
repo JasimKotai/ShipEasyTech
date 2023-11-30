@@ -119,23 +119,23 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   IconImage: {
-    width: 18,
-    height: 18,
-    tintColor: '#999999',
+    width: 16,
+    height: 16,
+    tintColor: '#404040',
   },
   focusedIconImage: {
-    width: 20,
-    height: 20,
+    width: 18,
+    height: 18,
     tintColor: GREEN_COLOR,
   },
   IconText: {
     color: '#999999',
     fontFamily: 'Poppins-Regular',
-    fontSize: 12,
+    fontSize: 10,
   },
   focusedIconText: {
     color: GREEN_COLOR,
     fontFamily: 'Poppins-Regular',
-    fontSize: 13,
+    fontSize: 11,
   },
 });

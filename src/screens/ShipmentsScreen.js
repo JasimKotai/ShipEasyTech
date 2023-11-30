@@ -1,7 +1,15 @@
-import {View, Text, StyleSheet, TouchableOpacity, Image, Dimensions} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+  Dimensions,
+} from 'react-native';
 import React, {useState} from 'react';
 import Modals from '../components/Modals';
 import Header from '../components/Header';
+import HelpAndSupport from './HelpAndSupport';
 
 const ShipmentsScreen = ({navigation}) => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -11,9 +19,9 @@ const ShipmentsScreen = ({navigation}) => {
   // const toggleModal = () => {
   //   setModalVisible(!modalVisible);
   // };
-//   <TouchableOpacity onPress={toggleModal}>
-//   <Text>Show Modal</Text>
-// </TouchableOpacity>
+  //   <TouchableOpacity onPress={toggleModal}>
+  //   <Text>Show Modal</Text>
+  // </TouchableOpacity>
   // <Modals visible={modalVisible} onClose={toggleModal} />
   return (
     <View style={styles.container}>
@@ -27,7 +35,7 @@ const ShipmentsScreen = ({navigation}) => {
       <View style={styles.searchButtonView}>
         <TouchableOpacity style={styles.searchBtn}>
           <Image
-            source={require('../assets/images/search-icon.png')}
+            source={require('../assets/images/search.png')}
             style={styles.searchBtnImg}
           />
         </TouchableOpacity>
@@ -38,7 +46,7 @@ const ShipmentsScreen = ({navigation}) => {
           />
         </TouchableOpacity>
       </View>
-     
+      <HelpAndSupport/>
     </View>
   );
 };

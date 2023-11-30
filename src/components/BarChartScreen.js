@@ -21,7 +21,7 @@ const BarChartScreen = () => {
     backgroundGradientToOpacity: 0.5,
     color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
     // strokeWidth: 1, // optional, default 3
-    barPercentage: 0.5,
+    barPercentage: 0.6,
     useShadowColorFromDataset: false, // optional
   };
 
@@ -36,6 +36,7 @@ const BarChartScreen = () => {
         chartConfig={chartConfig}
         fromZero={true}
         showBarTops={false}
+        verticalLabelRotation={30}
         // showValuesOnTopOfBars={true}
         // withInnerLines={false}
         // withVerticalLabels={false}

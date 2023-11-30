@@ -10,16 +10,16 @@ import {
   Pressable,
   Alert,
 } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { GREEN_COLOR } from '../assets/Colors';
+import {GREEN_COLOR} from '../assets/Colors';
 import DropDown from '../components/DropDown';
 import ReUsableButtons from '../components/ReUsableButtons';
 import DropDown2 from '../components/DropDown2';
-import { useDispatch, useSelector } from 'react-redux';
-import { userLogout } from '../config/UserSlice';
+import {useDispatch, useSelector} from 'react-redux';
+import {userLogout} from '../config/UserSlice';
 
-const MoreScreen = ({ navigation }) => {
+const MoreScreen = ({navigation}) => {
   const imagePath = '../assets/images/up-arrow.png';
   const Width = Dimensions.get('window').width;
   const Height = Dimensions.get('window').height;
@@ -27,11 +27,11 @@ const MoreScreen = ({ navigation }) => {
   const [userProfileImage, setUserProfileImage] = useState(null);
   const [dropDown, setDropDown] = useState(false);
   const [channelIntegrations, setChannelIntegration] = useState(false);
-  const { user, customer } = useSelector(state => state.userSlice);
+  const {user, customer} = useSelector(state => state.userSlice);
 
   const dispatch = useDispatch();
 
-  console.log("more screen user=====>", user);
+  console.log('more screen user=====>', user);
 
   // useEffect(() => {
   //   const getUserName = async () => {
@@ -66,7 +66,7 @@ const MoreScreen = ({ navigation }) => {
                   ? require('../assets/images/logo1.png')
                   : require('../assets/images/profile-user.png')
               }
-              style={{ width: 70, height: 70 }}
+              style={{width: 70, height: 70}}
             />
             {/* company name */}
             <View
@@ -87,15 +87,17 @@ const MoreScreen = ({ navigation }) => {
             </View> */}
             </View>
             {/* View Profile button is here */}
-            <TouchableOpacity style={styles.ViewProfileBtn}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('ProfileScreen')}
+              style={styles.ViewProfileBtn}>
               <Text style={styles.ViewProfileBtntext}>View Profile</Text>
             </TouchableOpacity>
           </View>
         </View>
         {/* drop down start */}
         <View style={styles.dropDownParent}>
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <View style={{ flexDirection: 'row', flex: 1, alignItems: 'center' }}>
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <View style={{flexDirection: 'row', flex: 1, alignItems: 'center'}}>
               <Text
                 style={{
                   color: '#000',
@@ -125,7 +127,7 @@ const MoreScreen = ({ navigation }) => {
                     ? require('../assets/images/up-arrow.png')
                     : require('../assets/images/down-arrow.png')
                 }
-                style={{ width: 18, height: 18, marginRight: 5 }}
+                style={{width: 18, height: 18, marginRight: 5}}
               />
             </TouchableOpacity>
           </View>
@@ -138,6 +140,7 @@ const MoreScreen = ({ navigation }) => {
             image={require('../assets/images/dashboard1.png')}
             title="Dashboard"
             path="Dashboard"
+            onPress={() => navigation.navigate('Dashboard')}
           />
           {/* <ReUsableButtons
           image={require('../assets/images/customer.png')}
@@ -148,6 +151,7 @@ const MoreScreen = ({ navigation }) => {
             title="Wallet & Passbook"
             // navigation={navigation}
             path="WalletAndPassbook"
+            onPress={() => navigation.navigate('WalletAndPassbook')}
           />
           {/* <ReUsableButtons
           image={require('../assets/images/weight-scale.png')}
@@ -157,6 +161,7 @@ const MoreScreen = ({ navigation }) => {
             image={require('../assets/images/list.png')}
             title="Manifests"
             path="Manifests"
+            onPress={() => navigation.navigate('Manifests')}
           />
           {/* channel integrations button */}
           {/* <TouchableOpacity
@@ -192,6 +197,7 @@ const MoreScreen = ({ navigation }) => {
             image={require('../assets/images/customer-support.png')}
             title="Help & Support"
             path="HelpAndSupport"
+            onPress={() => navigation.navigate('HelpAndSupport')}
           />
           <ReUsableButtons
             image={require('../assets/images/logout.png')}

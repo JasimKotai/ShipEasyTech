@@ -59,7 +59,7 @@ const HomeScreen = ({navigation}) => {
       if (Platform.OS === 'android') {
         const permission = PermissionsAndroid.PERMISSIONS.CAMERA;
         const granted = await PermissionsAndroid.request(permission); //await
-        console.log(granted);
+        console.log('DashBoard log: --', granted);
         if (granted === PermissionsAndroid.RESULTS.GRANTED) {
           console.log('DashBoard: camera permission granted');
           // handleCamera();
@@ -139,7 +139,7 @@ const HomeScreen = ({navigation}) => {
       <RBSheet
         ref={refRBSheet2}
         closeOnDragDown={true}
-        closeOnPressMask={false}
+        closeOnPressMask={true}
         height={height / 1.5}
         customStyles={{
           wrapper: {
@@ -163,6 +163,7 @@ const HomeScreen = ({navigation}) => {
               marginRight: 20,
               marginTop: 15,
               alignSelf: 'flex-end',
+              padding: 10,
             }}
             onPress={() => refRBSheet2.current.close()}>
             <Image

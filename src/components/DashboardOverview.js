@@ -17,11 +17,16 @@ const DashboardOverview = () => {
           <View style={styles.todayOrderChild}>
             <Image
               source={require('../assets/images/booking.png')}
-              style={{width: 25, height: 25}}
+              style={{width: 20, height: 20, tintColor: '#404040'}}
             />
             <Text style={styles.todayOrderText}>Today's Orders</Text>
           </View>
-          <Text numberOfLines={2} style={{textAlign: 'center', color: '#000'}}>
+          <Text
+            numberOfLines={2}
+            style={{
+              textAlign: 'center',
+              color: '#000',
+            }}>
             0
           </Text>
         </View>
@@ -30,11 +35,16 @@ const DashboardOverview = () => {
           <View style={styles.todayOrderChild}>
             <Image
               source={require('../assets/images/booking.png')}
-              style={{width: 25, height: 25}}
+              style={{width: 20, height: 20, tintColor: '#404040'}}
             />
             <Text style={styles.todayOrderText}>Yesterday's Orders</Text>
           </View>
-          <Text numberOfLines={2} style={{textAlign: 'center', color: '#000'}}>
+          <Text
+            numberOfLines={2}
+            style={{
+              textAlign: 'center',
+              color: '#000',
+            }}>
             0
           </Text>
         </View>
@@ -49,14 +59,14 @@ const DashboardOverview = () => {
             <Image
               source={require('../assets/images/booking.png')}
               style={{
-                width: 25,
-                height: 25,
+                width: 17,
+                height: 17,
+                tintColor: '#404040',
               }}
             />
           </View>
-          <View style={{flex: 0.5}}>
-            <Text style={{color: '#404040'}}>Today's Orders</Text>
-          </View>
+
+          <Text style={styles.Text1}>Total's Orders</Text>
 
           <View style={styles.transactionViewIcon2}>
             <Text style={{color: '#000'}} numberOfLines={1}>
@@ -70,14 +80,14 @@ const DashboardOverview = () => {
             <Image
               source={require('../assets/images/close.png')}
               style={{
-                width: 15,
-                height: 15,
+                width: 13,
+                height: 13,
+                tintColor: '#404040',
               }}
             />
           </View>
-          <View style={{flex: 0.5}}>
-            <Text style={{color: '#404040'}}>Total Cancel</Text>
-          </View>
+
+          <Text style={styles.Text1}>Total Cancel</Text>
 
           <View style={styles.transactionViewIcon2}>
             <Text style={{color: '#000'}} numberOfLines={1}>
@@ -91,15 +101,14 @@ const DashboardOverview = () => {
             <Image
               source={require('../assets/images/forward.png')}
               style={{
-                width: 15,
-                height: 15,
-                tintColor: '#000',
+                width: 13,
+                height: 13,
+                tintColor: '#404040',
               }}
             />
           </View>
-          <View style={{flex: 0.5}}>
-            <Text style={{color: '#404040'}}>Total Forwarded</Text>
-          </View>
+
+          <Text style={styles.Text1}>Total Forwarded</Text>
 
           <View style={styles.transactionViewIcon2}>
             <Text style={{color: '#000'}} numberOfLines={1}>
@@ -113,15 +122,14 @@ const DashboardOverview = () => {
             <Image
               source={require('../assets/images/wallet1.png')}
               style={{
-                width: 20,
-                height: 20,
+                width: 15,
+                height: 15,
                 resizeMode: 'contain',
+                tintColor: '#404040',
               }}
             />
           </View>
-          <View style={{flex: 0.5}}>
-            <Text style={{color: '#404040'}}>RTO</Text>
-          </View>
+          <Text style={styles.Text1}>RTO</Text>
 
           <View style={styles.transactionViewIcon2}>
             <Text style={{color: '#000'}} numberOfLines={1}>
@@ -136,14 +144,14 @@ const DashboardOverview = () => {
             <Image
               source={require('../assets/images/all.png')}
               style={{
-                width: 25,
-                height: 25,
+                width: 17,
+                height: 17,
+                tintColor: '#404040',
               }}
             />
           </View>
-          <View style={{flex: 0.5}}>
-            <Text style={{color: '#404040'}}>Total Forwarded</Text>
-          </View>
+
+          <Text style={styles.Text1}>Total Shipments</Text>
 
           <View style={styles.transactionViewIcon2}>
             <Text style={{color: '#000'}} numberOfLines={2}>
@@ -165,9 +173,10 @@ const styles = StyleSheet.create({
   },
   todayOrderView: {
     flex: 0.45,
-    backgroundColor: '#f2f2f2',
+    backgroundColor: '#fff',
+    // backgroundColor: '#f2f2f2',
     padding: 10,
-    elevation: 5,
+    elevation: 2,
     borderRadius: 5,
   },
   todayOrderChild: {
@@ -177,14 +186,15 @@ const styles = StyleSheet.create({
   },
   todayOrderText: {
     color: '#000',
-    fontFamily: 'Roboto-Regular',
+    fontFamily: 'Poppins-Regular',
+    fontSize: 13,
   },
   transactionParentView: {
     backgroundColor: '#f2f2f2',
     padding: 10,
     marginHorizontal: 10,
     borderRadius: 5,
-    elevation: 5,
+    elevation: 1,
   },
   Transactions: {
     color: '#404040',
@@ -199,7 +209,7 @@ const styles = StyleSheet.create({
     padding: 2,
     borderRadius: 5,
     marginTop: 10,
-    elevation: 9,
+    elevation: 1,
   },
   transactionViewIcon1: {
     width: 50,
@@ -209,11 +219,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   transactionViewIcon2: {
-    width: 70,
+    width: 60,
     height: 35,
-    alignItems: 'flex-end',
+    alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 5,
-    paddingRight: 5,
   },
+  Text1: {color: '#666666', fontFamily: 'Poppins-Regular'},
 });

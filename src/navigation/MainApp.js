@@ -2,7 +2,6 @@ import {View, Text, StatusBar, useColorScheme} from 'react-native';
 import React from 'react';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import MainNavigation from './MainNavigation';
-import {ToastProvider} from 'react-native-toast-notifications';
 
 const MainApp = () => {
   const isDarkMode = useColorScheme() === 'dark';
@@ -16,9 +15,7 @@ const MainApp = () => {
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-      <ToastProvider>
-        <MainNavigation />
-      </ToastProvider>
+      <MainNavigation />
     </>
   );
 };

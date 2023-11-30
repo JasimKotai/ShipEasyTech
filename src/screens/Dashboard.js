@@ -8,6 +8,7 @@ import {
   ScrollView,
   TouchableOpacity,
   Animated,
+  useWindowDimensions,
 } from 'react-native';
 import React, {useRef, useState} from 'react';
 import Header from '../components/Header';
@@ -18,21 +19,50 @@ import DashboardCOD from '../components/DashboardCOD';
 import DashboardPickUpDelivery from '../components/DashboardPickUpDelivery';
 import DashboardNDR from '../components/DashboardNDR';
 import DashboardWeightDiscrepancies from '../components/DashboardWeightDiscrepancies';
+import {SceneMap, TabBar, TabView} from 'react-native-tab-view';
 
 const Dashboard = ({navigation}) => {
   const height = Dimensions.get('window').height;
   const width = Dimensions.get('window').width;
   const [currentIndex, setCurrentIndex] = useState(0);
-  console.log(currentIndex);
-  const ref = useRef();
+  // console.log(currentIndex);
+  const layout = useWindowDimensions();
 
-  const data = [
-    {id: '1', content: 'Screen 1', screen: 'Overview'},
-    {id: '2', content: 'Screen 2', screen: 'COD'},
-    {id: '3', content: 'Screen 3', screen: 'Pickup & Delivery'},
-    {id: '4', content: 'Screen 4', screen: 'NDR'},
-    {id: '5', content: 'Screen 5', screen: 'Weight Discrepancies'},
-  ];
+  const renderScene = SceneMap({
+    first: DashboardOverview,
+    second: DashboardCOD,
+    third: DashboardPickUpDelivery,
+    fourth: DashboardNDR,
+    fifth: DashboardWeightDiscrepancies,
+  });
+
+  const [index, setIndex] = React.useState(0);
+  // console.log(index);
+
+  const [routes] = React.useState([
+    {key: 'first', title: 'Overview'},
+    {key: 'second', title: 'COD'},
+    {
+      key: 'third',
+      title: 'PickUp & Delivery',
+    },
+    {key: 'fourth', title: 'NDR'},
+    {
+      key: 'fifth',
+      title: 'Weight Discrepancies',
+    },
+  ]);
+
+  const renderTabBar = props => (
+    <TabBar
+      {...props}
+      indicatorStyle={styles.indicator}
+      style={styles.tabBar}
+      labelStyle={styles.label}
+      tabStyle={styles.tab}
+      activeColor={GREEN_COLOR}
+    />
+  );
 
   return (
     <View style={Styles.container}>
@@ -43,117 +73,38 @@ const Dashboard = ({navigation}) => {
           navigation.goBack();
         }}
       />
-      {/* buttons rendering  */}
-      <View style={{backgroundColor: LIGHT_GREEN, marginVertical: 3}}>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          {/* overview button */}
-          <TouchableOpacity
-            onPress={() => {
-              setCurrentIndex(0);
-              ref.current.scrollToIndex({
-                animated: true,
-                index: 0,
-              });
-            }}
-            style={[
-              Styles.OverviewBtn,
-              {borderBottomColor: currentIndex === 0 ? GREEN_COLOR : '#FFF'},
-            ]}>
-            <Text style={Styles.OverviewBtnText}>Overview</Text>
-          </TouchableOpacity>
-          {/* COD button */}
-          <TouchableOpacity
-            onPress={() => {
-              setCurrentIndex(1);
-              ref.current.scrollToIndex({
-                animated: true,
-                index: 1,
-              });
-            }}
-            style={[
-              Styles.OverviewBtn,
-              {borderBottomColor: currentIndex === 1 ? GREEN_COLOR : '#FFF'},
-            ]}>
-            <Text style={Styles.OverviewBtnText}>COD</Text>
-          </TouchableOpacity>
-          {/* Pickup & Delivery button */}
-          <TouchableOpacity
-            onPress={() => {
-              setCurrentIndex(2);
-              ref.current.scrollToIndex({
-                animated: true,
-                index: 2,
-              });
-            }}
-            style={[
-              Styles.OverviewBtn,
-              {borderBottomColor: currentIndex === 2 ? GREEN_COLOR : '#FFF'},
-            ]}>
-            <Text style={Styles.OverviewBtnText}>Pickup & Delivery</Text>
-          </TouchableOpacity>
-          {/* NDR */}
-          <TouchableOpacity
-            onPress={() => {
-              setCurrentIndex(3);
-              ref.current.scrollToIndex({
-                animated: true,
-                index: 3,
-              });
-            }}
-            style={[
-              Styles.OverviewBtn,
-              {borderBottomColor: currentIndex === 3 ? GREEN_COLOR : '#FFF'},
-            ]}>
-            <Text style={Styles.OverviewBtnText}>NDR</Text>
-          </TouchableOpacity>
-          {/* Weight Discrepancies */}
-          <TouchableOpacity
-            onPress={() => {
-              setCurrentIndex(4);
-              ref.current.scrollToIndex({
-                animated: true,
-                index: 4,
-              });
-            }}
-            style={[
-              Styles.OverviewBtn,
-              {borderBottomColor: currentIndex === 4 ? GREEN_COLOR : '#FFF'},
-            ]}>
-            <Text style={Styles.OverviewBtnText}>Weight Discrepancies</Text>
-          </TouchableOpacity>
-        </ScrollView>
-      </View>
-      {/* screen rendering */}
-      <Animated.FlatList
-        ref={ref}
-        data={data}
-        pagingEnabled
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        keyExtractor={item => item.id}
-        onScroll={e => {
-          const x = e.nativeEvent.contentOffset.x;
-          setCurrentIndex(x / width.toFixed(0));
-        }}
-        renderItem={({item, index}) => (
-          <Animated.View style={{width: width, backgroundColor: 'pink'}}>
-            {/* <Text>{item.id}</Text> */}
-            {index === 0 ? (
-              <DashboardOverview />
-            ) : index === 1 ? (
-              <DashboardCOD />
-            ) : index === 2 ? (
-              <DashboardPickUpDelivery />
-            ) : index === 3 ? (
-              <DashboardNDR />
-            ) : index === 4 ? (
-              <DashboardWeightDiscrepancies />
-            ) : null}
-          </Animated.View>
-        )}
+      {/* tab view = React Native Tab View */}
+      <TabView
+        navigationState={{index, routes}}
+        renderScene={renderScene}
+        onIndexChange={setIndex}
+        initialLayout={{width: layout.width}}
+        renderTabBar={renderTabBar}
       />
     </View>
   );
 };
 
 export default Dashboard;
+const Height = Dimensions.get('window').height;
+const Width = Dimensions.get('window').width;
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  tabBar: {
+    backgroundColor: '#fff',
+    elevation: 2,
+  },
+  indicator: {
+    backgroundColor: GREEN_COLOR,
+  },
+  label: {
+    color: '#404040', // Set your desired tab label color
+    fontSize: 10,
+    fontFamily: 'Montserrat-Bold',
+  },
+  tab: {
+    padding: 0,
+  },
+});

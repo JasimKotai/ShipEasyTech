@@ -18,12 +18,10 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {BASE_URL_LOCAL, BASE_URL_LIVE} from '../config/api';
 import {CommonActions} from '@react-navigation/native';
-import {useToast} from 'react-native-toast-notifications';
 import {useDispatch} from 'react-redux';
 import {saveUserData} from '../config/UserSlice';
 
 const SignInScreen = ({navigation}) => {
-  const toast = useToast();
   const refRBSheet = useRef();
   const width = Dimensions.get('window').width;
   const height = Dimensions.get('window').height;
@@ -64,14 +62,6 @@ const SignInScreen = ({navigation}) => {
       console.log('SignInScreenerror- login err:', error);
     }
   };
-  // useEffect(() => {
-  //   toast.show('Hello World', {
-  //     type: 'success',
-  //     placement: 'bottom',
-  //     duration: 3000,
-  //     animationType: 'zoom-in',
-  //   });
-  // });
 
   const validateEmail = text => {
     const emailPattern = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;

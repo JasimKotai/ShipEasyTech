@@ -1,22 +1,36 @@
-import {View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+  TouchableHighlight,
+} from 'react-native';
 import React from 'react';
 import {GREEN_COLOR} from '../assets/Colors';
 import {useNavigation} from '@react-navigation/native';
 
 const ReUsableButtons = ({image, title, path, onPress}) => {
   const navigation = useNavigation();
-  function navigateTo(path) {
+
+  const handlePress = () => {
     if (path) {
       navigation.navigate(path);
-    } else {
+    } else if (onPress) {
       onPress();
-      console.log('Reusable button click');
+    } else {
+      console.log('ReUsableButtons Screen - Reusable button click');
     }
-  }
-
+  };
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={() => navigateTo(path)} style={styles.button}>
+      <TouchableOpacity
+        activeOpacity={0.5}
+        onPress={handlePress}
+        // onPress={() => {
+        //   navigateTo();
+        // }}
+        style={styles.button}>
         <Image
           source={image}
           style={{
@@ -37,7 +51,7 @@ export default ReUsableButtons;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f0f0f0f0',
+    backgroundColor: '#fff',
   },
   button: {
     flexDirection: 'row',

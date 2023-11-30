@@ -32,7 +32,7 @@ const Orders = ({navigation}) => {
       <View style={styles.searchButtonView}>
         <TouchableOpacity style={styles.searchBtn}>
           <Image
-            source={require('../assets/images/search-icon.png')}
+            source={require('../assets/images/search.png')}
             style={styles.searchBtnImg}
           />
         </TouchableOpacity>

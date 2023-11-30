@@ -103,7 +103,7 @@ const CustomerDetails = ({ navigation }) => {
             </TouchableOpacity>
             <TouchableOpacity style={styles.selectCustomerAddressBtn}>
               <Image
-                source={require('../assets/images/search-icon.png')}
+                source={require('../assets/images/search.png')}
                 style={{ width: 25, height: 25, tintColor: GREEN_COLOR }}
               />
             </TouchableOpacity>

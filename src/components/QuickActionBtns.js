@@ -1,11 +1,18 @@
-import {View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+  Pressable,
+} from 'react-native';
 import React from 'react';
 import {GREEN_COLOR} from '../assets/Colors';
 
 const QuickActionBtns = ({image, title, onPress}) => {
   return (
-    <TouchableOpacity onPress={onPress}>
-      <View style={styles.btn}>
+    <TouchableOpacity onPress={onPress} style={styles.btn}>
+      <View style={styles.btnView}>
         <View
           style={{
             height: 60,
@@ -32,10 +39,16 @@ const QuickActionBtns = ({image, title, onPress}) => {
 export default QuickActionBtns;
 const styles = StyleSheet.create({
   btn: {
+    backgroundColor: '#FFF',
+    borderWidth: 0.5,
+    borderColor: '#f2f2f2',
+    borderRadius: 5,
+    elevation: 2,
+  },
+  btnView: {
     width: 82,
     height: 120,
-    backgroundColor: '#FFFF',
-    elevation: 5,
+    backgroundColor: '#FFFFFF',
     borderRadius: 5,
     alignItems: 'center',
   },
