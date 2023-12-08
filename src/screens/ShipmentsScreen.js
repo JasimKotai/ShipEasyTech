@@ -7,22 +7,12 @@ import {
   Dimensions,
 } from 'react-native';
 import React, {useState} from 'react';
-import Modals from '../components/Modals';
+
 import Header from '../components/Header';
-import HelpAndSupport from './HelpAndSupport';
 
 const ShipmentsScreen = ({navigation}) => {
-  const [modalVisible, setModalVisible] = useState(false);
   const height = Dimensions.get('window').height;
   const width = Dimensions.get('window').width;
-
-  // const toggleModal = () => {
-  //   setModalVisible(!modalVisible);
-  // };
-  //   <TouchableOpacity onPress={toggleModal}>
-  //   <Text>Show Modal</Text>
-  // </TouchableOpacity>
-  // <Modals visible={modalVisible} onClose={toggleModal} />
   return (
     <View style={styles.container}>
       <Header
@@ -46,7 +36,33 @@ const ShipmentsScreen = ({navigation}) => {
           />
         </TouchableOpacity>
       </View>
-      <HelpAndSupport/>
+      {/* parent view */}
+      <View
+        style={{
+          flex: 1,
+          marginTop: 5,
+          backgroundColor: '#fff',
+        }}>
+        <View
+          style={{
+            backgroundColor: '#fff',
+            elevation: 2,
+            margin: 20,
+            flex: 1,
+            borderRadius: 10,
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
+          <Image
+            source={require('../assets/images/shipment.png')}
+            style={{width: 100, height: 100}}
+          />
+          <Text style={{color: '#404040'}}>No Shipments to show here</Text>
+          <TouchableOpacity>
+            <Text>Add Your First Shipment</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
     </View>
   );
 };
@@ -60,10 +76,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   searchButtonView: {
+    position: 'absolute',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: -height / 11,
+    top: height / 21,
     backgroundColor: '#f0f8ff',
     width: width / 4,
     borderRadius: 15,

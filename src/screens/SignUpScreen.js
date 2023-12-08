@@ -305,6 +305,7 @@ const SignUpScreen = ({navigation}) => {
                     setIsFocused('FN');
                   }}
                   cursorColor={'black'}
+                  placeholderTextColor={'#666'}
                 />
                 {name == false ? (
                   <Text style={{fontSize: 10, color: 'red', marginLeft: 10}}>
@@ -340,6 +341,7 @@ const SignUpScreen = ({navigation}) => {
                   cursorColor={'black'}
                   keyboardType="number-pad"
                   maxLength={10}
+                  placeholderTextColor={'#666'}
                 />
                 {phone == false ? (
                   <Text style={{fontSize: 10, color: 'red', marginLeft: 10}}>
@@ -376,6 +378,7 @@ const SignUpScreen = ({navigation}) => {
                   setIsFocused('CN');
                 }}
                 cursorColor={'black'}
+                placeholderTextColor={'#666'}
               />
               {company_name == false ? (
                 <Text style={{fontSize: 10, color: 'red', marginLeft: 30}}>
@@ -411,6 +414,7 @@ const SignUpScreen = ({navigation}) => {
                   setIsFocused('Email');
                 }}
                 cursorColor={'black'}
+                placeholderTextColor={'#666'}
               />
               {email == false ? (
                 <Text style={{fontSize: 10, color: 'red', marginLeft: 30}}>
@@ -473,6 +477,7 @@ const SignUpScreen = ({navigation}) => {
                 }}
                 cursorColor={'black'}
                 secureTextEntry={secureEntry}
+                placeholderTextColor={'#666'}
               />
               {password_confirmation == false ? (
                 <Text style={{fontSize: 10, color: 'red', marginLeft: 30}}>
@@ -641,7 +646,9 @@ const SignUpScreen = ({navigation}) => {
                       setShowOrderButtons(!showOrderButtons);
                     }}
                     style={styles.customDropDownBtns}>
-                    <Text style={styles.customDropDownTxt}>Between 1-10 orders</Text>
+                    <Text style={styles.customDropDownTxt}>
+                      Between 1-10 orders
+                    </Text>
                   </TouchableOpacity>
                   <TouchableOpacity
                     onPress={() => {
@@ -663,7 +670,9 @@ const SignUpScreen = ({navigation}) => {
                       setShowOrderButtons(!showOrderButtons);
                     }}
                     style={styles.customDropDownBtns}>
-                    <Text style={styles.customDropDownTxt}>101-1000 orders</Text>
+                    <Text style={styles.customDropDownTxt}>
+                      101-1000 orders
+                    </Text>
                   </TouchableOpacity>
                 </View>
               ) : null}
@@ -965,7 +974,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     paddingBottom: 20,
     textAlignVertical: 'bottom',
-    color: '#000',
+    color: '#404040',
   },
   companyNameInput: {
     marginHorizontal: 20,
@@ -979,7 +988,7 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
     textAlignVertical: 'bottom',
     marginTop: 20,
-    color: '#000',
+    color: '#404040',
   },
   CustCompPlaceHolder: {
     fontSize: 12,
@@ -1032,7 +1041,7 @@ const styles = StyleSheet.create({
     paddingLeft: 5,
     borderBottomWidth: 0.4,
     borderColor: '#cccccc',
-    marginHorizontal: 5
+    marginHorizontal: 5,
   },
-  customDropDownTxt: {color: '#808080', fontFamily: 'Poppins-Regular'}
+  customDropDownTxt: {color: '#808080', fontFamily: 'Poppins-Regular'},
 });

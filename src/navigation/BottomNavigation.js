@@ -1,24 +1,13 @@
-import {
-  View,
-  Text,
-  StatusBar,
-  Image,
-  StyleSheet,
-  Dimensions,
-} from 'react-native';
+import {View, Text, StatusBar, Image, StyleSheet} from 'react-native';
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import HomeScreen from '../screens/HomeScreen';
 import Orders from '../screens/Orders';
 import ShipmentsScreen from '../screens/ShipmentsScreen';
-import HelpScreen from '../screens/HelpScreen';
 import MoreScreen from '../screens/MoreScreen';
-import {GREEN_COLOR} from '../assets/Colors';
+import {EXTRA_LIGHT_GREEN} from '../assets/Colors';
 
 const Tab = createBottomTabNavigator();
-const width = Dimensions.get('window').width;
-const height = Dimensions.get('window').height;
-console.log(height / 13);
 
 const BottomNavigation = () => {
   return (
@@ -30,8 +19,7 @@ const BottomNavigation = () => {
           tabBarShowLabel: false,
           tabBarHideOnKeyboard: true,
           tabBarStyle: {
-            height: height / 13,
-            backgroundColor: '#FFFF',
+            backgroundColor: EXTRA_LIGHT_GREEN,
           },
         }}>
         <Tab.Screen
@@ -41,7 +29,7 @@ const BottomNavigation = () => {
             tabBarIcon: ({focused}) => (
               <View style={styles.tabBarIconView}>
                 <Image
-                  source={require('../assets/images/home.png')}
+                  source={require('../assets/images/homecopy.png')}
                   style={focused ? styles.focusedIconImage : styles.IconImage}
                 />
                 <Text
@@ -119,23 +107,22 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   IconImage: {
-    width: 16,
-    height: 16,
-    tintColor: '#404040',
+    width: 15,
+    height: 15,
   },
   focusedIconImage: {
-    width: 18,
-    height: 18,
-    tintColor: GREEN_COLOR,
+    width: 16,
+    height: 16,
+    tintColor: 'green',
   },
   IconText: {
-    color: '#999999',
-    fontFamily: 'Poppins-Regular',
-    fontSize: 10,
+    color: '#000',
+    fontFamily: 'Montserrat-SemiBold',
+    fontSize: 9,
   },
   focusedIconText: {
-    color: GREEN_COLOR,
-    fontFamily: 'Poppins-Regular',
-    fontSize: 11,
+    color: 'green',
+    fontFamily: 'Poppins-SemiBold',
+    fontSize: 9,
   },
 });

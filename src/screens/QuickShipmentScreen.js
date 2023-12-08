@@ -10,23 +10,28 @@ import {
   TextInput,
   KeyboardAvoidingView,
   FlatList,
+  Alert,
+  localStorage,
 } from 'react-native';
-import React, { useEffect, useRef, useState } from 'react';
-import { GREEN_COLOR, LIGHT_GREEN } from '../assets/Colors';
-import { English } from '../Languages/EnglishLan';
-import { Hindi } from '../Languages/HindiLan';
-import { Dropdown } from 'react-native-element-dropdown';
+import React, {useEffect, useRef, useState} from 'react';
+import {EXTRA_LIGHT_GREEN, GREEN_COLOR, LIGHT_GREEN} from '../assets/Colors';
+import {English} from '../Languages/EnglishLan';
+import {Hindi} from '../Languages/HindiLan';
+import {Dropdown} from 'react-native-element-dropdown';
 import Header from '../components/Header';
-import { saveCreateOrderData } from '../config/UserSlice';
+import {saveCreateOrderData} from '../config/UserSlice';
 import RBSheet from 'react-native-raw-bottom-sheet';
-import { useDispatch, useSelector } from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useFocusEffect} from '@react-navigation/native';
 
-const QuickShipmentScreen = ({ navigation }) => {
+const QuickShipmentScreen = ({navigation}) => {
   const refRBSheet = useRef();
   const [renderOnes, setrenderOnes] = useState(null);
+
   const height = Dimensions.get('window').height;
   const width = Dimensions.get('window').width;
-  const [address, setAddress] = useState('');
+
   const [cashOrPrepaid, setCashOrPrepaid] = useState('COD');
   const [productWeightDetails, setProductWeightDetails] = useState({
     weight: '',
@@ -44,48 +49,283 @@ const QuickShipmentScreen = ({ navigation }) => {
     quentity: '',
     price: '',
     sku: '',
-    ProductCategory: '',
+    pickup_address: '',
+    courier_charge: '',
+    // ProductCategory: '',
     // HSNCategory: '',
     // TaxRate: '',
     // Discount: '',
   });
   const [otherCharges, setOtherCharges] = useState(false);
   const [showmore, setShowmore] = useState(false);
-  // search address state (bottomsheet)
-  const [searchAddress, setSearchAddress] = useState('');
-  const { user } = useSelector(state => state.userSlice);
+
+  const {user} = useSelector(state => state.userSlice);
   const dispatch = useDispatch();
 
   const platform = [
-    { label: '1', value: 'shopify' },
-    { label: '2', value: 'WooCommerce' },
-    { label: '2', value: 'Wix' },
-    { label: '2', value: 'Magento' },
-    { label: '2', value: 'BigCommercex' },
+    {label: '1', value: 'shopify'},
+    {label: '2', value: 'WooCommerce'},
+    {label: '2', value: 'Wix'},
+    {label: '2', value: 'Magento'},
+    {label: '2', value: 'BigCommercex'},
   ];
-  const Courier = [{ label: '1', value: 'Ecom Express' }];
+  const Courier = [{label: '1', value: 'Ecom Express'}];
 
   const generateRandNum = () => {
     return Math.floor(Math.random() * 9000) + 1000;
-  }
+  };
 
   const generateInvoiceNumber = () => {
     const randNum = generateRandNum();
-    setProductWeightDetails({ ...productWeightDetails, invoice: randNum.toString() });
-  }
+    setProductWeightDetails({
+      ...productWeightDetails,
+      invoice: randNum.toString(),
+    });
+  };
 
   const generateOrderNumber = () => {
     const randNum = generateRandNum();
     const prefix = user.name.slice(0, 4).toUpperCase();
-    setProductWeightDetails({ ...productWeightDetails, order_number: prefix + randNum.toString() });
-  }
+    setProductWeightDetails({
+      ...productWeightDetails,
+      order_number: prefix + randNum.toString(),
+    });
+  };
+
+  const [emptyFields, setEmptyFields] = useState({
+    weight: false,
+    length: false,
+    breadth: false,
+    height: false,
+    payment_type: false,
+    invoice: false,
+    order_number: false,
+    platform: false,
+    courier_company: false,
+    product_title: false,
+    quentity: false,
+    price: false,
+    sku: false,
+    pickup_address: false,
+    courier_charge: false,
+  });
+
+  // console.log(emptyFields.product_title);
+  // console.log(emptyFields.quentity);
+  // console.log(emptyFields.price);
+  // console.log(emptyFields.sku);
+  // console.log(emptyFields.weight);
+  // console.log(emptyFields.length);
+  // console.log(emptyFields.breadth);
+  // console.log(emptyFields.height, '__++__');
+
+  const scrollViewRef = useRef();
+
+  const handleNextButton = () => {
+    navigation.navigate('CustomerDetails');
+
+    // if (
+    //   products.product_title.length < 2 ||
+    //   products.quentity.length === 0 ||
+    //   products.price.length === 0 ||
+    //   products.sku.length < 3 ||
+    //   productWeightDetails.weight.length === 0 ||
+    //   productWeightDetails.length.length === 0 ||
+    //   productWeightDetails.breadth.length === 0 ||
+    //   productWeightDetails.height.length === 0
+    // ) {
+    //   console.log('no..');
+    //   scrollViewRef.current?.scrollTo({y: height / 5, animated: true});
+    //   handleValidation();
+    // } else if (
+    //   productWeightDetails.platform.length === 0 ||
+    //   productWeightDetails.courier_company.length === 0
+    // ) {
+    //   console.log('else if..');
+    //   scrollViewRef.current?.scrollTo({y: height / 1.5, animated: true});
+    //   handleValidation();
+    // } else if (selectPickupAddress.length === 0) {
+    //   Alert.alert('Address', 'select a address');
+    // } else {
+    //   console.log('function call......');
+    //   productWeightDetails.payment_type = cashOrPrepaid;
+    //   products.pickup_address = '8';
+    //   products.courier_charge = '90.97';
+    //   dispatch(saveCreateOrderData({...productWeightDetails, ...products}));
+    //   navigation.navigate('CustomerDetails');
+    // }
+  };
 
   // console.log("products====>", products);
   // console.log('productWeightDetails====>', productWeightDetails);
-  // console.log("payment====>", payment);
+
+  const validateField = (fieldName, value, minLength = 0) => {
+    if (minLength > 0) {
+      return value.length === 0 || value.length < minLength;
+    }
+    return value.length === 0;
+  };
+
+  const handleValidation = () => {
+    setEmptyFields(prevEmptyFields => ({
+      ...prevEmptyFields,
+      product_title: validateField('product_title', products.product_title, 2),
+      quentity: validateField('quentity', products.quentity),
+      price: validateField('price', products.price),
+      sku: validateField('sku', products.sku, 3),
+      weight: validateField('weight', productWeightDetails.weight),
+      length: validateField('length', productWeightDetails.length),
+      breadth: validateField('breadth', productWeightDetails.breadth),
+      height: validateField('height', productWeightDetails.height),
+      platform: validateField('platform', productWeightDetails.platform),
+      courier_company: validateField(
+        'courier_company',
+        productWeightDetails.courier_company,
+      ),
+    }));
+  };
+
+  // const users = [
+  //   {
+  //     name: 'John Doe',
+  //     phoneNumber: '123-456-7890',
+  //     address: '123 Main St, City A',
+  //   },
+  //   {
+  //     name: 'Alice Johnson',
+  //     phoneNumber: '234-567-8901',
+  //     address: '456 Elm St, City B',
+  //   },
+  //   {
+  //     name: 'Jane Smith',
+  //     phoneNumber: '345-678-9012',
+  //     address: '789 Oak St, City C',
+  //   },
+  //   {
+  //     name: 'Michael Brown',
+  //     phoneNumber: '456-789-0123',
+  //     address: '101 Pine St, City D',
+  //   },
+  //   {
+  //     name: 'Emily Wilson',
+  //     phoneNumber: '567-890-1234',
+  //     address: '222 Cedar St, City E',
+  //   },
+  //   {
+  //     name: 'David Lee',
+  //     phoneNumber: '678-901-2345',
+  //     address: '333 Maple St, City F',
+  //   },
+  //   {
+  //     name: 'Sarah Clark',
+  //     phoneNumber: '789-012-3456',
+  //     address: '444 Birch St, City G',
+  //   },
+  //   {
+  //     name: 'Alex Turner',
+  //     phoneNumber: '890-123-4567',
+  //     address: '555 Willow St, City H',
+  //   },
+  //   {
+  //     name: 'Olivia Parker',
+  //     phoneNumber: '901-234-5678',
+  //     address: '666 Elm St, City I',
+  //   },
+  //   {
+  //     name: 'Ethan Phillips',
+  //     phoneNumber: '012-345-6789',
+  //     address: '777 Oak St, City J',
+  //   },
+  //   {
+  //     name: 'Sophia Roberts',
+  //     phoneNumber: '112-233-4455',
+  //     address: '888 Pine St, City K',
+  //   },
+  //   {
+  //     name: 'William Harris',
+  //     phoneNumber: '223-334-5566',
+  //     address: '999 Cedar St, City L',
+  //   },
+  //   {
+  //     name: 'Ava Thompson',
+  //     phoneNumber: '334-445-6677',
+  //     address: '1010 Maple St, City M',
+  //   },
+  //   {
+  //     name: 'James Davis',
+  //     phoneNumber: '445-556-7788',
+  //     address: '1111 Birch St, City N',
+  //   },
+  //   {
+  //     name: 'Mia Martinez',
+  //     phoneNumber: '556-667-8899',
+  //     address: '1212 Willow St, City O',
+  //   },
+  //   {
+  //     name: 'Benjamin Hill',
+  //     phoneNumber: '667-778-9000',
+  //     address: '1313 Elm St, City P',
+  //   },
+  //   {
+  //     name: 'Charlotte Young',
+  //     phoneNumber: '778-889-0011',
+  //     address: '1414 Oak St, City Q',
+  //   },
+  //   {
+  //     name: 'Logan Scott',
+  //     phoneNumber: '889-900-1122',
+  //     address: '1515 Pine St, City R',
+  //   },
+  //   {
+  //     name: 'Grace Allen',
+  //     phoneNumber: '900-011-2233',
+  //     address: '1616 Cedar St, City S',
+  //   },
+  //   {
+  //     name: 'Daniel King',
+  //     phoneNumber: '011-122-3344',
+  //     address: '1717 Maple St, City T',
+  //   },
+  // ];
+
+  const [searchText, setSearchText] = useState('');
+  const [filteredUsers, setFilteredUsers] = useState([]);
+  const [selectPickupAddress, setSelectPickupAddress] = useState([]);
+
+  const handleSearch = text => {
+    setSearchText(text);
+
+    if (text === '') {
+      setFilteredUsers([]);
+    } else {
+      const filteredData = savedAddress.filter(userName =>
+        userName.contact_person.toLowerCase().includes(text.toLowerCase()),
+      );
+      setFilteredUsers(filteredData);
+    }
+  };
+
+  const [savedAddress, setSavedAddress] = useState([]);
+  const reverseData = savedAddress.reverse();
+  console.log('------ async data: ', savedAddress);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      const fetchData = async () => {
+        try {
+          const retrievedData =
+            JSON.parse(await AsyncStorage.getItem('SavedAddress')) || [];
+          setSavedAddress(retrievedData);
+        } catch (error) {
+          console.error('Error fetching data: ', error);
+        }
+      };
+
+      fetchData();
+    }, []),
+  );
 
   return (
-    // <KeyboardAvoidingView enabled={true} style={{flex: 1}} behavior={'height'}>
     <View style={styles.container}>
       <StatusBar barStyle={'dark-content'} />
       <Header
@@ -98,7 +338,8 @@ const QuickShipmentScreen = ({ navigation }) => {
         <Text style={styles.title2text}>Add Order Details</Text>
       </View>
       <ScrollView
-        style={{ flex: 1, paddingHorizontal: 5 }}
+        ref={scrollViewRef}
+        style={{flex: 1, paddingHorizontal: 5}}
         showsVerticalScrollIndicator={false}>
         {/* pick up address view */}
         <View style={styles.pickupAddressView}>
@@ -111,53 +352,60 @@ const QuickShipmentScreen = ({ navigation }) => {
               }}
               style={{
                 flex: 1,
-                paddingHorizontal: 10,
+                paddingLeft: 10,
                 alignItems: 'center',
                 flexDirection: 'row',
-                justifyContent: 'space-between',
               }}>
-              <View>
-                {address !== null ? (
-                  <Text style={{ color: '#808080' }} numberOfLines={1}>
-                    Selected Pickup Address
+              <View style={{flex: 0.9}}>
+                {selectPickupAddress.length === 0 ? (
+                  <Text
+                    style={{
+                      color: '#666666',
+                      fontSize: 13,
+                      fontFamily: 'Rubik-Regular',
+                    }}
+                    numberOfLines={1}>
+                    Select Pickup Address
                   </Text>
                 ) : (
-                  <Text style={{ color: '#000' }} numberOfLines={1}>
-                    {address}
+                  <Text style={{color: '#404040'}} numberOfLines={1}>
+                    {selectPickupAddress.complete_address}
                   </Text>
                 )}
               </View>
-              <Image
-                source={require('../assets/images/down-arrow.png')}
-                style={{
-                  width: 25,
-                  height: 20,
-                  resizeMode: 'contain',
-                  tintColor: GREEN_COLOR,
-                }}
-              />
+
+              <View style={{flex: 0.1, alignItems: 'center'}}>
+                <Image
+                  source={require('../assets/images/drop-down.png')}
+                  style={{
+                    width: 15,
+                    height: 25,
+                    resizeMode: 'contain',
+                    tintColor: GREEN_COLOR,
+                  }}
+                />
+              </View>
             </TouchableOpacity>
           </View>
           {/* gps location button */}
-          <View style={styles.pickupLocationView}>
+          <View style={styles.AddPickupAddress}>
             <TouchableOpacity
               onPress={() => {
                 navigation.navigate('AddPickupAddress');
               }}
-              style={{ flexDirection: 'row', alignItems: 'center' }}>
+              style={styles.AddPickupAddressButton}>
               <Image
                 source={require('../assets/images/location.png')}
                 style={{
-                  width: 18,
-                  height: 18,
+                  width: 15,
+                  height: 15,
                   tintColor: GREEN_COLOR,
-                  resizeMode: 'contain',
                 }}
               />
               <Text
                 style={{
                   color: GREEN_COLOR,
-                  fontFamily: 'Montserrat-SemiBold',
+                  fontFamily: 'Rubik-SemiBold',
                 }}>
                 Add Pickup Address
               </Text>
@@ -165,10 +413,9 @@ const QuickShipmentScreen = ({ navigation }) => {
           </View>
         </View>
         {/* Delivery pincode */}
-        <View style={styles.pickupAddressView}>
+        {/* <View style={styles.pickupAddressView}>
           <Text style={styles.pickupAddressText}>
             Delivery Pincode
-            {/* <Text style={{color: '#cccccc'}}>(Optional)</Text> */}
           </Text>
           <View style={styles.selectLocationView}>
             <TextInput
@@ -182,52 +429,85 @@ const QuickShipmentScreen = ({ navigation }) => {
           <Text style={{ color: '#bfbfbf', fontSize: 10 }}>
             Note : Entering pincode will check pincode is available or not
           </Text>
-        </View>
-        {/* product details */}
+        </View> */}
 
+        {/* product details */}
         <View style={styles.pickupAddressView}>
           <Text style={styles.pickupAddressText}>Product Details</Text>
 
           {/* wrapper view */}
-          <View style={{ backgroundColor: '#ffff' }}>
-            <View style={styles.selectLocationView}>
+          <View style={{backgroundColor: '#ffff'}}>
+            <View
+              style={[
+                styles.selectLocationView,
+                {borderColor: emptyFields.product_title ? 'red' : '#ccc'},
+              ]}>
               <TextInput
                 placeholder="Product Name"
                 placeholderTextColor={'#808080'}
-                style={styles.enterLocationInput}
+                style={[styles.enterLocationInput]}
                 value={products.product_title}
-                onChangeText={text =>
-                  setProducts({ ...products, product_title: text })
-                }
+                onChangeText={text => {
+                  setProducts({...products, product_title: text});
+                  setEmptyFields(prevEmptyFields => ({
+                    ...prevEmptyFields,
+                    product_title: text.length < 2,
+                  }));
+                }}
               />
             </View>
             {/* quantity and unit price */}
-            <View style={styles.quantityUnitPriceView}>
+            <View style={[styles.quantityUnitPriceView]}>
               <TextInput
                 placeholder="Quantity"
-                style={styles.QuantityInput}
+                style={[
+                  styles.QuantityInput,
+                  {borderColor: emptyFields.quentity ? 'red' : '#ccc'},
+                ]}
                 keyboardType="number-pad"
                 placeholderTextColor={'#808080'}
                 value={products.quentity}
-                onChangeText={text =>
-                  setProducts({ ...products, quentity: text })
-                }
+                onChangeText={text => {
+                  setProducts({...products, quentity: text});
+                  setEmptyFields(prevEmptyFields => ({
+                    ...prevEmptyFields,
+                    quentity: text.length === 0,
+                  }));
+                }}
               />
               <TextInput
                 placeholder="Unit Price"
-                style={styles.QuantityInput}
+                style={[
+                  styles.QuantityInput,
+                  {borderColor: emptyFields.price ? 'red' : '#ccc'},
+                ]}
                 keyboardType="number-pad"
                 placeholderTextColor={'#808080'}
                 value={products.price}
-                onChangeText={text => setProducts({ ...products, price: text })}
+                onChangeText={text => {
+                  setProducts({...products, price: text});
+                  setEmptyFields(prevEmptyFields => ({
+                    ...prevEmptyFields,
+                    price: text.length === 0,
+                  }));
+                }}
               />
             </View>
             <TextInput
               placeholder="SKU"
-              style={styles.SKUInput}
+              style={[
+                styles.SKUInput,
+                {borderColor: emptyFields.sku ? 'red' : '#ccc'},
+              ]}
               placeholderTextColor={'#808080'}
               value={products.sku}
-              onChangeText={text => setProducts({ ...products, sku: text })}
+              onChangeText={text => {
+                setProducts({...products, sku: text});
+                setEmptyFields(prevEmptyFields => ({
+                  ...prevEmptyFields,
+                  sku: text.length < 3,
+                }));
+              }}
             />
             {/* show more button start*/}
             {/* <TouchableOpacity
@@ -261,7 +541,7 @@ const QuickShipmentScreen = ({ navigation }) => {
                   value={products.HSNCategory}
                   style={styles.HSNInput}
                   onChangeText={text =>
-                    setProducts({ ...products, HSNInput: text })
+                    setProducts({...products, HSNInput: text})
                   }
                 />
                 {/* Tax Rate & Discount inputs view start */}
@@ -272,7 +552,7 @@ const QuickShipmentScreen = ({ navigation }) => {
                     placeholderTextColor={'#808080'}
                     value={products.TaxRate}
                     onChangeText={text =>
-                      setProducts({ ...products, TaxRate: text })
+                      setProducts({...products, TaxRate: text})
                     }
                   />
                   <TextInput
@@ -281,7 +561,7 @@ const QuickShipmentScreen = ({ navigation }) => {
                     placeholderTextColor={'#808080'}
                     value={products.Discount}
                     onChangeText={text =>
-                      setProducts({ ...products, Discount: text })
+                      setProducts({...products, Discount: text})
                     }
                   />
                 </View>
@@ -304,7 +584,11 @@ const QuickShipmentScreen = ({ navigation }) => {
         {/* Weight */}
         <View style={styles.WeightParentView}>
           <Text style={styles.pickupAddressText}>Weight</Text>
-          <View style={styles.WeightChildView1}>
+          <View
+            style={[
+              styles.WeightChildView1,
+              {borderColor: emptyFields.weight ? 'red' : '#ccc'},
+            ]}>
             <TextInput
               placeholder="Enter the weight of package in Kgs"
               placeholderTextColor={'#808080'}
@@ -322,18 +606,23 @@ const QuickShipmentScreen = ({ navigation }) => {
                     weight: text,
                   });
                 }
+
+                setEmptyFields(prevEmptyFields => ({
+                  ...prevEmptyFields,
+                  weight: text.length === 0,
+                }));
               }}
             />
             <View style={styles.WeightChildView2}>
-              <Text style={{ color: '#ffff', fontFamily: 'Poppins-SemiBold' }}>
+              <Text style={{color: 'green', fontFamily: 'Poppins-SemiBold'}}>
                 KG
               </Text>
             </View>
           </View>
-          <Text style={{ color: '#808080', fontSize: 10 }}>
+          <Text style={{color: '#595959', fontSize: 10}}>
             Max 3 digits after decimal value
           </Text>
-          <Text style={{ color: '#000', fontSize: 12, marginBottom: 20 }}>
+          <Text style={{color: '#404040', fontSize: 12, marginBottom: 20}}>
             Note : The minimum chargeable weight is 50 gm
           </Text>
 
@@ -386,73 +675,98 @@ const QuickShipmentScreen = ({ navigation }) => {
               justifyContent: 'space-between',
               marginVertical: 10,
             }}>
-            <View style={styles.lengthInputView}>
+            <View
+              style={[
+                styles.lengthInputView,
+                {borderColor: emptyFields.length ? 'red' : '#ccc'},
+              ]}>
               <TextInput
                 placeholder="Length"
-                placeholderTextColor={'#808080'}
+                placeholderTextColor={'#666666'}
                 style={styles.lengthInput}
                 keyboardType="number-pad"
                 maxLength={7}
                 value={productWeightDetails.length}
-                onChangeText={text =>
+                onChangeText={text => {
                   setProductWeightDetails({
                     ...productWeightDetails,
                     length: text,
-                  })
-                }
+                  });
+
+                  setEmptyFields(prevEmptyFields => ({
+                    ...prevEmptyFields,
+                    length: text.length === 0,
+                  }));
+                }}
               />
               <Text style={styles.lengthCMText}>cm</Text>
             </View>
-            <View style={styles.lengthInputView}>
+            <View
+              style={[
+                styles.lengthInputView,
+                {borderColor: emptyFields.breadth ? 'red' : '#ccc'},
+              ]}>
               <TextInput
                 placeholder="Breadth"
-                placeholderTextColor={'#808080'}
+                placeholderTextColor={'#666666'}
                 style={styles.lengthInput}
                 keyboardType="number-pad"
                 maxLength={7}
                 value={productWeightDetails.breadth}
-                onChangeText={text =>
+                onChangeText={text => {
                   setProductWeightDetails({
                     ...productWeightDetails,
                     breadth: text,
-                  })
-                }
+                  });
+
+                  setEmptyFields(prevEmptyFields => ({
+                    ...prevEmptyFields,
+                    breadth: text.length === 0,
+                  }));
+                }}
               />
               <Text style={styles.lengthCMText}>cm</Text>
             </View>
-            <View style={styles.lengthInputView}>
+            <View
+              style={[
+                styles.lengthInputView,
+                {borderColor: emptyFields.height ? 'red' : '#ccc'},
+              ]}>
               <TextInput
                 placeholder="Heigth"
-                placeholderTextColor={'#808080'}
+                placeholderTextColor={'#666666'}
                 style={styles.lengthInput}
                 keyboardType="number-pad"
                 maxLength={7}
                 value={productWeightDetails.height}
-                onChangeText={text =>
+                onChangeText={text => {
                   setProductWeightDetails({
                     ...productWeightDetails,
                     height: text,
-                  })
-                }
+                  });
+
+                  setEmptyFields(prevEmptyFields => ({
+                    ...prevEmptyFields,
+                    height: text.length === 0,
+                  }));
+                }}
               />
               <Text style={styles.lengthCMText}>cm</Text>
             </View>
           </View>
-          <Text style={{ color: '#808080', fontSize: 12 }}>
+          <Text style={{color: '#808080', fontSize: 12}}>
             Note : Dimensions value should be greater than 0.50 cm
           </Text>
         </View>
 
-
         {/* order and invoice view */}
         <View style={styles.orderInvocesParent}>
-
           {/* invoice no */}
           <View style={styles.orderInvocesChild1}>
             <TextInput
               placeholder="Invoice No"
               style={styles.orderInvocesInput}
-              placeholderTextColor={'#808080'}
+              placeholderTextColor={'#666666'}
               value={productWeightDetails.invoice}
               onChangeText={text =>
                 setProductWeightDetails({
@@ -461,7 +775,9 @@ const QuickShipmentScreen = ({ navigation }) => {
                 })
               }
             />
-            <TouchableOpacity style={styles.orderInvocesGenerateBtn} onPress={() => generateInvoiceNumber()}>
+            <TouchableOpacity
+              style={styles.orderInvocesGenerateBtn}
+              onPress={() => generateInvoiceNumber()}>
               <Image
                 source={require('../assets/images/auto-generate.png')}
                 style={styles.orderInvocesGenerateBtnIMG}
@@ -474,7 +790,7 @@ const QuickShipmentScreen = ({ navigation }) => {
             <TextInput
               placeholder="Order No"
               style={styles.orderInvocesInput}
-              placeholderTextColor={'#808080'}
+              placeholderTextColor={'#666666'}
               value={productWeightDetails.order_number}
               onChangeText={text =>
                 setProductWeightDetails({
@@ -483,18 +799,28 @@ const QuickShipmentScreen = ({ navigation }) => {
                 })
               }
             />
-            <TouchableOpacity style={styles.orderInvocesGenerateBtn} onPress={() => generateOrderNumber()}>
+            <TouchableOpacity
+              style={styles.orderInvocesGenerateBtn}
+              onPress={() => generateOrderNumber()}>
               <Image
                 source={require('../assets/images/auto-generate.png')}
                 style={styles.orderInvocesGenerateBtnIMG}
               />
             </TouchableOpacity>
           </View>
-           
+
           {/* drop down for platform */}
           <Dropdown
-            style={styles.dropdown}
+            style={[
+              styles.dropdown,
+              {borderColor: emptyFields.platform ? 'red' : '#ccc'},
+            ]}
             placeholderStyle={styles.placeholderStyle}
+            selectedTextStyle={{
+              fontSize: 13,
+              fontFamily: 'Poppins-Regular',
+              color: '#404040',
+            }}
             iconStyle={styles.iconStyle}
             data={platform}
             // search
@@ -508,7 +834,7 @@ const QuickShipmentScreen = ({ navigation }) => {
               borderBottomColor: '#ccc',
               marginTop: 5,
             }}
-            itemTextStyle={{ color: '#000' }}
+            itemTextStyle={{color: '#000'}}
             maxHeight={150}
             showsVerticalScrollIndicator={false}
             labelField="value"
@@ -519,14 +845,27 @@ const QuickShipmentScreen = ({ navigation }) => {
             onChange={item => {
               setProductWeightDetails({
                 ...productWeightDetails,
-                platform: item,
+                platform: item.value,
               });
+
+              setEmptyFields(prevEmptyFields => ({
+                ...prevEmptyFields,
+                platform: item.value === 0,
+              }));
             }}
           />
           {/* drop down forcourier partner */}
           <Dropdown
-            style={[styles.dropdown]}
+            style={[
+              styles.dropdown,
+              {borderColor: emptyFields.courier_company ? 'red' : '#ccc'},
+            ]}
             placeholderStyle={styles.placeholderStyle}
+            selectedTextStyle={{
+              fontSize: 13,
+              fontFamily: 'Poppins-Regular',
+              color: '#404040',
+            }}
             iconStyle={styles.iconStyle}
             data={Courier}
             // search
@@ -540,7 +879,7 @@ const QuickShipmentScreen = ({ navigation }) => {
               borderBottomColor: '#ccc',
               marginTop: 5,
             }}
-            itemTextStyle={{ color: '#000' }}
+            itemTextStyle={{color: '#404040'}}
             maxHeight={150}
             showsVerticalScrollIndicator={false}
             labelField="value"
@@ -551,8 +890,13 @@ const QuickShipmentScreen = ({ navigation }) => {
             onChange={item => {
               setProductWeightDetails({
                 ...productWeightDetails,
-                courier_company: item,
+                courier_company: item.value,
               });
+
+              setEmptyFields(prevEmptyFields => ({
+                ...prevEmptyFields,
+                courier_company: item.value === 0,
+              }));
             }}
           />
         </View>
@@ -560,28 +904,26 @@ const QuickShipmentScreen = ({ navigation }) => {
         {/* payment cash on delivery or prepaid */}
         <View style={styles.PaymentParentView}>
           <Text style={styles.pickupAddressText}>Payment</Text>
-          <View style={{ flexDirection: 'row' }}>
+          <View style={{flexDirection: 'row'}}>
             <View style={styles.cashOnDeliveryView}>
               <TouchableOpacity
                 onPress={() => {
                   setCashOrPrepaid('COD');
                 }}
                 style={styles.cashOnDeliveryBtn}>
-                <Image
-                  source={require('../assets/images/new-moon.png')}
+                <View
                   style={{
-                    width: 20,
-                    height: 20,
-                    tintColor:
-                      cashOrPrepaid === 'COD' ? GREEN_COLOR : '#b3b3b3',
-                    resizeMode: 'cover',
+                    backgroundColor:
+                      cashOrPrepaid === 'COD' ? GREEN_COLOR : '#f2f2f2',
+                    flex: 1,
+                    borderRadius: 25,
                   }}
                 />
               </TouchableOpacity>
 
               <Text
                 style={{
-                  color: '#000',
+                  color: '#404040',
                   fontFamily: 'Poppins-SemiBold',
                   marginLeft: 5,
                 }}>
@@ -591,27 +933,25 @@ const QuickShipmentScreen = ({ navigation }) => {
             <View
               style={[
                 styles.cashOnDeliveryView,
-                { alignItems: 'center', justifyContent: 'center' },
+                {alignItems: 'center', justifyContent: 'center'},
               ]}>
               <TouchableOpacity
                 onPress={() => {
-                  setCashOrPrepaid('Prepaid');
+                  setCashOrPrepaid('PPD');
                 }}
                 style={styles.cashOnDeliveryBtn}>
-                <Image
-                  source={require('../assets/images/new-moon.png')}
+                <View
                   style={{
-                    width: 20,
-                    height: 20,
-                    resizeMode: 'cover',
-                    tintColor:
-                      cashOrPrepaid === 'Prepaid' ? GREEN_COLOR : '#b3b3b3',
+                    backgroundColor:
+                      cashOrPrepaid === 'PPD' ? GREEN_COLOR : '#f2f2f2',
+                    flex: 1,
+                    borderRadius: 25,
                   }}
                 />
               </TouchableOpacity>
               <Text
                 style={{
-                  color: '#000',
+                  color: '#404040',
                   fontFamily: 'Poppins-SemiBold',
                   marginLeft: 5,
                 }}>
@@ -621,14 +961,14 @@ const QuickShipmentScreen = ({ navigation }) => {
           </View>
           {/* divider */}
           <View
-            style={{ height: 1, backgroundColor: '#cccc', marginVertical: 10 }}
+            style={{height: 1, backgroundColor: '#cccc', marginVertical: 10}}
           />
           {/* sub total */}
           <View style={styles.subTotalView}>
-            <Text style={{ color: '#000', fontFamily: 'Poppins-Regular' }}>
+            <Text style={{color: '#404040', fontFamily: 'Poppins-Regular'}}>
               Subtotal
             </Text>
-            <Text style={{ color: '#000' }}>
+            <Text style={{color: '#404040'}}>
               ₹ {products?.quentity * products.price}
             </Text>
           </View>
@@ -651,10 +991,10 @@ const QuickShipmentScreen = ({ navigation }) => {
           </TouchableOpacity> */}
           {/* otherCharge shipping chages giftwrap transation discount */}
           {otherCharges ? (
-            <View style={{ marginVertical: 10 }}>
+            <View style={{marginVertical: 10}}>
               {/* shipping charge */}
               <View style={styles.otherChargesInputView}>
-                <Text style={{ flex: 0.5, color: '#000' }}>Shipping Charges</Text>
+                <Text style={{flex: 0.5, color: '#000'}}>Shipping Charges</Text>
                 <TextInput
                   placeholder="0"
                   placeholderTextColor={'#808080'}
@@ -663,7 +1003,7 @@ const QuickShipmentScreen = ({ navigation }) => {
               </View>
               {/* gift wrap */}
               <View style={styles.otherChargesInputView}>
-                <Text style={{ flex: 0.5, color: '#000' }}>GiftWrap Charges</Text>
+                <Text style={{flex: 0.5, color: '#000'}}>GiftWrap Charges</Text>
                 <TextInput
                   placeholder="0"
                   placeholderTextColor={'#808080'}
@@ -672,7 +1012,7 @@ const QuickShipmentScreen = ({ navigation }) => {
               </View>
               {/* transaction */}
               <View style={styles.otherChargesInputView}>
-                <Text style={{ flex: 0.5, color: '#000' }}>
+                <Text style={{flex: 0.5, color: '#000'}}>
                   Transaction Charges
                 </Text>
                 <TextInput
@@ -683,7 +1023,7 @@ const QuickShipmentScreen = ({ navigation }) => {
               </View>
               {/* Discount */}
               <View style={styles.otherChargesInputView}>
-                <Text style={{ flex: 0.5, color: '#000' }}>Discount</Text>
+                <Text style={{flex: 0.5, color: '#000'}}>Discount</Text>
                 <TextInput
                   placeholder="0"
                   placeholderTextColor={'#808080'}
@@ -707,23 +1047,23 @@ const QuickShipmentScreen = ({ navigation }) => {
                 justifyContent: 'space-between',
                 paddingHorizontal: 10,
               }}>
-              <Text style={{ color: '#000', fontFamily: 'Poppins-Regular' }}>
+              <Text style={{color: '#000', fontFamily: 'Poppins-Regular'}}>
                 Total
               </Text>
-              <Text style={{ color: '#000' }}>
+              <Text style={{color: '#000'}}>
                 ₹ {products?.quentity * products.price}
               </Text>
             </View>
-            <Text style={{ color: '#808080', fontSize: 12, marginLeft: 10 }}>
+            <Text style={{color: '#808080', fontSize: 12, marginLeft: 10}}>
               Note : In case a shipment gets lost, the amount entered above will
               be refunded to youraccount.
             </Text>
           </View>
         </View>
+
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate('CustomerDetails');
-            dispatch(saveCreateOrderData({...productWeightDetails, ...products}));
+            handleNextButton();
           }}
           style={styles.NextButton}>
           <Text style={styles.NextButtonText}>Next</Text>
@@ -732,9 +1072,13 @@ const QuickShipmentScreen = ({ navigation }) => {
       {/* bottom sheet for select pickup address */}
       <RBSheet
         ref={refRBSheet}
-        closeOnDragDown={true}
+        closeOnDragDown={false}
         closeOnPressMask={true}
+        dragFromTopOnly={true}
         height={height / 1.1}
+        animationType="slide"
+        openDuration={300}
+        closeDuration={300}
         customStyles={{
           wrapper: {
             backgroundColor: 'rgba(0, 0, 0, 0.7)',
@@ -751,20 +1095,15 @@ const QuickShipmentScreen = ({ navigation }) => {
             borderTopRightRadius: 30,
           },
         }}>
-        <View style={{ flex: 1, backgroundColor: '#ffff' }}>
+        <View style={{flex: 1, backgroundColor: '#ffff'}}>
           <TouchableOpacity
-            style={{
-              marginRight: 20,
-              marginTop: 15,
-              alignSelf: 'flex-end',
-            }}
+            style={styles.RBSheetCloseButton}
             onPress={() => refRBSheet.current.close()}>
             <Image
               source={require('../assets/images/close1.png')}
               style={{
-                width: 25,
+                width: 20,
                 height: 20,
-                resizeMode: 'contain',
                 tintColor: GREEN_COLOR,
               }}
             />
@@ -772,71 +1111,65 @@ const QuickShipmentScreen = ({ navigation }) => {
           <TextInput
             placeholder="Search Pickup Address"
             placeholderTextColor={'#808080'}
-            value={searchAddress}
-            onChangeText={setSearchAddress}
-            style={{
-              borderWidth: 1,
-              marginHorizontal: 10,
-              borderRadius: 10,
-              borderColor: '#808080',
-              marginVertical: 10,
-              padding: 0,
-              height: height / 18,
-              paddingHorizontal: 10,
-            }}
+            value={searchText}
+            onChangeText={handleSearch}
+            style={styles.searchBarInRBSheet}
           />
+          {searchText !== '' && filteredUsers.length === 0 && (
+            <View style={styles.NoResultView}>
+              <Text style={{color: '#404040', fontFamily: 'Poppins-Regular'}}>
+                No results found!
+              </Text>
+              <Image
+                source={require('../assets/images/no-results.png')}
+                style={{width: 30, height: 30}}
+              />
+            </View>
+          )}
+
           <FlatList
-            data={[1]}
-            renderItem={() => {
+            data={searchText === '' ? reverseData : filteredUsers}
+            showsVerticalScrollIndicator={false}
+            alwaysBounceVertical={false}
+            renderItem={({item, index}) => {
+              const firstLetter = item.contact_person.charAt(0);
               return (
-                <View
-                  style={{
-                    backgroundColor: '#ffff',
-                    marginHorizontal: 10,
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    borderRadius: 5,
-                    paddingHorizontal: 10,
-                    marginVertical: 5,
-                    padding: 2,
-                    elevation: 5,
-                  }}>
-                  <View
-                    style={{
-                      backgroundColor: LIGHT_GREEN,
-                      width: 40,
-                      height: 40,
-                      borderRadius: 30,
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}>
-                    <Text
-                      style={{
-                        color: '#000',
-                        fontFamily: 'Montserrat-SemiBold',
-                        fontSize: 18,
-                      }}>
-                      Q
-                    </Text>
-                  </View>
-                  <View style={{ marginLeft: 10 }}>
-                    <Text
-                      numberOfLines={1}
-                      style={{
-                        color: '#404040',
-                        fontFamily: 'Montserrat-SemiBold',
-                      }}>
-                      hello world
-                    </Text>
-                    <Text
-                      numberOfLines={1}
-                      style={{
-                        color: '#737373',
-                        fontSize: 13,
-                      }}>
-                      1234567890
-                    </Text>
-                  </View>
+                <View style={styles.RBSheetFlatListParentView}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      setSelectPickupAddress(item);
+                      refRBSheet.current.close();
+                    }}
+                    style={{flexDirection: 'row'}}>
+                    <View style={styles.RBSheetFlatListButtonView}>
+                      <Text
+                        style={{
+                          color: '#000',
+                          fontFamily: 'Montserrat-SemiBold',
+                          fontSize: 18,
+                        }}>
+                        {firstLetter}
+                      </Text>
+                    </View>
+                    <View style={{marginLeft: 10}}>
+                      <Text
+                        numberOfLines={1}
+                        style={{
+                          color: '#404040',
+                          fontFamily: 'Montserrat-SemiBold',
+                        }}>
+                        {item.contact_person}
+                      </Text>
+                      <Text
+                        numberOfLines={1}
+                        style={{
+                          color: '#737373',
+                          fontSize: 13,
+                        }}>
+                        {item.complete_address}
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
                 </View>
               );
             }}
@@ -844,7 +1177,6 @@ const QuickShipmentScreen = ({ navigation }) => {
         </View>
       </RBSheet>
     </View>
-    //{/* </KeyboardAvoidingView> */}
   );
 };
 
@@ -875,24 +1207,24 @@ const styles = StyleSheet.create({
     // marginLeft: 64,
   },
   title2View: {
-    backgroundColor: '#ffff',
+    backgroundColor: '#ffffff',
     paddingVertical: 10,
     paddingLeft: 10,
     // marginHorizontal: 10,
-    marginTop: 5,
-    elevation: 5,
+    marginVertical: 4,
+    elevation: 1,
     marginHorizontal: 10,
     borderRadius: 5,
   },
   title2text: {
-    color: '#000',
-    fontFamily: 'Poppins-SemiBold',
-    fontSize: 16,
+    color: '#404040',
+    fontFamily: 'Rubik-SemiBold',
+    // fontSize: 14,
     marginLeft: 10,
   },
   pickupAddressView: {
     backgroundColor: '#fff',
-    elevation: 5,
+    elevation: 2,
     marginHorizontal: 5,
     marginVertical: 10,
     // borderWidth: 0.6,
@@ -900,7 +1232,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   pickupAddressText: {
-    color: '#000',
+    color: '#404040',
     fontFamily: 'Poppins-SemiBold',
   },
   selectLocationView: {
@@ -909,8 +1241,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffff',
     marginTop: 10,
     borderRadius: 5,
-    borderWidth: 0.5,
-    borderColor: '#808080',
+    borderWidth: 1,
+    borderColor: '#ccc',
   },
   enterLocationInput: {
     flex: 1,
@@ -921,11 +1253,20 @@ const styles = StyleSheet.create({
     height: height / 18,
     paddingVertical: 0,
   },
-  pickupLocationView: {
+  AddPickupAddress: {
     alignItems: 'center',
     paddingVertical: 10,
     borderColor: '#808080',
     marginVertical: 10,
+  },
+  AddPickupAddressButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    padding: 5,
+    paddingHorizontal: 20,
+    borderRadius: 20,
+    elevation: 1,
   },
   quantityUnitPriceView: {
     height: height / 18,
@@ -938,8 +1279,8 @@ const styles = StyleSheet.create({
   },
   QuantityInput: {
     flex: 0.47,
-    borderWidth: 0.4,
-    borderColor: '#808080',
+    borderWidth: 1,
+    borderColor: '#ccc',
     borderRadius: 5,
     paddingHorizontal: 10,
     height: height / 18,
@@ -954,9 +1295,9 @@ const styles = StyleSheet.create({
     height: height / 18,
     paddingHorizontal: 10,
     borderRadius: 5,
-    borderWidth: 0.5,
+    borderWidth: 1,
     paddingVertical: 0,
-    borderColor: '#808080',
+    borderColor: '#ccc',
     color: '#000',
     alignItems: 'center',
   },
@@ -1027,7 +1368,7 @@ const styles = StyleSheet.create({
   },
   WeightParentView: {
     backgroundColor: '#fff',
-    elevation: 5,
+    elevation: 2,
     marginHorizontal: 5,
     marginVertical: 10,
     // borderWidth: 0.6,
@@ -1041,42 +1382,42 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 0,
     paddingHorizontal: 10,
-    // borderWidth: 1
-    borderRightWidth: 1,
-    borderColor: '#808080',
   },
   WeightChildView1: {
     flexDirection: 'row',
     marginTop: 10,
-    borderWidth: 0.5,
+    borderWidth: 1,
     borderRadius: 5,
-    borderColor: '#808080',
+    borderColor: '#ccc',
   },
   WeightChildView2: {
     alignItems: 'center',
     flex: 0.2,
-    backgroundColor: GREEN_COLOR,
+    // backgroundColor: GREEN_COLOR,
+    backgroundColor: 'aliceblue',
     justifyContent: 'center',
     borderTopRightRadius: 5,
     borderBottomRightRadius: 5,
+    borderLeftWidth: 1,
+    borderColor: '#f2f2f2',
   },
   dropdown: {
     height: height / 18,
-    borderColor: '#808080',
-    borderWidth: 0.5,
+    borderColor: '#ccc',
+    borderWidth: 1,
     borderRadius: 5,
     paddingHorizontal: 8,
     marginBottom: 5,
   },
   placeholderStyle: {
-    fontSize: 14,
+    fontSize: 13,
     fontFamily: 'Poppins-Regular',
-    color: '#808080',
+    color: '#404040',
   },
   iconStyle: {
     width: 30,
     resizeMode: 'cover',
-    tintColor: GREEN_COLOR,
+    tintColor: '#404040',
     height: 30,
     marginRight: 6,
   },
@@ -1088,32 +1429,34 @@ const styles = StyleSheet.create({
   lengthInputView: {
     borderWidth: 1,
     borderColor: '#cccc',
-    borderRadius: 6,
-    flex: 0.3,
+    borderRadius: 4,
+    flex: 0.32,
     color: '#000',
-    height: height / 18,
     flexDirection: 'row',
     justifyContent: 'space-between',
+    backgroundColor: '#fff',
   },
   lengthInput: {
-    padding: 0,
+    paddingVertical: 8,
     margin: 0,
-    height: height / 18,
     color: '#000',
+    fontSize: 13,
     paddingLeft: 4,
-    // backgroundColor: 'red',
+    flex: 1,
+    borderRightWidth: 1,
+    borderColor: '#f2f2f2',
   },
   lengthCMText: {
-    color: '#ffff',
-    backgroundColor: GREEN_COLOR,
-    lineHeight: height / 18,
-    paddingHorizontal: 5,
-    borderTopRightRadius: 5,
+    color: 'green',
+    textAlignVertical: 'center',
+    backgroundColor: 'aliceblue',
+    paddingHorizontal: 4.5,
+    borderTopRightRadius: 4,
     borderBottomRightRadius: 5,
   },
   PaymentParentView: {
     backgroundColor: '#fff',
-    elevation: 5,
+    elevation: 2,
     marginHorizontal: 5,
     marginVertical: 10,
     // borderWidth: 0.6,
@@ -1127,7 +1470,15 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     alignItems: 'center',
   },
-  cashOnDeliveryBtn: { backgroundColor: '#999999', padding: 5, borderRadius: 40 },
+  cashOnDeliveryBtn: {
+    backgroundColor: '#fff',
+    padding: 2,
+    borderWidth: 2,
+    borderColor: '#cce7ff',
+    width: 22,
+    height: 22,
+    borderRadius: 25,
+  },
   subTotalView: {
     flexDirection: 'row',
     padding: 10,
@@ -1163,20 +1514,20 @@ const styles = StyleSheet.create({
   NextButton: {
     backgroundColor: '#000',
     marginBottom: 20,
-    padding: 10,
+    padding: 8,
     marginHorizontal: 5,
-    borderRadius: 5,
+    borderRadius: 25,
     alignItems: 'center',
     justifyContent: 'center',
   },
   NextButtonText: {
-    color: '#ffff',
+    color: '#fff',
     fontSize: 15,
-    fontFamily: 'Poppins-SemiBold',
+    fontFamily: 'Rubik-Regular',
   },
   orderInvocesParent: {
     backgroundColor: '#fff',
-    elevation: 5,
+    elevation: 2,
     marginHorizontal: 5,
     marginVertical: 10,
     // borderWidth: 0.6,
@@ -1185,17 +1536,16 @@ const styles = StyleSheet.create({
   },
   orderInvocesChild1: {
     flexDirection: 'row',
-    borderWidth: 0.5,
-    borderColor: '#808080',
+    borderWidth: 1,
+    borderColor: '#ccc',
     borderRadius: 5,
     marginVertical: 5,
   },
   orderInvocesInput: {
-    flex: 0.47,
     height: height / 18,
     paddingVertical: 0,
     color: '#000',
-    flex: 0.8,
+    flex: 0.9,
     borderTopLeftRadius: 5,
     borderBottomLeftRadius: 5,
     paddingLeft: 10,
@@ -1211,6 +1561,50 @@ const styles = StyleSheet.create({
     width: 25,
     height: 25,
     resizeMode: 'contain',
-    tintColor: GREEN_COLOR,
+    tintColor: '#404040',
+  },
+  // RBSheet Styles
+  RBSheetCloseButton: {
+    marginRight: 20,
+    marginTop: 10,
+    alignSelf: 'flex-end',
+    borderRadius: 30,
+    padding: 9,
+  },
+  searchBarInRBSheet: {
+    marginHorizontal: 10,
+    marginVertical: 10,
+    borderRadius: 10,
+    padding: 6,
+    paddingHorizontal: 10,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    backgroundColor: '#fff',
+    elevation: 1,
+  },
+  NoResultView: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  RBSheetFlatListParentView: {
+    backgroundColor: '#ffff',
+    marginHorizontal: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderRadius: 5,
+    paddingHorizontal: 10,
+    marginVertical: 7,
+    padding: 7,
+    elevation: 2,
+  },
+  RBSheetFlatListButtonView: {
+    backgroundColor: LIGHT_GREEN,
+    width: 40,
+    height: 40,
+    borderRadius: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

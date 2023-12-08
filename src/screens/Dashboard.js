@@ -22,8 +22,6 @@ import DashboardWeightDiscrepancies from '../components/DashboardWeightDiscrepan
 import {SceneMap, TabBar, TabView} from 'react-native-tab-view';
 
 const Dashboard = ({navigation}) => {
-  const height = Dimensions.get('window').height;
-  const width = Dimensions.get('window').width;
   const [currentIndex, setCurrentIndex] = useState(0);
   // console.log(currentIndex);
   const layout = useWindowDimensions();
@@ -60,6 +58,11 @@ const Dashboard = ({navigation}) => {
       style={styles.tabBar}
       labelStyle={styles.label}
       tabStyle={styles.tab}
+      renderLabel={({route, focused, color}) => (
+        <Text style={styles.label} numberOfLines={1}>
+          {route.title}
+        </Text>
+      )}
       activeColor={GREEN_COLOR}
     />
   );
@@ -80,6 +83,7 @@ const Dashboard = ({navigation}) => {
         onIndexChange={setIndex}
         initialLayout={{width: layout.width}}
         renderTabBar={renderTabBar}
+        
       />
     </View>
   );

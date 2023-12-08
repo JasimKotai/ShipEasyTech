@@ -1,6 +1,5 @@
 import {View, Text, StyleSheet, Image} from 'react-native';
 import React from 'react';
-import {GREEN_COLOR, LIGHT_GREEN} from '../assets/Colors';
 
 const DashboardOverview = () => {
   return (
@@ -174,7 +173,6 @@ const styles = StyleSheet.create({
   todayOrderView: {
     flex: 0.45,
     backgroundColor: '#fff',
-    // backgroundColor: '#f2f2f2',
     padding: 10,
     elevation: 2,
     borderRadius: 5,

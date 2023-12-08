@@ -179,6 +179,7 @@ const SignInScreen = ({navigation}) => {
               }}
               cursorColor={emailValid === false ? 'red' : '#000'}
               keyboardType="email-address"
+              placeholderTextColor={'#666666'}
             />
           </View>
           {/* password  view */}
@@ -230,6 +231,7 @@ const SignInScreen = ({navigation}) => {
               }}
               cursorColor={'black'}
               secureTextEntry={secureEntry}
+              placeholderTextColor={'#666666'}
             />
             {/* forget password */}
             <TouchableOpacity
@@ -273,7 +275,7 @@ const SignInScreen = ({navigation}) => {
                 paddingTop: 20,
                 paddingBottom: 10,
               }}>
-              <Text style={{color: '#808080', fontFamily: 'Poppins-Regular'}}>
+              <Text style={{color: '#666', fontFamily: 'Poppins-Regular'}}>
                 Don't have an account?{' '}
               </Text>
               <TouchableOpacity
@@ -472,6 +474,7 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
     textAlignVertical: 'bottom',
     marginTop: 20,
+    color: '#404040',
   },
   EmailPlaceholder: {
     fontSize: 12,

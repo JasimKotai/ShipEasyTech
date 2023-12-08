@@ -202,7 +202,25 @@ const MoreScreen = ({navigation}) => {
           <ReUsableButtons
             image={require('../assets/images/logout.png')}
             title="Logout"
-            onPress={handleLogout}
+            onPress={() => {
+              Alert.alert(
+                'Logout',
+                'Are you sure you want to logout?',
+                [
+                  {
+                    text: 'Cancel',
+                  },
+                  {
+                    text: 'Logout',
+                    onPress: () => {
+                      handleLogout();
+                      console.log('Logged out');
+                    },
+                  },
+                ],
+                {cancelable: false},
+              );
+            }}
           />
         </View>
       </ScrollView>

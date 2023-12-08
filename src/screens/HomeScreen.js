@@ -101,6 +101,7 @@ const HomeScreen = ({navigation}) => {
         closeOnDragDown={true}
         closeOnPressMask={true}
         height={height / 1.5}
+        animationType="slide"
         customStyles={{
           wrapper: {
             // backgroundColor: 'transparent',
@@ -140,6 +141,7 @@ const HomeScreen = ({navigation}) => {
         ref={refRBSheet2}
         closeOnDragDown={true}
         closeOnPressMask={true}
+        animationType="slide"
         height={height / 1.5}
         customStyles={{
           wrapper: {
@@ -189,12 +191,12 @@ const HomeScreen = ({navigation}) => {
               <Image
                 source={require('../assets/images/wallet1.png')}
                 style={styles.walletBtnIcon}
-                tintColor={'#57bc53'}
+                tintColor={'green'}
               />
               <Text
                 numberOfLines={1}
                 style={{
-                  color: '#57bc53',
+                  color: 'green',
                   fontSize: 13,
                   fontFamily: 'Montserrat-Bold',
                 }}>
@@ -290,7 +292,10 @@ const HomeScreen = ({navigation}) => {
       </View>
         */}
       {/* quick view */}
-      <ScrollView style={{flex: 1}}>
+      <ScrollView
+        style={{flex: 1}}
+        showsVerticalScrollIndicator={false}
+        alwaysBounceVertical={false}>
         <View style={styles.quickView}>
           <Text style={styles.quickAction}>Quick Action</Text>
           <View style={styles.QuickActionBtnsView}>
@@ -338,6 +343,7 @@ const HomeScreen = ({navigation}) => {
         {/* shipment metrics */}
         <View style={styles.shipmentMetrics}>
           <Text style={styles.quickAction}>Shipment Metrics</Text>
+
           <View
             style={{
               backgroundColor: '#FFFFFF',
@@ -347,11 +353,11 @@ const HomeScreen = ({navigation}) => {
             <Text style={{color: '#000', marginLeft: 10}}>
               Total Shipment: 0
             </Text>
+
             {/* bar chart is here  */}
             <View
               style={{
                 flex: 1,
-                // backgroundColor: 'red',
                 borderRadius: 10,
                 alignItems: 'center',
                 marginTop: 10,
@@ -359,18 +365,7 @@ const HomeScreen = ({navigation}) => {
               <BarChartScreen />
             </View>
 
-            <View
-              style={{
-                position: 'absolute',
-                right: 10,
-                top: 10,
-                // height: height / 4.5,
-                width: width / 3,
-                backgroundColor: '#FFFFFF',
-                elevation: 10,
-                alignItems: 'center',
-                borderRadius: 5,
-              }}>
+            <View style={styles.shipmentMetricsDropDown}>
               <TouchableOpacity
                 style={[styles.shipmentMetricsBtn, {}]}
                 onPress={() => {
@@ -514,7 +509,6 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     marginHorizontal: 10,
     borderRadius: 5,
-    // borderBottomWidth: 0.5,
     borderWidth: 0.2,
     borderColor: '#808080',
     marginVertical: 3,
@@ -525,33 +519,31 @@ const styles = StyleSheet.create({
     fontSize: 12,
   },
   quickAction: {
-    color: '#000',
+    color: '#404040',
     fontSize: 16,
     fontFamily: 'Poppins-Bold',
   },
   QuickActionBtnsView: {
-    // backgroundColor: 'skyblue',
     flexDirection: 'row',
     justifyContent: 'space-around',
   },
   quickView: {
-    // flex: 1,
-    backgroundColor: '#FFFF',
+    backgroundColor: '#fff',
     paddingHorizontal: 10,
     paddingVertical: 10,
   },
   actionRequiredview: {
-    // flex: 1,
     backgroundColor: '#FFFF',
     paddingHorizontal: 10,
     paddingTop: 5,
     paddingBottom: 5,
+    marginVertical: 10,
   },
   actionRequiredviewchild: {
     padding: 10,
     backgroundColor: '#FFFF',
     borderRadius: 10,
-    elevation: 5,
+    elevation: 1,
   },
   shipmentMetrics: {
     backgroundColor: '#e6ffef',
@@ -560,6 +552,7 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
     borderRadius: 20,
     marginBottom: 20,
+    marginVertical: 10,
   },
   shipmentMetricsBtn: {
     width: '100%',
@@ -569,10 +562,23 @@ const styles = StyleSheet.create({
   },
   shipmentMetricsBtnText: {
     fontSize: 12,
-    color: '#000',
-    fontFamily: 'Poppins-Regular',
+    color: '#404040',
+    fontFamily: 'Poppins-SemiBold',
     width: '80%',
     paddingLeft: 8,
     lineHeight: 35,
+  },
+  shipmentMetricsDropDown: {
+    position: 'absolute',
+    right: 10,
+    top: 10,
+    width: width / 2.9,
+    backgroundColor: '#FFFFFF',
+    elevation: 1,
+    borderWidth: 1,
+    borderColor: '#f2f2f2',
+    alignItems: 'center',
+    borderRadius: 5,
+    zIndex: 1,
   },
 });

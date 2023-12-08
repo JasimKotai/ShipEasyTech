@@ -3,21 +3,18 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  Image,
   Dimensions,
   ScrollView,
 } from 'react-native';
 import React, {useRef, useState} from 'react';
-import {GREEN_COLOR, LIGHT_GREEN} from '../assets/Colors';
+import {EXTRA_LIGHT_GREEN, GREEN_COLOR, LIGHT_GREEN} from '../assets/Colors';
 import {useNavigation} from '@react-navigation/native';
 
 const AddOrderSheet = ({REF}) => {
   const navigation = useNavigation();
-  const refRBSheet = useRef();
-  const width = Dimensions.get('window').width;
-  const height = Dimensions.get('window').height;
   const [selectedButton, setselectedButton] = useState('Quick');
   const [path, setPath] = useState('QuickShipmentScreen');
+  const refRBSheet = useRef();
   // console.log(path);
   // console.log(selectedButton);
   // const handleRBSheet = () => {
@@ -33,21 +30,18 @@ const AddOrderSheet = ({REF}) => {
           onPress={() => {
             setselectedButton('Quick');
             setPath('QuickShipmentScreen');
-          }}>
+          }}
+          style={styles.Buttons}>
           <View style={styles.buttonView}>
-            <View
-              style={
-                selectedButton == 'Quick'
-                  ? styles.buttonChildViewFocused
-                  : styles.buttonChildView
-              }>
-              <Image
-                source={require('../assets/images/new-moon.png')}
-                style={
-                  selectedButton == 'Quick'
-                    ? styles.buttonImageFocused
-                    : styles.buttonImage
-                }
+            <View style={styles.buttonChildView}>
+              <View
+                style={{
+                  width: 15,
+                  height: 15,
+                  backgroundColor:
+                    selectedButton === 'Quick' ? GREEN_COLOR : '#f2f2f2',
+                  borderRadius: 20,
+                }}
               />
             </View>
             <View style={{backgroundColor: 'transparent', flex: 1}}>
@@ -63,21 +57,18 @@ const AddOrderSheet = ({REF}) => {
           onPress={() => {
             setselectedButton('Return');
             setPath('ReturnOrderScreen');
-          }}>
+          }}
+          style={styles.Buttons}>
           <View style={styles.buttonView}>
-            <View
-              style={
-                selectedButton == 'Return'
-                  ? styles.buttonChildViewFocused
-                  : styles.buttonChildView
-              }>
-              <Image
-                source={require('../assets/images/new-moon.png')}
-                style={
-                  selectedButton == 'Return'
-                    ? styles.buttonImageFocused
-                    : styles.buttonImage
-                }
+            <View style={styles.buttonChildView}>
+              <View
+                style={{
+                  width: 15,
+                  height: 15,
+                  backgroundColor:
+                    selectedButton === 'Return' ? GREEN_COLOR : '#f2f2f2',
+                  borderRadius: 20,
+                }}
               />
             </View>
             <View style={{backgroundColor: 'transparent', flex: 1}}>
@@ -93,21 +84,20 @@ const AddOrderSheet = ({REF}) => {
           disabled
           onPress={() => {
             setselectedButton('International');
-          }}>
+          }}
+          style={styles.Buttons}>
           <View style={styles.buttonView}>
-            <View
-              style={
-                selectedButton == 'International'
-                  ? styles.buttonChildViewFocused
-                  : styles.buttonChildView
-              }>
-              <Image
-                source={require('../assets/images/new-moon.png')}
-                style={
-                  selectedButton == 'International'
-                    ? styles.buttonImageFocused
-                    : styles.buttonImage
-                }
+            <View style={styles.buttonChildView}>
+              <View
+                style={{
+                  width: 15,
+                  height: 15,
+                  backgroundColor:
+                    selectedButton === 'International'
+                      ? GREEN_COLOR
+                      : '#f2f2f2',
+                  borderRadius: 20,
+                }}
               />
             </View>
             <View style={{backgroundColor: 'transparent', flex: 1}}>
@@ -124,21 +114,18 @@ const AddOrderSheet = ({REF}) => {
           disabled
           onPress={() => {
             setselectedButton('Hyperlocal');
-          }}>
+          }}
+          style={styles.Buttons}>
           <View style={styles.buttonView}>
-            <View
-              style={
-                selectedButton == 'Hyperlocal'
-                  ? styles.buttonChildViewFocused
-                  : styles.buttonChildView
-              }>
-              <Image
-                source={require('../assets/images/new-moon.png')}
-                style={
-                  selectedButton == 'Hyperlocal'
-                    ? styles.buttonImageFocused
-                    : styles.buttonImage
-                }
+            <View style={styles.buttonChildView}>
+              <View
+                style={{
+                  width: 15,
+                  height: 15,
+                  backgroundColor:
+                    selectedButton === 'Hyperlocal' ? GREEN_COLOR : '#f2f2f2',
+                  borderRadius: 20,
+                }}
               />
             </View>
             <View style={{backgroundColor: 'transparent', flex: 1}}>
@@ -148,15 +135,15 @@ const AddOrderSheet = ({REF}) => {
               </Text>
             </View>
           </View>
-          <TouchableOpacity
-            onPress={() => {
-              // handleRBSheet();
-              REF.current.close();
-              navigation.navigate(path);
-            }}
-            style={styles.proceedBtn}>
-            <Text style={styles.proceedBtnText}>Proceed</Text>
-          </TouchableOpacity>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            // handleRBSheet();
+            REF.current.close();
+            navigation.navigate(path);
+          }}
+          style={styles.proceedBtn}>
+          <Text style={styles.proceedBtnText}>Proceed</Text>
         </TouchableOpacity>
       </ScrollView>
     </View>
@@ -164,72 +151,62 @@ const AddOrderSheet = ({REF}) => {
 };
 
 export default AddOrderSheet;
-const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 const styles = StyleSheet.create({
   parent: {
     flex: 1,
-    paddingHorizontal: 15,
+    paddingHorizontal: 20,
   },
   title: {
     color: '#000',
     fontSize: 15,
     fontFamily: 'Poppins-Regular',
   },
-  buttonView: {
-    flexDirection: 'row',
+  Buttons: {
+    backgroundColor: '#fff',
+    marginTop: 10,
+    borderRadius: 5,
     height: height / 10,
-    backgroundColor: '#f0f0f0',
+    borderWidth: 1,
+    borderColor: '#fff',
+    elevation: 1,
+  },
+  buttonView: {
+    flex: 1,
+    flexDirection: 'row',
+    backgroundColor: '#f2f2f2',
     alignItems: 'center',
     borderRadius: 5,
-    marginTop: 10,
   },
   buttonChildView: {
-    borderWidth: 5,
-    borderColor: '#f0f0f0',
+    width: 25,
+    height: 25,
+    borderWidth: 3,
+    borderColor: EXTRA_LIGHT_GREEN,
     borderRadius: 20,
     marginHorizontal: 10,
     alignItems: 'center',
-  },
-  buttonChildViewFocused: {
-    borderWidth: 5,
-    borderColor: '#e6ffef',
-    borderRadius: 20,
-    marginHorizontal: 10,
-  },
-  buttonImage: {
-    width: 15,
-    height: 15,
-    // tintColor: '#808080',
-    resizeMode: 'contain',
-  },
-  buttonImageFocused: {
-    width: 15,
-    height: 15,
-    // tintColor: '#808080',
-    tintColor: GREEN_COLOR,
-    resizeMode: 'contain',
+    justifyContent: 'center',
   },
   buttonText1: {
     fontFamily: 'Poppins-SemiBold',
-    color: '#000',
+    color: '#404040',
   },
   buttonText2: {
     fontFamily: 'Poppins-Regular',
     fontSize: 12,
-    color: '#000',
+    color: '#595959',
   },
   proceedBtn: {
-    backgroundColor: LIGHT_GREEN,
-    paddingVertical: 10,
+    backgroundColor: '#000',
+    paddingVertical: 8,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 30,
-    marginBottom: 10,
+    marginTop: 15,
+    borderRadius: 40,
   },
   proceedBtnText: {
     fontFamily: 'Poppins-Regular',
-    fontSize: 16,
-    color: '#000',
+    color: '#fff',
   },
 });

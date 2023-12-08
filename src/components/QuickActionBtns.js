@@ -1,11 +1,4 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Image,
-  Pressable,
-} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native';
 import React from 'react';
 import {GREEN_COLOR} from '../assets/Colors';
 
@@ -40,10 +33,10 @@ export default QuickActionBtns;
 const styles = StyleSheet.create({
   btn: {
     backgroundColor: '#FFF',
-    borderWidth: 0.5,
+    borderWidth: 1,
     borderColor: '#f2f2f2',
     borderRadius: 5,
-    elevation: 2,
+    elevation: 1,
   },
   btnView: {
     width: 82,
@@ -56,7 +49,8 @@ const styles = StyleSheet.create({
     width: 30,
     height: 28,
     resizeMode: 'contain',
-    tintColor: GREEN_COLOR,
+    // tintColor: GREEN_COLOR,
+    tintColor: 'green',
   },
   txt: {
     fontSize: 12,

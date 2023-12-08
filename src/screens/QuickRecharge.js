@@ -21,12 +21,6 @@ const QuickRecharge = ({navigation, refRBSheet2}) => {
     refRBSheet2.current.close();
   };
   return (
-    // <Modal
-    //   transparent={true}
-    //   animationType="slide"
-    //   visible={visible}
-    //   // onRequestClose={onClose}
-    // >
     <>
       <StatusBar
         barStyle={'light-content'}
@@ -53,21 +47,20 @@ const QuickRecharge = ({navigation, refRBSheet2}) => {
           </Text>
           <View
             style={{
-              // backgroundColor: '#e6e6e6',
               backgroundColor: LIGHT_GREEN,
               borderRadius: 5,
               flexDirection: 'row',
               alignItems: 'center',
               // paddingVertical: 5,
-              elevation: 5,
+              elevation: 2,
             }}>
             <Text
               style={{
                 color: '#000',
-                fontWeight: '900',
                 fontSize: 20,
                 flex: 0.15,
                 textAlign: 'center',
+                fontFamily: 'Rubik-Regular',
               }}>
               ₹
             </Text>
@@ -79,7 +72,7 @@ const QuickRecharge = ({navigation, refRBSheet2}) => {
                 flex: 0.7,
                 paddingHorizontal: 10,
                 paddingVertical: 6,
-                color: '#000',
+                color: '#404040',
               }}
               placeholderTextColor={TEXT_BLACK2}
               keyboardType="number-pad"
@@ -95,7 +88,7 @@ const QuickRecharge = ({navigation, refRBSheet2}) => {
               }}>
               <Image
                 source={require('../assets/images/close1.png')}
-                style={{width: 15, height: 15}}
+                style={{width: 14, height: 14}}
               />
             </TouchableOpacity>
           </View>
@@ -175,7 +168,10 @@ const QuickRecharge = ({navigation, refRBSheet2}) => {
         <View style={{flex: 1}} />
         <TouchableOpacity style={styles.addMoneyMainBtn}>
           <Text
-            style={{color: '#ffff', fontFamily: 'Onest-Bold', fontSize: 15}}>
+            style={{
+              color: '#ffff',
+              fontFamily: 'Poppins-Regular',
+            }}>
             Add Money
           </Text>
         </TouchableOpacity>
@@ -186,7 +182,6 @@ const QuickRecharge = ({navigation, refRBSheet2}) => {
 
 export default QuickRecharge;
 const width = Dimensions.get('window').width;
-const height = Dimensions.get('window').height;
 const styles = StyleSheet.create({
   parent: {
     backgroundColor: 'aliceblue',
@@ -208,38 +203,43 @@ const styles = StyleSheet.create({
   addMoneyBtns: {
     flexDirection: 'row',
     borderWidth: 1,
-    borderColor: '#96ddea',
+    borderColor: '#fff',
     width: width / 4.7,
-    backgroundColor: LIGHT_GREEN,
+    backgroundColor: '#f2f2f2',
     justifyContent: 'space-evenly',
+    alignItems: 'center',
     paddingVertical: 8,
     borderRadius: 5,
+    elevation: 1,
   },
   addMoneyBtnsText: {
-    color: TEXT_BLACK,
-    fontSize: 15,
+    color: '#404040',
+    fontWeight: '600',
   },
-  addMoneyBtnsImg: {width: 18, height: 18},
+  addMoneyBtnsImg: {width: 19, height: 18, resizeMode: 'contain'},
   couponCodeView: {
-    // backgroundColor: '#e6ffef',
-    backgroundColor: '#fff',
+    backgroundColor: '#f2f2f2',
     borderRadius: 5,
-    padding: 10,
+    paddingHorizontal: 20,
+    paddingVertical: 5,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginTop: 20,
+    marginTop: 10,
+    elevation: 1,
+    borderWidth: 1,
+    borderColor: '#fff',
   },
   ViewCouponBtnTxt: {
-    color: GREEN_COLOR,
+    color: 'green',
     fontFamily: 'Onest-Bold',
   },
   addMoneyMainBtn: {
     backgroundColor: '#000',
-    paddingVertical: 12,
+    paddingVertical: 8,
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 10,
-    borderRadius: 5,
+    borderRadius: 40,
   },
 });

@@ -14,13 +14,13 @@ import {
 import React, {useState} from 'react';
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import {RNCamera} from 'react-native-camera';
+import {EXTRA_LIGHT_GREEN, LIGHT_GREEN} from '../assets/Colors';
 
 const BarCodeScreen = ({navigation}) => {
   const width = Dimensions.get('window').width;
-  const height = Dimensions.get('window').height;
   const [flashLight, setFlashLight] = useState(false);
   const [searchInput, setSearchInput] = useState('');
-  // console.log(searchInput);
+
   const onSuccess = e => {
     // console.log(e);
     setSearchInput(e.data);
@@ -30,56 +30,25 @@ const BarCodeScreen = ({navigation}) => {
       <View style={styles.container}>
         <StatusBar
           hidden={false}
-          translucent={true}
+          translucent={false}
           backgroundColor={'#e6ffef'}
         />
         {/* camera scanner view */}
         <View
           style={{
-            flex: 3,
-            backgroundColor: 'rgba(0, 0, 0, 0.9)',
-            // backgroundColor: 'red',
+            flex: 0.7,
+            backgroundColor: '#fff',
           }}>
-          <QRCodeScanner
-            onRead={onSuccess}
-            flashMode={
-              flashLight
-                ? RNCamera.Constants.FlashMode.torch
-                : RNCamera.Constants.FlashMode.auto
-            }
-            showMarker={true}
-            markerStyle={{
-              backgroundColor: 'rgba(0, 0, 0, 0.1)',
-              borderColor: '#ffff',
-            }}
-            cameraProps={{
-              whiteBalance: 'shadow',
-              videoStabilizationMode: 'cinematic',
-            }}
-            fadeIn={false}
-            // reactivate={true}
-            // cameraTimeout={15000}
-          />
-          {/* flash button */}
-          <TouchableOpacity
-            onPress={() => {
-              setFlashLight(!flashLight);
-            }}
-            style={styles.flashBtn}>
-            <Image
-              source={
-                flashLight
-                  ? require('../assets/images/flash-on.png')
-                  : require('../assets/images/flash-off.png')
-              }
-              style={styles.flashBtnImg}
-            />
-          </TouchableOpacity>
           {/* back button */}
           <View style={styles.BackBtnView}>
             <TouchableOpacity
               onPress={() => {
                 navigation.goBack();
+              }}
+              style={{
+                alignSelf: 'flex-start',
+                padding: 3,
+                marginHorizontal: 10,
               }}>
               <Image
                 source={require('../assets/images/back.png')}
@@ -88,17 +57,61 @@ const BarCodeScreen = ({navigation}) => {
             </TouchableOpacity>
             <Text style={styles.Title}>Barcode Scanner</Text>
           </View>
+          <QRCodeScanner
+            onRead={onSuccess}
+            flashMode={
+              flashLight
+                ? RNCamera.Constants.FlashMode.torch
+                : RNCamera.Constants.FlashMode.auto
+            }
+            showMarker={true}
+            // bottomViewStyle={{padding: 0, margin: 0, backgroundColor: 'red'}}
+            bottomContent={
+              <TouchableOpacity
+                onPress={() => {
+                  setFlashLight(!flashLight);
+                }}
+                style={{
+                  marginBottom: 10,
+                  padding: 6,
+                  alignSelf: 'flex-start',
+                  marginLeft: 20,
+                }}>
+                <Image
+                  source={
+                    flashLight
+                      ? require('../assets/images/flash-on.png')
+                      : require('../assets/images/flash-off.png')
+                  }
+                  style={styles.flashBtnImg}
+                />
+              </TouchableOpacity>
+            }
+            markerStyle={{
+              // backgroundColor: 'rgba(255, 255, 255, 0.9)',
+              borderColor: '#ffff',
+            }}
+            cameraProps={{
+              whiteBalance: 'incandescent',
+              videoStabilizationMode: 'auto',
+            }}
+            fadeIn={true}
+            // reactivate={true}
+            // cameraTimeout={15000}
+            vibrate={true}
+          />
         </View>
         {/* bottom view eg textinput, buttons */}
-        <View style={{flex: 1}}>
-          <ScrollView
-            style={{
-              width: width,
-              backgroundColor: 'aliceblue',
-            }}>
+        <View style={{flex: 0.3}}>
+          <ScrollView style={{flex: 1}} showsVerticalScrollIndicator={false}>
             {/* Scroll Parent View */}
             <View style={styles.ScrollParentView}>
-              <Text style={{fontFamily: 'Poppins-Regular', color: '#000'}}>
+              <Text
+                style={{
+                  fontFamily: 'Poppins-Regular',
+                  color: '#404040',
+                  marginLeft: 5,
+                }}>
                 Generate Manifest for AWB
               </Text>
               {/* textinput parent view */}
@@ -108,22 +121,34 @@ const BarCodeScreen = ({navigation}) => {
                   placeholder="AWD Number"
                   onChangeText={text => setSearchInput(text)}
                   style={styles.textInputStyle}
+                  placeholderTextColor={'#666'}
                 />
                 {searchInput.length !== 0 ? (
                   <View
                     style={{
                       flexDirection: 'row',
-                      width: width / 6,
-                      justifyContent: 'space-evenly',
-                      alignItems: 'center',
+                      flex: 0.4,
                     }}>
-                    <TouchableOpacity>
+                    <TouchableOpacity
+                      style={{
+                        flex: 1,
+                        borderRightWidth: 0.8,
+                        borderLeftWidth: 0.8,
+                        borderColor: '#f2f2f2',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}>
                       <Image
                         source={require('../assets/images/reload.png')}
-                        style={{width: 20, height: 24, resizeMode: 'contain'}}
+                        style={{width: 20, height: 20, resizeMode: 'contain'}}
                       />
                     </TouchableOpacity>
                     <TouchableOpacity
+                      style={{
+                        flex: 1,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
                       onPress={() => {
                         setSearchInput('');
                       }}>
@@ -135,17 +160,13 @@ const BarCodeScreen = ({navigation}) => {
                   </View>
                 ) : null}
               </View>
-              {/* <Text style={{color: 'red', fontSize: 10, marginLeft: 10}}>
-            Order not found
-          </Text> */}
             </View>
             {/* button */}
             <TouchableOpacity style={styles.proceedBtn}>
               <Text
                 style={{
-                  color: '#000',
-                  fontSize: 16,
-                  fontFamily: 'Poppins-SemiBold',
+                  color: '#fff',
+                  fontFamily: 'Poppins-Regular',
                 }}>
                 Proceed
               </Text>
@@ -160,76 +181,66 @@ const BarCodeScreen = ({navigation}) => {
 export default BarCodeScreen;
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
-// console.log(height / 27);
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // height: height,
-    backgroundColor: '#fFFF',
-    paddingTop: height / 28,
+    backgroundColor: '#fff',
   },
   BackBtnView: {
     position: 'absolute',
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.9)',
-    // backgroundColor: 'red',
-    paddingVertical: 10,
+    backgroundColor: EXTRA_LIGHT_GREEN,
+    paddingVertical: 5,
     width: width,
-    paddingLeft: 13,
+    zIndex: 1,
   },
   BackBtnImage: {
     width: 25,
     height: 25,
     resizeMode: 'contain',
-    tintColor: '#fff',
+    // tintColor: '#000',
   },
   Title: {
-    color: '#fff',
-    fontFamily: 'Poppins-Regular',
+    color: '#404040',
+    fontFamily: 'Montserrat-SemiBold',
     fontSize: 16,
-    marginLeft: 10,
   },
-  flashBtn: {
-    zIndex: 1,
-    position: 'absolute',
-    bottom: 65,
-    left: 30,
-  },
-  flashBtnImg: {width: 20, height: 30, tintColor: '#ffff'},
+  flashBtnImg: {width: 25, height: 25, tintColor: 'aliceblue'},
   ScrollParentView: {
     margin: 10,
     backgroundColor: '#ffff',
-    // height: height / 7,
-    padding: 10,
+    paddingVertical: 10,
     borderRadius: 5,
-    elevation: 5,
-    // borderWidth: 1,
+    elevation: 2,
+    borderWidth: 1,
+    borderColor: 'aliceblue',
   },
   textinputParentView: {
     borderWidth: 1,
-    borderColor: '#808080',
+    borderColor: '#f2f2f2',
     borderRadius: 5,
     flexDirection: 'row',
-    alignItems: 'center',
     marginTop: 10,
-    height: height / 17,
+    marginHorizontal: 5,
+    backgroundColor: '#fff',
+    elevation: 0.5,
   },
   textInputStyle: {
+    padding: 6,
     paddingHorizontal: 10,
-    fontSize: 11,
-    color: '#595959',
-    fontFamily: 'Poppins-SemiBold',
+    fontSize: 13,
+    color: '#404040',
+    fontFamily: 'Rubik-SemiBold',
     flex: 1,
-    // backgroundColor: 'red',
   },
   proceedBtn: {
     marginHorizontal: 10,
-    backgroundColor: '#99ffbe',
+    backgroundColor: '#000',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 10,
-    borderRadius: 5,
+    paddingVertical: 8,
+    borderRadius: 40,
   },
 });

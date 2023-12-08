@@ -9,8 +9,6 @@ import {
 import React from 'react';
 
 const ActionsRequiredBtns = ({title, btn}) => {
-  const width = Dimensions.get('window').width;
-  const height = Dimensions.get('window').height;
   return (
     <View style={styles.parent}>
       <View style={styles.text1View}>
@@ -23,7 +21,7 @@ const ActionsRequiredBtns = ({title, btn}) => {
         <Text style={styles.btnText}>{btn}</Text>
         <Image
           source={require('../assets/images/greater.png')}
-          style={{width: 15, height: 15, tintColor: '#808080'}}
+          style={{width: 15, height: 15, tintColor: '#404040'}}
         />
       </TouchableOpacity>
     </View>
@@ -54,18 +52,16 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
   textView2: {
-    // backgroundColor: 'orange',
     justifyContent: 'center',
     paddingLeft: 10,
     flex: 1,
   },
   text2: {
     fontFamily: 'Poppins-Regular',
-    color: '#808080',
+    color: '#494949',
     fontSize: 13,
   },
   btn: {
-    // backgroundColor: 'brown',
     width: width / 4,
     flexDirection: 'row',
     alignItems: 'center',
@@ -73,7 +69,7 @@ const styles = StyleSheet.create({
   },
   btnText: {
     fontFamily: 'Poppins-SemiBold',
-    color: '#808080',
+    color: '#404040',
     fontSize: 13,
   },
 });
