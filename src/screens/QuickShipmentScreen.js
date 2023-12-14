@@ -307,7 +307,7 @@ const QuickShipmentScreen = ({navigation}) => {
 
   const [savedAddress, setSavedAddress] = useState([]);
   const reverseData = savedAddress.reverse();
-  console.log('------ async data: ', savedAddress);
+  // console.log('------ async data: ', savedAddress);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -1581,6 +1581,7 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     backgroundColor: '#fff',
     elevation: 1,
+    color: '#404040',
   },
   NoResultView: {
     flex: 1,

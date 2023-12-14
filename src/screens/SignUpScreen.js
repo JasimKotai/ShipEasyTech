@@ -795,6 +795,7 @@ const SignUpScreen = ({navigation}) => {
                 ref={refRBSheet}
                 closeOnDragDown={true}
                 closeOnPressMask={true}
+                animationType="slide"
                 customStyles={{
                   wrapper: {
                     // backgroundColor: 'transparent',

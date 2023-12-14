@@ -409,6 +409,7 @@ const HelpAndSupport = ({navigation}) => {
         closeOnDragDown={true}
         closeOnPressMask={true}
         height={Height / 1.04}
+        animationType="slide"
         customStyles={{
           wrapper: {
             backgroundColor: 'rgba(0, 0, 0, 0.3)',
