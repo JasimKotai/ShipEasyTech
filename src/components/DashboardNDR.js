@@ -23,7 +23,11 @@ const DashboardNDR = () => {
   const apiData = [];
   return (
     <View style={styles.container}>
-      <ScrollView style={{flex: 1}} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        style={{flex: 1}}
+        showsVerticalScrollIndicator={false}
+        alwaysBounceVertical={false}
+        nestedScrollEnabled>
         <View style={styles.CODParent}>
           {/* child 1 start */}
           <View style={styles.child1}>
@@ -244,7 +248,7 @@ const DashboardNDR = () => {
         {/* NDR Funnel start ---------------------------------------- */}
         <View style={styles.CODParent}>
           {/* child 1 */}
-          <View style={[styles.child1, {backgroundColor: '#e6fcff'}]}>
+          <View style={[styles.child1, {backgroundColor: '#f2f2f2'}]}>
             <View style={{flex: 0.7}}>
               <Text style={styles.codtitle}>NDR Funnel</Text>
             </View>

@@ -28,6 +28,8 @@ import Wallet from '../components/Wallet';
 import Passbook from '../components/Passbook';
 import ProfileScreen from '../screens/ProfileScreen';
 import EditProfile from '../screens/EditProfile';
+import TransactionHistory from '../components/TransactionHistory';
+import CalculatorScreen from '../components/CalculatorScreen';
 
 const MainNavigation = () => {
   const Stack = createNativeStackNavigator();
@@ -70,6 +72,11 @@ const MainNavigation = () => {
         <Stack.Screen name="Passbook" component={Passbook} />
         <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
         <Stack.Screen name="EditProfile" component={EditProfile} />
+        <Stack.Screen
+          name="TransactionHistory"
+          component={TransactionHistory}
+        />
+        <Stack.Screen name="Calculator" component={CalculatorScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

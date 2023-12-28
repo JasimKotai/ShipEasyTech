@@ -163,6 +163,8 @@ const ManifestScreen = ({navigation}) => {
         closeOnDragDown={true}
         closeOnPressMask={true}
         height={Height / 1.1}
+        animationType="slide"
+        openDuration={100}
         customStyles={{
           wrapper: {
             backgroundColor: 'rgba(0, 0, 0, 0.7)',

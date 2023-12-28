@@ -20,6 +20,7 @@ import DashboardPickUpDelivery from '../components/DashboardPickUpDelivery';
 import DashboardNDR from '../components/DashboardNDR';
 import DashboardWeightDiscrepancies from '../components/DashboardWeightDiscrepancies';
 import {SceneMap, TabBar, TabView} from 'react-native-tab-view';
+import Temp from '../components/Temp';
 
 const Dashboard = ({navigation}) => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -58,55 +59,51 @@ const Dashboard = ({navigation}) => {
       style={styles.tabBar}
       labelStyle={styles.label}
       tabStyle={styles.tab}
-      renderLabel={({route, focused, color}) => (
-        <Text style={styles.label} numberOfLines={1}>
-          {route.title}
-        </Text>
-      )}
       activeColor={GREEN_COLOR}
     />
   );
 
   return (
-    <View style={Styles.container}>
-      <StatusBar barStyle={'dark-content'} backgroundColor={LIGHT_GREEN} />
-      <Header
-        title="Dashboard"
-        onPress={() => {
-          navigation.goBack();
-        }}
-      />
-      {/* tab view = React Native Tab View */}
-      <TabView
-        navigationState={{index, routes}}
-        renderScene={renderScene}
-        onIndexChange={setIndex}
-        initialLayout={{width: layout.width}}
-        renderTabBar={renderTabBar}
-        
-      />
-    </View>
+    <Temp />
+    // <View style={Styles.container}>
+    //   <StatusBar barStyle={'dark-content'} backgroundColor={LIGHT_GREEN} />
+    //   <Header
+    //     title="Dashboard"
+    //     onPress={() => {
+    //       navigation.goBack();
+    //     }}
+    //   />
+    //   {/* tab view = React Native Tab View */}
+    //   <TabView
+    //     navigationState={{index, routes}}
+    //     renderScene={renderScene}
+    //     onIndexChange={setIndex}
+    //     initialLayout={{width: layout.width}}
+    //     lazy={true}
+    //     renderTabBar={renderTabBar}
+    //   />
+    // </View>
   );
 };
 
 export default Dashboard;
-const Height = Dimensions.get('window').height;
-const Width = Dimensions.get('window').width;
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
   tabBar: {
     backgroundColor: '#fff',
-    elevation: 2,
+    elevation: 0,
   },
   indicator: {
     backgroundColor: GREEN_COLOR,
   },
   label: {
-    color: '#404040', // Set your desired tab label color
-    fontSize: 10,
-    fontFamily: 'Montserrat-Bold',
+    color: '#404040',
+    fontSize: 12,
+    // fontFamily: 'Poppins-Regular',
+    fontWeight: '500',
   },
   tab: {
     padding: 0,

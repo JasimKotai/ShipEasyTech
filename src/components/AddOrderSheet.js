@@ -158,8 +158,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   title: {
-    color: '#000',
-    fontSize: 15,
+    color: '#404040',
     fontFamily: 'Poppins-Regular',
   },
   Buttons: {
@@ -194,7 +193,7 @@ const styles = StyleSheet.create({
   },
   buttonText2: {
     fontFamily: 'Poppins-Regular',
-    fontSize: 12,
+    fontSize: 11,
     color: '#595959',
   },
   proceedBtn: {

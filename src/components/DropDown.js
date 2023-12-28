@@ -1,6 +1,8 @@
-import {View, Text, TouchableOpacity, Image} from 'react-native';
+import {View, Text, TouchableOpacity, Image, Dimensions} from 'react-native';
 import React from 'react';
-import { GREEN_COLOR } from '../assets/Colors';
+import {GREEN_COLOR} from '../assets/Colors';
+
+const Width = Dimensions.get('window').width;
 
 const DropDown = () => {
   return (
@@ -19,14 +21,14 @@ const DropDown = () => {
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <Image
             source={require('../assets/images/mail.png')}
-            style={{width: 20, height: 20}}
+            style={{width: Width / 18, height: Width / 18}}
           />
           <Text
             style={{
-              color: '#000',
-              fontFamily: 'Poppins-Regular',
+              color: '#404040',
+              fontFamily: 'Rubik-Regular',
               marginLeft: 6,
-              fontSize: 12,
+              fontSize: 13,
             }}>
             Email ID :
           </Text>

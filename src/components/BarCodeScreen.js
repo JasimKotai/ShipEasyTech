@@ -17,7 +17,6 @@ import {RNCamera} from 'react-native-camera';
 import {EXTRA_LIGHT_GREEN, LIGHT_GREEN} from '../assets/Colors';
 
 const BarCodeScreen = ({navigation}) => {
-  const width = Dimensions.get('window').width;
   const [flashLight, setFlashLight] = useState(false);
   const [searchInput, setSearchInput] = useState('');
 
@@ -213,7 +212,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffff',
     paddingVertical: 10,
     borderRadius: 5,
-    elevation: 2,
+    elevation: 1,
     borderWidth: 1,
     borderColor: 'aliceblue',
   },

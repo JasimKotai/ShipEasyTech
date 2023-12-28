@@ -12,14 +12,14 @@ import {
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {Styles} from '../css/ProfileScreenCSS';
-import {GREEN_COLOR, LIGHT_GREEN} from '../assets/Colors';
+import {EXTRA_LIGHT_GREEN, GREEN_COLOR, LIGHT_GREEN} from '../assets/Colors';
 import Header from '../components/Header';
 import ImageCropPicker from 'react-native-image-crop-picker';
 import {useSelector} from 'react-redux';
 
+const Height = Dimensions.get('window').height;
+const Width = Dimensions.get('window').width;
 const ProfileScreen = ({navigation}) => {
-  const height = Dimensions.get('window').height;
-  const width = Dimensions.get('window').width;
   const [profile, setProfile] = useState(null);
   const [userName, setUserName] = useState(null);
   const [companyId, setCompanyId] = useState(null);
@@ -114,7 +114,7 @@ const ProfileScreen = ({navigation}) => {
       {/* profile/company logo picture */}
       <View style={Styles.profileParent}>
         <Text style={Styles.title}>Company Logo</Text>
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+        <View style={{flexDirection: 'row'}}>
           <TouchableOpacity
             onPress={handleGalleryPermission}
             style={{
@@ -125,13 +125,13 @@ const ProfileScreen = ({navigation}) => {
             }}>
             <View
               style={{
-                width: 73,
-                height: 73,
-                backgroundColor: '#f2f2f2',
+                width: Width / 5.5,
+                height: Width / 5.5,
+                backgroundColor: '#fff',
                 alignItems: 'center',
                 justifyContent: 'center',
                 borderRadius: 50,
-                borderWidth: 1.5,
+                borderWidth: 1,
                 borderColor: GREEN_COLOR,
               }}>
               <Image
@@ -141,8 +141,8 @@ const ProfileScreen = ({navigation}) => {
                     : require('../assets/images/profile-user.png')
                 }
                 style={{
-                  width: 70,
-                  height: 70,
+                  width: Width / 6,
+                  height: Width / 6,
                   resizeMode: 'contain',
                   borderRadius: 50,
                 }}
@@ -150,10 +150,15 @@ const ProfileScreen = ({navigation}) => {
             </View>
           </TouchableOpacity>
 
-          <View style={{paddingHorizontal: 10, flex: 0.7}}>
+          <View
+            style={{
+              flex: 0.7,
+              // backgroundColor: 'red',
+              justifyContent: 'center',
+            }}>
             <Text
               numberOfLines={2}
-              style={{color: '#404040', fontFamily: 'Roboto-Regular'}}>
+              style={{color: '#404040', fontFamily: 'Poppins-SemiBold'}}>
               {companyName !== null ? companyName : 'Company Name'}
             </Text>
           </View>
@@ -162,40 +167,78 @@ const ProfileScreen = ({navigation}) => {
       {/* company details start */}
       <View style={Styles.profileParent}>
         <Text style={Styles.title}>Company Details</Text>
-        <View
+        {/* <View
           style={{
             flexDirection: 'row',
-          }}>
-          <View
-            style={{
-              flex: 0.33,
-            }}>
+          }}> */}
+
+        {/* user name */}
+        <View style={Styles.userDetailsView}>
+          <View style={Styles.leftView}>
             <Text style={Styles.companyName}>User Name</Text>
-            <Text style={Styles.companyName}>Company ID</Text>
-            <Text style={Styles.companyName}>Company Name</Text>
-            <Text style={Styles.companyName}>Email</Text>
+            <Text style={[Styles.companyName, {color: '#000', fontSize: 18}]}>
+              :
+            </Text>
           </View>
-          <View style={{flex: 0.67, paddingHorizontal: 10}}>
+          <View style={Styles.rightView}>
             <Text numberOfLines={2} style={Styles.companyName2}>
               {userName !== null ? userName : 'not available'}
             </Text>
+          </View>
+        </View>
+
+        {/* companu ID */}
+        <View style={Styles.userDetailsView}>
+          <View style={Styles.leftView}>
+            <Text style={Styles.companyName}>Company ID</Text>
+            <Text style={[Styles.companyName, {color: '#000', fontSize: 18}]}>
+              :
+            </Text>
+          </View>
+          <View style={Styles.rightView}>
             <Text numberOfLines={2} style={Styles.companyName2}>
               {companyId !== null ? companyId : 'not available'}
             </Text>
+          </View>
+        </View>
+
+        {/* company name */}
+        <View style={Styles.userDetailsView}>
+          <View style={Styles.leftView}>
+            <Text style={Styles.companyName}>Company Name</Text>
+            <Text style={[Styles.companyName, {color: '#000', fontSize: 18}]}>
+              :
+            </Text>
+          </View>
+          <View style={Styles.rightView}>
             <Text numberOfLines={2} style={Styles.companyName2}>
               {companyName !== null ? companyName : 'not available'}
             </Text>
+          </View>
+        </View>
+
+        {/* email */}
+        <View style={Styles.userDetailsView}>
+          <View style={Styles.leftView}>
+            <Text style={Styles.companyName}>Email</Text>
+            <Text style={[Styles.companyName, {color: '#000', fontSize: 18}]}>
+              :
+            </Text>
+          </View>
+          <View style={Styles.rightView}>
             <Text numberOfLines={2} style={Styles.companyName2}>
               {email !== null ? email : 'not available'}
             </Text>
           </View>
         </View>
       </View>
+      {/* </View> */}
+
       {/* company details end */}
       <TouchableOpacity
         onPress={() => navigation.navigate('EditProfile')}
         style={Styles.button}>
-        <Text style={{color: GREEN_COLOR, fontFamily: 'Poppins-SemiBold'}}>
+        <Text style={{color: '#fff', fontFamily: 'Poppins-Regular'}}>
           Edit Company Info
         </Text>
       </TouchableOpacity>

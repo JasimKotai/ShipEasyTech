@@ -43,7 +43,11 @@ const DashboardWeightDiscrepancies = () => {
 
   return (
     <View style={styles.container}>
-      <ScrollView style={{flex: 1}} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        style={{flex: 1}}
+        showsVerticalScrollIndicator={false}
+        alwaysBounceVertical={false}
+        nestedScrollEnabled>
         <View style={styles.parent1}>
           <View style={styles.child1}>
             <View style={{flex: 0.7}}>

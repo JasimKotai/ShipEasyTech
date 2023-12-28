@@ -20,9 +20,10 @@ import {Styles} from '../css/ProfileScreenCSS';
 import ImageCropPicker from 'react-native-image-crop-picker';
 import {useSelector} from 'react-redux';
 
+const height = Dimensions.get('window').height;
+const width = Dimensions.get('window').width;
+
 const EditProfile = ({navigation}) => {
-  const height = Dimensions.get('window').height;
-  const width = Dimensions.get('window').width;
   const [profile, setProfile] = useState(null);
   const [companyName, setCompanyName] = useState(null);
   const [email, setEmail] = useState(null);
@@ -121,6 +122,7 @@ const EditProfile = ({navigation}) => {
               backgroundColor: '#f2f2f2',
               borderRadius: 5,
               padding: 10,
+              elevation: 0.4,
             }}>
             <TouchableOpacity
               onPress={handleGalleryPermission}
@@ -216,41 +218,41 @@ export default EditProfile;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#fff',
   },
   compamyParentView: {
     backgroundColor: '#FFF',
     padding: 10,
     marginTop: 20,
-    marginHorizontal: 10,
+    marginHorizontal: 5,
     borderRadius: 5,
+    elevation: 1,
   },
   companyTitle: {
     color: '#404040',
-    fontFamily: 'Roboto-Bold',
+    fontFamily: 'Poppins-SemiBold',
   },
   companyInput: {
-    borderWidth: 1,
-    borderColor: '#e6e6e6',
-    padding: 5,
-    margin: 0,
-    borderRadius: 5,
-    backgroundColor: '#FFF',
-    elevation: 4,
-    // marginVertical: 10,
-    color: '#000',
+    padding: 4,
+    borderRadius: 25,
+    backgroundColor: '#f2f2f2',
+    elevation: 0.4,
+    color: '#404040',
     paddingHorizontal: 10,
+    borderWidth: 1,
+    borderColor: 'aliceblue',
+    fontFamily: 'Montserrat-SemiBold',
+    fontSize: 12,
   },
   label: {
-    color: '#8c8c8c',
+    color: '#595959',
     fontSize: 12,
-    marginLeft: 10,
-    margin: 5,
-    fontFamily: 'Roboto-Bold',
+    fontFamily: 'Poppins-Regular',
   },
   saveButton: {
     backgroundColor: '#000',
     marginHorizontal: 10,
-    borderRadius: 5,
+    borderRadius: 25,
     alignItems: 'center',
     justifyContent: 'center',
     padding: 5,
@@ -259,8 +261,8 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   saveButtonText: {
-    color: GREEN_COLOR,
-    fontFamily: 'Poppins-Bold',
+    color: '#fff',
+    fontFamily: 'Poppins-Regular',
     fontSize: 15,
   },
 });

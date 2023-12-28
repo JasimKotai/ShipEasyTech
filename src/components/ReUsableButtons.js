@@ -5,10 +5,13 @@ import {
   TouchableOpacity,
   Image,
   TouchableHighlight,
+  Dimensions,
 } from 'react-native';
 import React from 'react';
 import {GREEN_COLOR} from '../assets/Colors';
 import {useNavigation} from '@react-navigation/native';
+
+const Width = Dimensions.get('window').width;
 
 const ReUsableButtons = ({image, title, path, onPress}) => {
   const navigation = useNavigation();
@@ -34,8 +37,8 @@ const ReUsableButtons = ({image, title, path, onPress}) => {
         <Image
           source={image}
           style={{
-            width: 25,
-            height: 25,
+            width: Width / 16,
+            height: Width / 16,
             resizeMode: 'contain',
             tintColor: GREEN_COLOR,
           }}
@@ -51,18 +54,19 @@ export default ReUsableButtons;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#FFFF',
   },
   button: {
     flexDirection: 'row',
     backgroundColor: '#FFFF',
     padding: 10,
     alignItems: 'center',
+    marginVertical: 1,
+    borderRadius: 5,
   },
   text: {
-    color: '#000',
+    color: '#404040',
     fontFamily: 'Poppins-Regular',
-    fontSize: 15,
-    marginLeft: 15,
+    marginLeft: Width / 18,
   },
 });

@@ -8,17 +8,18 @@ import {
   Image,
   Pressable,
 } from 'react-native';
-import React, {useCallback, useState} from 'react';
-import {LIGHT_GREEN} from '../assets/Colors';
+import React, {useState} from 'react';
+import {EXTRA_LIGHT_GREEN} from '../assets/Colors';
 
+const Width = Dimensions.get('window').width;
 const DashboardCOD = () => {
-  const Width = Dimensions.get('window').width;
-  const Height = Dimensions.get('window').height;
   const [dropdown, setDropDown] = useState(false);
   const [dropdownType, setDropDownType] = useState('Today');
   return (
     <View style={styles.container}>
-      <ScrollView style={{flex: 1}} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        alwaysBounceVertical={false}>
         <View style={styles.CODParent}>
           {/* child 1 start */}
           <View style={styles.child1}>
@@ -164,15 +165,13 @@ const DashboardCOD = () => {
 };
 
 export default DashboardCOD;
-const Width = Dimensions.get('window').width;
-const Height = Dimensions.get('window').height;
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
   CODParent: {
     backgroundColor: '#fff',
-    // backgroundColor: LIGHT_GREEN,
     marginHorizontal: 10,
     marginVertical: 15,
     elevation: 1,
@@ -184,7 +183,7 @@ const styles = StyleSheet.create({
   },
 
   child1: {
-    backgroundColor: '#f2f2f2',
+    backgroundColor: EXTRA_LIGHT_GREEN,
     flexDirection: 'row',
     paddingVertical: 15,
     paddingHorizontal: 5,
@@ -241,8 +240,8 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     padding: 5,
     paddingVertical: 10,
-    backgroundColor: '#f2f2f2',
-    borderRadius: 10,
+    backgroundColor: '#fff',
+    borderRadius: 5,
     elevation: 1,
     marginBottom: 5,
   },

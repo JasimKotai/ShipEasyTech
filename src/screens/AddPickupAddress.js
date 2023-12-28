@@ -56,7 +56,7 @@ const AddPickupAddress = ({navigation}) => {
     country: 'India',
     is_default: 'Home',
   });
-  // console.log(currentLocation);
+  // console.log(pickupAddress);
   const handleLocationPermission = async () => {
     try {
       if (Platform.OS === 'android') {

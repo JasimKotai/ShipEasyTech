@@ -8,22 +8,23 @@ import {
 } from 'react-native';
 import React from 'react';
 
-const ActionsRequiredBtns = ({title, btn}) => {
+const ActionsRequiredBtns = ({title, btn, updates}) => {
+  // console.log('ActionsRequiredBtns : ', updates);
   return (
     <View style={styles.parent}>
       <View style={styles.text1View}>
-        <Text style={styles.text1}>0</Text>
+        <Text style={styles.text1}>{updates}</Text>
       </View>
       <View style={styles.textView2}>
         <Text style={styles.text2}>{title}</Text>
       </View>
-      <TouchableOpacity style={styles.btn}>
+      {/* <TouchableOpacity style={styles.btn}>
         <Text style={styles.btnText}>{btn}</Text>
         <Image
           source={require('../assets/images/greater.png')}
           style={{width: 15, height: 15, tintColor: '#404040'}}
         />
-      </TouchableOpacity>
+      </TouchableOpacity> */}
     </View>
   );
 };
@@ -57,9 +58,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   text2: {
-    fontFamily: 'Poppins-Regular',
+    fontFamily: 'Poppins-Medium',
     color: '#494949',
-    fontSize: 13,
+    // fontSize: 13,
   },
   btn: {
     width: width / 4,

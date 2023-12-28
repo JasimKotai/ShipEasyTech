@@ -27,6 +27,8 @@ import {useFocusEffect} from '@react-navigation/native';
 
 const QuickShipmentScreen = ({navigation}) => {
   const refRBSheet = useRef();
+  const scrollViewRef = useRef();
+
   const [renderOnes, setrenderOnes] = useState(null);
 
   const height = Dimensions.get('window').height;
@@ -118,8 +120,6 @@ const QuickShipmentScreen = ({navigation}) => {
   // console.log(emptyFields.length);
   // console.log(emptyFields.breadth);
   // console.log(emptyFields.height, '__++__');
-
-  const scrollViewRef = useRef();
 
   const handleNextButton = () => {
     navigation.navigate('CustomerDetails');

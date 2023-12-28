@@ -6,20 +6,37 @@ import {
   ScrollView,
   TextInput,
   Image,
+  Dimensions,
 } from 'react-native';
-import React, {useState} from 'react';
-import {GREEN_COLOR} from '../assets/Colors';
-import {useNavigation} from '@react-navigation/native';
+import React, {useCallback, useEffect, useState} from 'react';
+import {EXTRA_LIGHT_GREEN, GREEN_COLOR} from '../assets/Colors';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import RazorpayCheckout from 'react-native-razorpay';
 import {useDispatch, useSelector} from 'react-redux';
 
-const Wallet = () => {
+const Width = Dimensions.get('window').width;
+
+const Wallet = ({route, appliedCoupon}) => {
   const navigation = useNavigation();
+
   const [amount, setAmount] = useState('500');
   const {user, customer} = useSelector(state => state.userSlice);
+
+  const [coupon, setCoupon] = useState();
+  // console.log('COUPON : ', coupon);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      if (appliedCoupon) {
+        setCoupon(appliedCoupon);
+      }
+    }, [appliedCoupon]),
+  );
+
   // console.log('Wallet screen ', user);
   // console.log(user.name);
   // const newAmount = Number(amount) + 5000;
+
   const handleRazorPay = async () => {
     const options = {
       description: 'Credits towards consultation',
@@ -46,6 +63,19 @@ const Wallet = () => {
       console.log('razor pay error ; ', error);
       alert(`Error: ${error.code} | ${error.description}`);
     }
+  };
+
+  // const [dataFromBanana, setDataFromBanana] = useState('');
+
+  // useEffect(() => {
+  //   // Handle data received from BananaScreen
+  //   if (dataFromBanana) {
+  //     console.log('Data received from BananaScreen:', dataFromBanana);
+  //   }
+  // }, [dataFromBanana]);
+
+  const navigateToCouponsScreen = () => {
+    navigation.navigate('CouponsScreen');
   };
   return (
     <View style={styles.container}>
@@ -85,11 +115,20 @@ const Wallet = () => {
             }}
           />
           <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('TransactionHistory');
+            }}
             style={{
               width: '60%',
               alignSelf: 'center',
             }}>
-            <Text style={{color: GREEN_COLOR, textAlign: 'center'}}>
+            <Text
+              style={{
+                color: GREEN_COLOR,
+                textAlign: 'center',
+                // fontFamily: 'Roboto-Bold',
+                fontFamily: 'Poppins-SemiBold',
+              }}>
               View Transaction History
             </Text>
           </TouchableOpacity>
@@ -177,37 +216,98 @@ const Wallet = () => {
             </TouchableOpacity>
           </View>
           {/* coupons view */}
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-evenly',
-              alignItems: 'center',
-              marginTop: 20,
-              paddingVertical: 7,
-              backgroundColor: '#f2f2f2',
-              borderRadius: 5,
-            }}>
-            <Image
-              source={require('../assets/images/coupon2.png')}
-              style={{width: 25, height: 25}}
-            />
-            <Text style={{color: '#666666', fontFamily: 'Roboto-Bold'}}>
-              Select Coupon Code
-            </Text>
-            <TouchableOpacity
-              onPress={() => navigation.navigate('CouponsScreen')}>
-              <Text style={{color: GREEN_COLOR, fontFamily: 'Roboto-Bold'}}>
-                View Coupons
-              </Text>
-            </TouchableOpacity>
-          </View>
+          <>
+            {coupon ? (
+              <View
+                style={[
+                  styles.couponView,
+                  // {backgroundColor: EXTRA_LIGHT_GREEN},
+                ]}>
+                <View
+                  style={{
+                    flex: 0.2,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    // backgroundColor: 'blueviolet',
+                  }}>
+                  <Image
+                    source={require('../assets/images/coupon2.png')}
+                    style={{width: Width / 10, height: Width / 10}}
+                  />
+                </View>
+                <View
+                  style={{
+                    flex: 0.6,
+                    // backgroundColor: 'red',
+                  }}>
+                  <Text
+                    style={{
+                      color: '#404040',
+                      fontFamily: 'Poppins-Regular',
+                      textAlign: 'center',
+                    }}>
+                    Coupon{' '}
+                    <Text style={{color: GREEN_COLOR}}>
+                      {coupon.type} {coupon.value}
+                    </Text>{' '}
+                    applied!
+                  </Text>
+                  <Text
+                    style={{
+                      color: '#404040',
+                      fontFamily: 'Poppins-Regular',
+                      textAlign: 'center',
+                    }}>
+                    {coupon.description}
+                  </Text>
+                </View>
+                <TouchableOpacity
+                  onPress={() => {
+                    setCoupon();
+                  }}
+                  style={{
+                    flex: 0.2,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    borderRadius: 20,
+                    // backgroundColor: '#fff',
+                    // elevation: 1,
+                    paddingVertical: 4,
+                  }}>
+                  <Text
+                    style={{color: GREEN_COLOR, fontFamily: 'Poppins-Regular'}}>
+                    Remove
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            ) : (
+              <View style={styles.couponView}>
+                <Image
+                  source={require('../assets/images/coupon2.png')}
+                  style={{width: 25, height: 25}}
+                />
+                <Text style={{color: '#666666', fontFamily: 'Roboto-Bold'}}>
+                  Select Coupon Code
+                </Text>
+                <TouchableOpacity
+                  onPress={() => {
+                    navigateToCouponsScreen();
+                  }}>
+                  <Text style={{color: GREEN_COLOR, fontFamily: 'Roboto-Bold'}}>
+                    View Coupons
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            )}
+          </>
+
           {/* Add Money button */}
           <TouchableOpacity
             onPress={() => {
               handleRazorPay();
             }}
             style={styles.addMoneyBtn}>
-            <Text style={{color: GREEN_COLOR, fontFamily: 'Montserrat-Bold'}}>
+            <Text style={{color: '#fff', fontFamily: 'Poppins-Regular'}}>
               Add Money
             </Text>
           </TouchableOpacity>
@@ -227,7 +327,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     marginHorizontal: 10,
     borderRadius: 5,
-    padding: 10,
     paddingVertical: 20,
     marginTop: 15,
   },
@@ -237,8 +336,7 @@ const styles = StyleSheet.create({
   },
   WalletBallance: {
     fontFamily: 'Roboto-Bold',
-    fontSize: 15,
-    color: '#666666',
+    color: '#404040',
   },
   AddAmountText: {
     color: '#000',
@@ -250,7 +348,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#f2f2f2',
     alignItems: 'center',
     borderRadius: 5,
-    elevation: 2,
+    elevation: 1,
   },
   RupeesText: {
     flex: 0.15,
@@ -274,7 +372,7 @@ const styles = StyleSheet.create({
   },
   add100Btn: {
     flexDirection: 'row',
-    elevation: 2,
+    elevation: 1,
     backgroundColor: '#f2f2f2',
     flex: 0.23,
     alignItems: 'center',
@@ -294,12 +392,30 @@ const styles = StyleSheet.create({
   },
   addMoneyBtn: {
     backgroundColor: '#000000',
-    borderRadius: 5,
-    paddingVertical: 8,
+    borderRadius: 25,
+    paddingVertical: 7,
     alignItems: 'center',
     justifyContent: 'center',
-    width: 200,
+    width: Width / 1.5,
     alignSelf: 'center',
     marginTop: 20,
+    borderWidth: 1,
+    borderColor: 'aliceblue',
   },
+  couponView: {
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
+    marginTop: 20,
+    paddingVertical: 7,
+    backgroundColor: '#f2f2f2',
+    borderRadius: 5,
+    elevation: 1,
+  },
+  // selectedCouponView: {
+  //   marginTop: 20,
+  //   paddingVertical: 7,
+  //   backgroundColor: '#f2f2f2',
+  //   borderRadius: 5,
+  // },
 });

@@ -5,7 +5,9 @@ import HomeScreen from '../screens/HomeScreen';
 import Orders from '../screens/Orders';
 import ShipmentsScreen from '../screens/ShipmentsScreen';
 import MoreScreen from '../screens/MoreScreen';
-import {EXTRA_LIGHT_GREEN} from '../assets/Colors';
+import {EXTRA_LIGHT_GREEN, GREEN_COLOR} from '../assets/Colors';
+
+/* eslint-disable */
 
 const Tab = createBottomTabNavigator();
 
@@ -18,19 +20,27 @@ const BottomNavigation = () => {
           headerShown: false,
           tabBarShowLabel: false,
           tabBarHideOnKeyboard: true,
+          // headerShadowVisible: false,
           tabBarStyle: {
-            backgroundColor: EXTRA_LIGHT_GREEN,
+            backgroundColor: '#fff',
+            height: 60,
+            // elevation: 0,
+            borderTopWidth: 0,
           },
         }}>
         <Tab.Screen
           name="Home"
           component={HomeScreen}
           options={{
+            headerShadowVisible: false,
+            elevation: 0,
+            borderWidth: 0,
+            backgroundColor: 'transparent',
             tabBarIcon: ({focused}) => (
               <View style={styles.tabBarIconView}>
                 <Image
-                  source={require('../assets/images/homecopy.png')}
-                  style={focused ? styles.focusedIconImage : styles.IconImage}
+                  source={require('../assets/images/home.png')}
+                  style={focused ? styles.focusedIconImage : [styles.IconImage]}
                 />
                 <Text
                   style={focused ? styles.focusedIconText : styles.IconText}>
@@ -48,7 +58,7 @@ const BottomNavigation = () => {
               <View style={styles.tabBarIconView}>
                 <Image
                   source={require('../assets/images/box2.png')}
-                  style={focused ? styles.focusedIconImage : styles.IconImage}
+                  style={focused ? styles.focusedIconImage : [styles.IconImage]}
                 />
                 <Text
                   style={focused ? styles.focusedIconText : styles.IconText}>
@@ -107,22 +117,23 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   IconImage: {
-    width: 15,
-    height: 15,
+    width: 20,
+    height: 20,
+    tintColor: '#404040',
   },
   focusedIconImage: {
-    width: 16,
-    height: 16,
+    width: 21,
+    height: 21,
     tintColor: 'green',
   },
   IconText: {
     color: '#000',
-    fontFamily: 'Montserrat-SemiBold',
-    fontSize: 9,
+    fontFamily: 'Poppins-Regular',
+    fontSize: 12,
   },
   focusedIconText: {
     color: 'green',
     fontFamily: 'Poppins-SemiBold',
-    fontSize: 9,
+    fontSize: 12,
   },
 });

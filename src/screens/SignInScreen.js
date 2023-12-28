@@ -21,15 +21,18 @@ import {CommonActions} from '@react-navigation/native';
 import {useDispatch} from 'react-redux';
 import {saveUserData} from '../config/UserSlice';
 
+const width = Dimensions.get('window').width;
+const height = Dimensions.get('window').height;
 const SignInScreen = ({navigation}) => {
   const refRBSheet = useRef();
-  const width = Dimensions.get('window').width;
-  const height = Dimensions.get('window').height;
+
   const [isFocused, setIsFocused] = useState('');
   // const [userDetails, setUserDetails] = useState({ email: 'satyasankar09@gmail.com', password: 'Rajarani22@' });
   const [userDetails, setUserDetails] = useState({
-    email: 'chandan76kotai@gmail.com',
-    password: '12345678',
+    // email: 'chandan76kotai@gmail.com',
+    // password: '12345678',
+    email: 'satyajitbarik83@gmail.com',
+    password: 'satya@11',
   });
   const [checkEmailValidation, setEmailValidation] = useState(false);
   const [secureEntry, setSecureEntry] = useState(true);
@@ -42,7 +45,8 @@ const SignInScreen = ({navigation}) => {
   const handleLogin = async () => {
     try {
       setIsLoading(true); // Start loading
-      const response = await axios.post(`${BASE_URL_LIVE}/login`, userDetails);
+      // const response = await axios.post(`${BASE_URL_LIVE}/login`, userDetails);
+      const response = await axios.post(`${BASE_URL_LOCAL}/login`, userDetails);
       console.log('response=====> ', response.data);
       if (response.data.code == '200') {
         const json = JSON.stringify(response.data.userData);
@@ -405,8 +409,7 @@ const SignInScreen = ({navigation}) => {
 };
 
 export default SignInScreen;
-const width = Dimensions.get('window').width;
-const height = Dimensions.get('window').height;
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,

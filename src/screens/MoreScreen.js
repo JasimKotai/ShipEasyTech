@@ -19,10 +19,11 @@ import DropDown2 from '../components/DropDown2';
 import {useDispatch, useSelector} from 'react-redux';
 import {userLogout} from '../config/UserSlice';
 
+const Width = Dimensions.get('window').width;
+const Height = Dimensions.get('window').height;
 const MoreScreen = ({navigation}) => {
   const imagePath = '../assets/images/up-arrow.png';
-  const Width = Dimensions.get('window').width;
-  const Height = Dimensions.get('window').height;
+
   // const [loginDetails, setLoginDetails] = useState('');
   const [userProfileImage, setUserProfileImage] = useState(null);
   const [dropDown, setDropDown] = useState(false);
@@ -100,15 +101,14 @@ const MoreScreen = ({navigation}) => {
             <View style={{flexDirection: 'row', flex: 1, alignItems: 'center'}}>
               <Text
                 style={{
-                  color: '#000',
-                  fontSize: 15,
+                  color: '#404040',
                   fontFamily: 'Poppins-Regular',
                 }}>
                 KAM Name :
               </Text>
               <Text
                 style={{
-                  color: '#808080',
+                  color: '#595959',
                   fontFamily: 'Poppins-Regular',
                   marginLeft: 6,
                   fontSize: 13,
@@ -120,6 +120,10 @@ const MoreScreen = ({navigation}) => {
             <TouchableOpacity
               onPress={() => {
                 setDropDown(!dropDown);
+              }}
+              style={{
+                paddingHorizontal: 15,
+                paddingVertical: 4,
               }}>
               <Image
                 source={
@@ -127,7 +131,7 @@ const MoreScreen = ({navigation}) => {
                     ? require('../assets/images/up-arrow.png')
                     : require('../assets/images/down-arrow.png')
                 }
-                style={{width: 18, height: 18, marginRight: 5}}
+                style={{width: Width / 20, height: Width / 20}}
               />
             </TouchableOpacity>
           </View>
@@ -229,10 +233,6 @@ const MoreScreen = ({navigation}) => {
 };
 
 export default MoreScreen;
-const Width = Dimensions.get('window').width;
-const Height = Dimensions.get('window').height;
-const a = Height / 25;
-// console.log(';;;;', a);
 
 const styles = StyleSheet.create({
   container: {
@@ -253,7 +253,7 @@ const styles = StyleSheet.create({
   },
   company_name_Style: {
     fontSize: 16,
-    color: '#000',
+    color: '#404040',
     fontFamily: 'Poppins-Bold',
     marginLeft: 5,
   },
@@ -264,20 +264,28 @@ const styles = StyleSheet.create({
     marginLeft: 3,
   },
   ViewProfileBtn: {
-    // backgroundColor: 'red',
-    // marginTop: Height / 25,
+    backgroundColor: '#fff',
+    paddingHorizontal: 13,
+    paddingVertical: 2,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 5,
+    elevation: 0.1,
   },
   ViewProfileBtntext: {
     color: GREEN_COLOR,
     fontFamily: 'Poppins-Regular',
+    fontSize: 13
   },
   dropDownParent: {
     flex: 1,
     marginHorizontal: 20,
-    backgroundColor: '#f0f8ff',
+    backgroundColor: '#fff',
     paddingVertical: 10,
     paddingHorizontal: 10,
     borderRadius: 5,
+    elevation: 1,
+    margin: 1,
   },
   reusableBtnsView: {
     flex: 1,

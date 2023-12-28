@@ -1,7 +1,16 @@
-import {View, Text, StyleSheet, Image} from 'react-native';
-import React from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  Dimensions,
+  Animated,
+  FlatList,
+  TouchableOpacity,
+} from 'react-native';
+import React, {useRef} from 'react';
 
-const HyperlocalOrders = () => {
+const InTransit = () => {
   return (
     <View style={styles.container}>
       <View style={styles.NoResultView}>
@@ -15,7 +24,7 @@ const HyperlocalOrders = () => {
   );
 };
 
-export default HyperlocalOrders;
+export default InTransit;
 const styles = StyleSheet.create({
   container: {
     flex: 1,

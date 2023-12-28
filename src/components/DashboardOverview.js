@@ -174,8 +174,10 @@ const styles = StyleSheet.create({
     flex: 0.45,
     backgroundColor: '#fff',
     padding: 10,
-    elevation: 2,
+    elevation: 1,
     borderRadius: 5,
+    borderWidth: 1,
+    borderColor: '#f2f2f2'
   },
   todayOrderChild: {
     flexDirection: 'row',
@@ -203,11 +205,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: '#FFF',
+    backgroundColor: '#f2f2f2',
     padding: 2,
     borderRadius: 5,
     marginTop: 10,
     elevation: 1,
+    borderWidth: 1,
+    borderColor: '#fff'
   },
   transactionViewIcon1: {
     width: 50,
@@ -223,5 +227,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderRadius: 5,
   },
-  Text1: {color: '#666666', fontFamily: 'Poppins-Regular'},
+  Text1: {color: '#404040', fontFamily: 'Poppins-Regular'},
 });

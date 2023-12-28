@@ -1,7 +1,7 @@
 import {View, Text, StyleSheet, Image} from 'react-native';
 import React from 'react';
 
-const ReturnOrders = () => {
+const CancelledScreen = () => {
   return (
     <View style={styles.container}>
       <View style={styles.NoResultView}>
@@ -14,16 +14,17 @@ const ReturnOrders = () => {
             backgroundColor: 'black',
             borderRadius: 10,
             tintColor: 'white',
-            resizeMode: 'center'
+            resizeMode: 'center',
           }}
         />
         <Text style={styles.NoResultTxt}>No Result</Text>
+        <Text style={styles.NoResultTxt}>CancelledScreen</Text>
       </View>
     </View>
   );
 };
 
-export default ReturnOrders;
+export default CancelledScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,

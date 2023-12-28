@@ -15,7 +15,7 @@ import {
   Linking,
 } from 'react-native';
 import React, {useEffect, useRef, useState} from 'react';
-import {GREEN_COLOR, LIGHT_GREEN} from '../assets/Colors';
+import {EXTRA_LIGHT_GREEN, GREEN_COLOR, LIGHT_GREEN} from '../assets/Colors';
 import QuickActionBtns from '../components/QuickActionBtns';
 import ActionsRequiredBtns from '../components/ActionsRequiredBtns';
 import BarChartScreen from '../components/BarChartScreen';
@@ -25,8 +25,13 @@ import QRCodeScanner from 'react-native-qrcode-scanner';
 import {useSelector} from 'react-redux';
 import QuickRecharge from './QuickRecharge';
 
+import {BarChart, LineChart, PieChart} from 'react-native-gifted-charts';
+import {useFocusEffect} from '@react-navigation/native';
+import axios from 'axios';
+
 const HomeScreen = ({navigation}) => {
   const {user, customer, token} = useSelector(state => state.userSlice);
+  // console.log('-=-----', customer.c_api_password);
   const refRBSheet = useRef();
   const refRBSheet2 = useRef();
 
@@ -39,6 +44,18 @@ const HomeScreen = ({navigation}) => {
   const [showMetricsDay, setShowMetricsDay] = useState(false);
   const [shipmentButton, setShipmentButton] = useState('Last 30 days');
   const [modalVisible, setModalVisible] = useState(false);
+
+  const lineChartData = [
+    {value: 15, label: 'Mon', dataPointText: 15},
+    {value: 30, label: 'Tue', dataPointText: 15},
+    {value: 40, label: 'Wed', dataPointText: 15},
+    {value: 90, label: 'Thu', dataPointText: 15},
+    {value: 25, label: 'Fri', dataPointText: 15},
+    {value: 75, label: 'Sat', dataPointText: 15},
+    {value: 90, label: 'Thu', dataPointText: 15},
+    {value: 50, label: 'Fri', dataPointText: 15},
+    {value: 100, label: 'Sat', dataPointText: 15},
+  ];
 
   const handleFocusedKeyboard = () => {
     //dont delete
@@ -87,6 +104,39 @@ const HomeScreen = ({navigation}) => {
     refRBSheet2.current.open();
   };
 
+  const handleCalulatorScreen = () => {
+    navigation.navigate('Calculator');
+  };
+
+  // fetch orders details
+  const [totalOrders, setTotalOrders] = useState(null);
+  useFocusEffect(
+    React.useCallback(() => {
+      // console.log('useFocusEffect : ');
+      const handleOrderDetails = async () => {
+        try {
+          const response = await axios.get(
+            'http://192.168.1.14/shipeasy-prod/public/api/count-of-orders',
+            {
+              headers: {
+                Authorization:
+                  // 'Bearer 19|Wt2nzzdbewfScK9kjd4gRVfBEJecTzv9uTxqN9FO845b73cc',
+                  `Bearer ${customer.c_api_password}`,
+              },
+            },
+          );
+          // console.log('-=-=-', response.data);
+          if (response.data) {
+            setTotalOrders(response.data);
+          }
+        } catch (error) {
+          console.log('home screen did not get total order details ', error);
+        }
+      };
+      handleOrderDetails();
+    }, []),
+  );
+
   return (
     <View style={styles.container}>
       <StatusBar
@@ -102,6 +152,7 @@ const HomeScreen = ({navigation}) => {
         closeOnPressMask={true}
         height={height / 1.5}
         animationType="slide"
+        openDuration={100}
         customStyles={{
           wrapper: {
             // backgroundColor: 'transparent',
@@ -123,14 +174,18 @@ const HomeScreen = ({navigation}) => {
         <View style={{flex: 1}}>
           <TouchableOpacity
             style={{
-              marginRight: 20,
-              marginTop: 15,
               alignSelf: 'flex-end',
+              padding: 10,
+              backgroundColor: '#fff',
+              borderRadius: 20,
+              elevation: 0.7,
+              right: 15,
+              marginVertical: 5,
             }}
             onPress={() => refRBSheet.current.close()}>
             <Image
-              source={require('../assets/images/close.png')}
-              style={{width: 15, height: 15, tintColor: GREEN_COLOR}}
+              source={require('../assets/images/close1.png')}
+              style={{width: 15, height: 15}}
             />
           </TouchableOpacity>
           <AddOrderSheet REF={refRBSheet} />
@@ -143,6 +198,7 @@ const HomeScreen = ({navigation}) => {
         closeOnPressMask={true}
         animationType="slide"
         height={height / 1.5}
+        openDuration={100}
         customStyles={{
           wrapper: {
             backgroundColor: 'rgba(0, 0, 0, 0.7)',
@@ -159,18 +215,21 @@ const HomeScreen = ({navigation}) => {
             borderTopRightRadius: 30,
           },
         }}>
-        <View style={{flex: 1, backgroundColor: 'aliceblue'}}>
+        <View style={{flex: 1, backgroundColor: '#fff'}}>
           <TouchableOpacity
             style={{
-              marginRight: 20,
-              marginTop: 15,
               alignSelf: 'flex-end',
               padding: 10,
+              backgroundColor: '#fff',
+              borderRadius: 20,
+              elevation: 0.7,
+              right: 15,
+              marginVertical: 5,
             }}
             onPress={() => refRBSheet2.current.close()}>
             <Image
-              source={require('../assets/images/close.png')}
-              style={{width: 15, height: 15, tintColor: GREEN_COLOR}}
+              source={require('../assets/images/close1.png')}
+              style={{width: 15, height: 15}}
             />
           </TouchableOpacity>
           <QuickRecharge navigation={navigation} refRBSheet2={refRBSheet2} />
@@ -319,29 +378,61 @@ const HomeScreen = ({navigation}) => {
               // onPress={handleRequestCameraPermission}
               onPress={handleBarCodeScreen}
             />
-            {/* <QuickActionBtns
+            <QuickActionBtns
               image={require('../assets/images/calculator.png')}
               title="Shipping Rate Calculator"
-            /> */}
+              onPress={handleCalulatorScreen}
+            />
           </View>
         </View>
         {/* action required */}
         <View style={styles.actionRequiredview}>
-          <Text style={styles.quickAction}>Action Required</Text>
+          <Text style={styles.quickAction}>Transactions</Text>
           <View style={styles.actionRequiredviewchild}>
             <ActionsRequiredBtns
-              title="New Order To Be Processed"
+              // title="New Order To Be Processed"
+              title="Ready To Ship"
               btn="Ship Now"
+              updates={
+                totalOrders !== null
+                  ? totalOrders.order_list_ready_to_ship_count
+                  : '0'
+              }
             />
             <ActionsRequiredBtns
-              title="Order with Weight Discrepancies"
+              // title="Order with Weight Discrepancies"
+              title="In-Transit"
               btn="Manage"
+              updates={
+                totalOrders !== null
+                  ? totalOrders.order_list_intransit_count
+                  : '0'
+              }
             />
-            <ActionsRequiredBtns title="Update NDR Instruction" btn="Update" />
+            <ActionsRequiredBtns
+              title="Delivered"
+              btn="Update"
+              updates={
+                totalOrders !== null
+                  ? totalOrders.order_list_delivered_count
+                  : '0'
+              }
+            />
+
+            <ActionsRequiredBtns
+              title="RTO"
+              btn="Update"
+              updates={totalOrders !== null ? totalOrders.rto_count : '0'}
+            />
+            <ActionsRequiredBtns
+              title="RVP"
+              btn="Update"
+              updates={totalOrders !== null ? totalOrders.rvp_count : '0'}
+            />
           </View>
         </View>
         {/* shipment metrics */}
-        <View style={styles.shipmentMetrics}>
+        {/* <View style={styles.shipmentMetrics}>
           <Text style={styles.quickAction}>Shipment Metrics</Text>
 
           <View
@@ -354,7 +445,7 @@ const HomeScreen = ({navigation}) => {
               Total Shipment: 0
             </Text>
 
-            {/* bar chart is here  */}
+           // bar chart is here 
             <View
               style={{
                 flex: 1,
@@ -443,6 +534,44 @@ const HomeScreen = ({navigation}) => {
               ) : null}
             </View>
           </View>
+        </View> */}
+        {/* line chart  */}
+        <View style={[styles.shipmentMetrics]}>
+          <Text style={[styles.quickAction, {marginLeft: 10,}]}>Daily Order Growth</Text>
+          <View
+            style={{
+              marginVertical: 5,
+              backgroundColor: '#fff',
+              paddingVertical: 10,
+            }}>
+            <LineChart
+              data={lineChartData}
+              curved
+              // color="rgb(84,219,234)"
+              color={GREEN_COLOR}
+              thickness={5}
+              hideDataPoints={false}
+              // hideRules
+              rulesColor={'#f2f2f2'}
+              rulesThickness={1}
+              rulesType="solid"
+              yAxisColor={GREEN_COLOR}
+              yAxisTextStyle={{color: '#404040'}}
+              showVerticalLines
+              verticalLinesColor="#f2f2f2"
+              xAxisColor={GREEN_COLOR}
+              isAnimated
+              focusEnabled
+              showStripOnFocus
+              showTextOnFocus
+              backgroundColor={'#fff'}
+              // focusedDataPointShape="rect"
+              // focusedDataPointWidth={10}
+              // focusedDataPointHeight={15}
+              // focusedDataPointColor="#F00"
+              // focusedDataPointRadius={10}
+            />
+          </View>
         </View>
       </ScrollView>
     </View>
@@ -521,7 +650,7 @@ const styles = StyleSheet.create({
   quickAction: {
     color: '#404040',
     fontSize: 16,
-    fontFamily: 'Poppins-Bold',
+    fontFamily: 'Poppins-SemiBold',
   },
   QuickActionBtnsView: {
     flexDirection: 'row',
@@ -533,10 +662,9 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   actionRequiredview: {
-    backgroundColor: '#FFFF',
+    backgroundColor: EXTRA_LIGHT_GREEN,
     paddingHorizontal: 10,
-    paddingTop: 5,
-    paddingBottom: 5,
+    paddingVertical: 10,
     marginVertical: 10,
   },
   actionRequiredviewchild: {
@@ -547,10 +675,9 @@ const styles = StyleSheet.create({
   },
   shipmentMetrics: {
     backgroundColor: '#e6ffef',
-    paddingHorizontal: 10,
-    paddingTop: 5,
+    paddingVertical: 10,
     paddingBottom: 20,
-    borderRadius: 20,
+    borderRadius: 10,
     marginBottom: 20,
     marginVertical: 10,
   },

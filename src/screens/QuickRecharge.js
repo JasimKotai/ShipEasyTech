@@ -11,9 +11,10 @@ import {
 } from 'react-native';
 import React, {useState} from 'react';
 import {GREEN_COLOR, LIGHT_GREEN} from '../assets/Colors';
-import {TEXT_BLACK, TEXT_BLACK2} from '../assets/fontStyles';
+import {TEXT_BLACK, TEXT_BLACK2, TEXT_LIGHT_BLACK} from '../assets/fontStyles';
 import {useNavigation} from '@react-navigation/native';
 
+const Width = Dimensions.get('window').width;
 const QuickRecharge = ({navigation, refRBSheet2}) => {
   const [amount, setAmount] = useState('500');
   const toCouponScreen = () => {
@@ -36,7 +37,7 @@ const QuickRecharge = ({navigation, refRBSheet2}) => {
           }}>
           <Image
             source={require('../assets/images/wallet1.png')}
-            style={{width: 30, height: 30, tintColor: GREEN_COLOR}}
+            style={{width: Width / 16, height: Width / 16, tintColor: 'green'}}
           />
           <Text style={styles.title}>Recharge Wallet</Text>
         </View>
@@ -74,7 +75,7 @@ const QuickRecharge = ({navigation, refRBSheet2}) => {
                 paddingVertical: 6,
                 color: '#404040',
               }}
-              placeholderTextColor={TEXT_BLACK2}
+              placeholderTextColor={TEXT_LIGHT_BLACK}
               keyboardType="number-pad"
               maxLength={7}
             />
@@ -146,7 +147,7 @@ const QuickRecharge = ({navigation, refRBSheet2}) => {
               alignItems: 'center',
             }}>
             <Image
-              source={require('../assets/images/coupon.png')}
+              source={require('../assets/images/coupon2.png')}
               style={{width: 30, height: 30}}
             />
             <Text
@@ -181,30 +182,29 @@ const QuickRecharge = ({navigation, refRBSheet2}) => {
 };
 
 export default QuickRecharge;
-const width = Dimensions.get('window').width;
 const styles = StyleSheet.create({
   parent: {
-    backgroundColor: 'aliceblue',
-    padding: 10,
+    backgroundColor: '#fff',
+    paddingHorizontal: 10,
     flex: 1,
   },
   closeBtn: {
-    width: width / 10,
+    width: Width / 10,
     padding: 5,
     alignItems: 'center',
     alignSelf: 'flex-end',
   },
   title: {
-    fontSize: 18,
+    fontSize: 17,
     color: TEXT_BLACK2,
-    fontFamily: 'Montserrat-SemiBold',
+    fontFamily: 'Rubik-SemiBold',
     marginLeft: 10,
   },
   addMoneyBtns: {
     flexDirection: 'row',
     borderWidth: 1,
     borderColor: '#fff',
-    width: width / 4.7,
+    width: Width / 4.7,
     backgroundColor: '#f2f2f2',
     justifyContent: 'space-evenly',
     alignItems: 'center',
